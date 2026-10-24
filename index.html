@@ -1,0 +1,922 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Cerita - Deep Talk Bareng Pacar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            200: '#eaddd7',
+                            300: '#e0cec7',
+                            400: '#d2bab0',
+                            500: '#a37c6c',
+                            600: '#8b6255',
+                            700: '#734c41',
+                            800: '#5a382e',
+                            900: '#482920',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #fdf8f6;
+            overflow-x: hidden;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(163, 124, 108, 0.1);
+        }
+
+        /* Animated Background Shapes */
+        .bg-shape {
+            position: absolute;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+        .shape-1 {
+            top: -10%; left: -10%; width: 300px; height: 300px;
+            background: #ffecd2;
+            animation: blob 7s infinite;
+        }
+        .shape-2 {
+            top: 40%; right: -10%; width: 400px; height: 400px;
+            background: #fcb69f;
+            animation: blob 7s infinite;
+            animation-delay: 2s;
+        }
+        .shape-3 {
+            bottom: -20%; left: 20%; width: 350px; height: 350px;
+            background: #ffdde1;
+            animation: blob 7s infinite;
+            animation-delay: 4s;
+        }
+
+        .question-transition {
+            transition: all 0.4s ease-in-out;
+        }
+        
+        .hide-question {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        
+        .show-question {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* UNO Styles */
+        .uno-card {
+            width: 60px;
+            height: 90px;
+            border-radius: 8px;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 4px solid white;
+            position: relative;
+            background-color: #333;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            user-select: none;
+            flex-shrink: 0;
+        }
+        .uno-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .uno-red { background: linear-gradient(135deg, #ff5555, #cc0000); }
+        .uno-blue { background: linear-gradient(135deg, #5555ff, #0000cc); }
+        .uno-green { background: linear-gradient(135deg, #55aa55, #008800); }
+        .uno-yellow { background: linear-gradient(135deg, #ffdd55, #cca000); color: #333; text-shadow: none; border-color: #fff; }
+        .uno-black { background: linear-gradient(135deg, #555, #111); }
+        
+        .uno-card-mini {
+            width: 40px;
+            height: 60px;
+            font-size: 0.8rem;
+            border: 2px solid white;
+            border-radius: 4px;
+        }
+
+        .uno-center-symbol {
+            font-size: 1.5em;
+            display: block;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .uno-corner-symbol {
+            position: absolute;
+            font-size: 0.5em;
+            top: 4px;
+            left: 6px;
+        }
+        .uno-corner-symbol-br {
+            position: absolute;
+            font-size: 0.5em;
+            bottom: 4px;
+            right: 6px;
+            transform: rotate(180deg);
+        }
+        .hand-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: -25px; /* Overlap cards */
+            justify-content: center;
+            padding: 10px;
+        }
+        .hand-container .uno-card {
+            margin-left: 0;
+        }
+        .current-turn-highlight {
+            box-shadow: 0 0 15px 5px rgba(236, 72, 153, 0.3) !important;
+            border-color: #fbcfe8 !important;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center relative">
+
+    <!-- Background Decoration -->
+    <div class="bg-shape shape-1 rounded-full"></div>
+    <div class="bg-shape shape-2 rounded-full"></div>
+    <div class="bg-shape shape-3 rounded-full"></div>
+
+    <main class="w-full max-w-md px-6 py-8 relative z-10 w-full min-h-[90vh] flex flex-col">
+        
+        <!-- HOME SCREEN -->
+        <div id="home-screen" class="flex-1 flex flex-col justify-center animate-fade-in">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-sm text-brand-500 mb-6 text-2xl">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h1 class="font-serif text-3xl font-semibold text-brand-900 mb-3">Ruang Cerita</h1>
+                <p class="text-brand-600 text-sm font-light">Pilih kartu, tarik napas panjang, dan luangkan waktu untuk saling mendengarkan.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Category 1: Santai -->
+                <button onclick="startCategory('santai')" class="w-full text-left p-5 glass-card rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center">
+                                <i class="fa-solid fa-mug-hot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 group-hover:text-blue-600 transition-colors">Santai</h3>
+                                <p class="text-xs text-gray-500">Lucu-lucuan & pengandaian ringan</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-blue-400"></i>
+                    </div>
+                </button>
+
+                <!-- Category 2: Biasa -->
+                <button onclick="startCategory('biasa')" class="w-full text-left p-5 glass-card rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center">
+                                <i class="fa-solid fa-hands-holding-circle"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 group-hover:text-orange-600 transition-colors">Menengah</h3>
+                                <p class="text-xs text-gray-500">Hubungan & keseharian kita</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-orange-400"></i>
+                    </div>
+                </button>
+
+                <!-- Category 3: Deeptalk -->
+                <button onclick="startCategory('deeptalk')" class="w-full text-left p-5 glass-card rounded-2xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center">
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 group-hover:text-rose-600 transition-colors">Deep Talk</h3>
+                                <p class="text-xs text-gray-500">Isi hati terdalam & masa depan</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-rose-400"></i>
+                    </div>
+                </button>
+
+                <!-- Category 4: UNO Game -->
+                <button onclick="startUno()" class="w-full text-left p-5 glass-card rounded-2xl hover:-translate-y-1 transition-all duration-300 group mt-2 border-l-4 border-indigo-400">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-500 flex items-center justify-center">
+                                <i class="fa-solid fa-gamepad"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-lg text-gray-800 group-hover:text-indigo-600 transition-colors">Main UNO Berdua</h3>
+                                <p class="text-xs text-gray-500">Ada hukuman buat yang kalah!</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-gray-300 group-hover:text-indigo-400"></i>
+                    </div>
+                </button>
+            </div>
+            
+            <p class="text-center text-xs text-gray-400 mt-12">
+                "Cara terbaik mencintai seseorang adalah dengan mendengarkannya."
+            </p>
+        </div>
+
+        <!-- QUESTION SCREEN (Hidden by default) -->
+        <div id="question-screen" class="hidden flex-1 flex-col h-full animate-fade-in pb-10">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="goHome()" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-600 hover:text-brand-600 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div id="category-badge" class="px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider">
+                    Category
+                </div>
+                <div class="w-10"></div> <!-- Spacer -->
+            </div>
+
+            <!-- Card -->
+            <div class="flex-1 flex flex-col justify-center relative">
+                <div id="card-container" class="glass-card rounded-3xl p-8 min-h-[350px] flex flex-col justify-center items-center text-center relative overflow-hidden question-transition show-question">
+                    
+                    <!-- Decorative quote marks -->
+                    <i class="fa-solid fa-quote-left absolute top-6 left-6 text-3xl opacity-10 text-brand-500"></i>
+                    
+                    <h2 id="question-text" class="font-serif text-2xl md:text-3xl leading-relaxed text-brand-900 z-10">
+                        Pertanyaan akan muncul di sini...
+                    </h2>
+                    
+                    <div id="progress-text" class="absolute bottom-4 text-xs font-medium text-gray-400">
+                        1 / 10
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-10 flex flex-col items-center gap-4">
+                <button onclick="nextQuestion()" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-medium text-lg transition-colors shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2">
+                    <span>Pertanyaan Berikutnya</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                </button>
+                <p class="text-xs text-gray-500 text-center px-4">Gantian yang jawab ya. Nggak perlu buru-buru, dengerin sampai selesai.</p>
+            </div>
+        </div>
+
+        <!-- UNO SCREEN -->
+        <div id="uno-screen" class="hidden flex-1 flex-col h-full animate-fade-in pb-4 absolute inset-0 bg-[#fdf8f6]/95 z-50 overflow-y-auto px-4 sm:px-6 w-full max-w-md mx-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between py-6 sticky top-0 bg-[#fdf8f6]/90 backdrop-blur-sm z-20">
+                <button onclick="goHomeFromUno()" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-gray-600 hover:text-brand-600 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider bg-indigo-100 text-indigo-700 shadow-sm border border-indigo-200">
+                    <i class="fa-solid fa-gamepad mr-1"></i> UNO Couple
+                </div>
+                <div class="w-10"></div>
+            </div>
+
+            <div class="flex-1 flex flex-col justify-between">
+                <!-- Player 2 (Top) -->
+                <div id="p2-area" class="glass-card rounded-2xl p-4 flex flex-col items-center relative transition-all duration-300 border-2 border-transparent">
+                    <div class="flex justify-between w-full items-center mb-3">
+                        <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-user-group mr-1 text-indigo-400"></i> Pasangan (Player 2)</span>
+                        <button onclick="toggleHand(2)" class="text-xs bg-white border border-gray-200 shadow-sm px-3 py-1.5 rounded-full hover:bg-gray-50 transition active:scale-95"><i class="fa-solid fa-eye-slash" id="p2-eye"></i><span id="p2-eye-text"> Sembunyikan</span></button>
+                    </div>
+                    <div id="p2-hand" class="hand-container min-h-[100px] w-full"></div>
+                    <div id="p2-card-count" class="text-xs font-medium text-gray-500 mt-3 bg-gray-100 px-3 py-1 rounded-full">7 Kartu</div>
+                </div>
+
+                <!-- Center Board -->
+                <div class="flex flex-col items-center justify-center my-6 relative py-4 bg-white/40 rounded-3xl mx-2 shadow-inner border border-white/60">
+                    <div id="turn-indicator" class="absolute -top-3 bg-brand-500 text-white text-xs font-semibold px-5 py-1.5 rounded-full shadow-md">
+                        Giliran: Kamu (Player 1)
+                    </div>
+                    
+                    <div class="flex items-center justify-center gap-6 mt-4 w-full px-4">
+                        <!-- Draw Pile -->
+                        <div class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform" onclick="drawCardCurrentPlayer()">
+                            <div class="uno-card uno-black border-dashed border-gray-400 hover:border-white shadow-sm">
+                                <span class="uno-center-symbol text-[11px] text-center font-normal uppercase tracking-widest"><i class="fa-solid fa-layer-group mb-1 text-xl"></i><br>Ambil</span>
+                            </div>
+                            <span class="text-[10px] text-gray-500 mt-2 font-medium bg-white px-2 py-0.5 rounded-md shadow-sm border border-gray-100" id="draw-pile-count">108</span>
+                        </div>
+                        
+                        <!-- Discard Pile -->
+                        <div class="flex flex-col items-center relative">
+                            <div id="discard-pile" class="uno-card shadow-lg ring-4 ring-white/50">
+                                <!-- Top card goes here -->
+                            </div>
+                            <div id="current-color-indicator" class="absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-2 border-white shadow-md hidden z-10"></div>
+                            <span class="text-[10px] text-gray-500 mt-2 font-medium bg-white px-2 py-0.5 rounded-md shadow-sm border border-gray-100">Arena</span>
+                        </div>
+                    </div>
+                    
+                    <div id="uno-message" class="text-brand-600 font-bold mt-4 h-5 text-sm text-center animate-fade-in w-full px-4 truncate"></div>
+                </div>
+
+                <!-- Player 1 (Bottom) -->
+                <div id="p1-area" class="glass-card rounded-2xl p-4 flex flex-col items-center relative transition-all duration-300 border-2 border-transparent">
+                    <div class="flex justify-between w-full items-center mb-3">
+                        <span class="font-semibold text-gray-700 text-sm"><i class="fa-solid fa-user mr-1 text-rose-400"></i> Kamu (Player 1)</span>
+                        <button onclick="toggleHand(1)" class="text-xs bg-white border border-gray-200 shadow-sm px-3 py-1.5 rounded-full hover:bg-gray-50 transition active:scale-95"><i class="fa-solid fa-eye-slash" id="p1-eye"></i><span id="p1-eye-text"> Sembunyikan</span></button>
+                    </div>
+                    <div id="p1-hand" class="hand-container min-h-[100px] w-full"></div>
+                    <div id="p1-card-count" class="text-xs font-medium text-gray-500 mt-3 bg-gray-100 px-3 py-1 rounded-full">7 Kartu</div>
+                </div>
+            </div>
+            
+            <!-- Color Picker Modal (Hidden) -->
+            <div id="color-picker-modal" class="fixed inset-0 bg-gray-900/40 z-[100] hidden items-center justify-center backdrop-blur-sm">
+                <div class="bg-white p-6 rounded-3xl max-w-[260px] w-full text-center shadow-xl">
+                    <h3 class="font-bold text-gray-800 mb-1">Ganti Warna</h3>
+                    <p class="text-xs text-gray-500 mb-5">Pilih warna untuk melanjutkan permainan</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="selectWildColor('red')" class="w-full h-16 bg-red-500 rounded-2xl hover:scale-105 transition-transform shadow-md border-2 border-white ring-2 ring-transparent hover:ring-red-300"></button>
+                        <button onclick="selectWildColor('blue')" class="w-full h-16 bg-blue-500 rounded-2xl hover:scale-105 transition-transform shadow-md border-2 border-white ring-2 ring-transparent hover:ring-blue-300"></button>
+                        <button onclick="selectWildColor('green')" class="w-full h-16 bg-green-500 rounded-2xl hover:scale-105 transition-transform shadow-md border-2 border-white ring-2 ring-transparent hover:ring-green-300"></button>
+                        <button onclick="selectWildColor('yellow')" class="w-full h-16 bg-yellow-400 rounded-2xl hover:scale-105 transition-transform shadow-md border-2 border-white ring-2 ring-transparent hover:ring-yellow-300"></button>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- Winner Modal (Hidden) -->
+            <div id="winner-modal" class="fixed inset-0 bg-gray-900/60 z-[100] hidden items-center justify-center backdrop-blur-sm px-4">
+                <div class="bg-white p-8 rounded-[2rem] max-w-[320px] w-full text-center shadow-2xl transform transition-all relative overflow-hidden">
+                    <!-- Confetti decor -->
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+                    
+                    <div class="w-20 h-20 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mx-auto mb-5 text-yellow-600 text-4xl shadow-inner relative z-10">
+                        <i class="fa-solid fa-crown drop-shadow-md"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2 relative z-10">Yeay, Menang! 🎉</h2>
+                    <p id="winner-text" class="text-gray-600 mb-6 relative z-10 leading-relaxed">Player X memenangkan permainan!</p>
+                    
+                    <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 mb-6 relative z-10">
+                        <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-1">Hukuman buat yang kalah:</p>
+                        <p class="text-sm text-indigo-900 font-medium italic">"Traktir es krim, beliin makanan favorit, atau pijat pundak 5 menit!"</p>
+                    </div>
+                    
+                    <div class="space-y-3 relative z-10">
+                        <button onclick="initUnoGame()" class="w-full py-3.5 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition active:scale-95 shadow-md shadow-brand-500/20">Main Lagi Yuk</button>
+                        <button onclick="goHomeFromUno()" class="w-full py-3.5 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition active:scale-95">Kembali ke Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Database Pertanyaan
+        const questionsData = {
+            santai: [
+                "Kalau kamu bisa jadi hewan selama sehari, kamu mau jadi hewan apa dan kenapa?",
+                "Apa makanan yang nggak bakal pernah kamu tolak meskipun lagi kenyang?",
+                "Kalau kita menang lotre 10 Miliar hari ini, hal pertama yang mau kamu lakuin apa?",
+                "Menurutmu, siapa di antara kita yang paling mungkin selamat dari serangan zombie?",
+                "Sebutkan 3 kebiasaan anehku yang kamu sadari tapi orang lain nggak tahu!",
+                "Film atau kartun apa yang paling sering kamu tonton waktu kecil?",
+                "Kalau hidup kita dibikin jadi film, genre-nya apa dan siapa yang meranin kita?",
+                "Apa hal paling memalukan yang pernah terjadi sama kamu waktu masih sekolah?",
+                "Kalau kamu cuma bisa dengerin 1 lagu seumur hidup, lagu apa yang kamu pilih?",
+                "Menurutmu, kesan pertamamu waktu kenal aku tuh kayak gimana sih?"
+            ],
+            biasa: [
+                "Apa hal kecil yang sering aku lakuin, tapi bikin kamu ngerasa disayang banget?",
+                "Ada nggak sifat atau kebiasaanku yang awalnya kamu benci/bingung tapi sekarang malah terbiasa?",
+                "Menurutmu, kapan momen paling romantis atau berkesan dari kita di bulan ini?",
+                "Dari skala 1-10, seberapa puas kamu dengan cara kita nyelesaiin masalah akhir-akhir ini? Kenapa?",
+                "Kalau ada satu hal yang bisa kamu ubah dari rutinitas harian kita, apa itu?",
+                "Apa hal yang paling kamu suka dari dirimu sendiri semenjak pacaran sama aku?",
+                "Kapan terakhir kali kamu ngerasa bangga banget sama pencapaianku?",
+                "Menurutmu, apakah 'Love Language' (bahasa cinta) kita berdua udah saling terpenuhi dengan baik?",
+                "Apa kebiasaan baruku yang paling kamu suka akhir-akhir ini?",
+                "Kegiatan apa yang pengen banget kamu lakuin bareng aku tapi belum kesampaian?"
+            ],
+            deeptalk: [
+                "Jujur, apa ketakutan terbesarmu dalam hubungan kita saat ini?",
+                "Pernah nggak kamu ngerasa kesepian sendirian meskipun lagi sama aku? Kapan itu?",
+                "Kalau suatu hari nanti kita dihadapkan masalah besar yang bikin capek banget, apa alasan yang bakal bikin kamu tetap bertahan?",
+                "Apa luka di masa lalumu yang sampai sekarang masih kerasa sakit, dan gimana caraku biar nggak ikut ngelukain itu?",
+                "Menurut kamu, hal apa yang masih jadi kelemahan hubungan kita dan harus kita perbaiki bareng?",
+                "Definisi 'sukses' untuk hubungan kita menurut kamu itu yang kayak gimana?",
+                "Gimana cara terbaik buat aku nenangin kamu pas kamu lagi bener-bener hancur atau marah besar?",
+                "Pernah nggak ada satu momen dimana kamu ngerasa ragu sama aku? Gimana kamu ngatasin perasaan itu?",
+                "Harapan terbesar apa yang pengen kamu wujudkan bareng aku 5 tahun dari sekarang?",
+                "Kalau hari ini adalah hari terakhir kita bisa ngobrol, apa satu hal yang pengen banget kamu bilang ke aku?"
+            ]
+        };
+
+        const categoryConfig = {
+            santai: { color: 'bg-blue-100 text-blue-700', icon: 'fa-mug-hot', name: 'Santai' },
+            biasa: { color: 'bg-orange-100 text-orange-700', icon: 'fa-hands-holding-circle', name: 'Menengah' },
+            deeptalk: { color: 'bg-rose-100 text-rose-700', icon: 'fa-moon', name: 'Deep Talk' }
+        };
+
+        // State Variables
+        let currentCategory = '';
+        let activeQuestions = [];
+        let currentIndex = 0;
+
+        // DOM Elements
+        const homeScreen = document.getElementById('home-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const questionText = document.getElementById('question-text');
+        const categoryBadge = document.getElementById('category-badge');
+        const cardContainer = document.getElementById('card-container');
+        const progressText = document.getElementById('progress-text');
+
+        // Shuffle Array Function (Fisher-Yates)
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        // Start Game
+        function startCategory(category) {
+            currentCategory = category;
+            
+            // Clone and shuffle questions
+            activeQuestions = shuffleArray([...questionsData[category]]);
+            currentIndex = 0;
+
+            // Update UI styles based on category
+            const config = categoryConfig[category];
+            categoryBadge.className = `px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider ${config.color}`;
+            categoryBadge.innerHTML = `<i class="fa-solid ${config.icon} mr-1.5"></i> ${config.name}`;
+
+            // Switch screens
+            homeScreen.classList.add('hidden');
+            questionScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        // Show Current Question
+        function showQuestion() {
+            // Animation reset
+            cardContainer.classList.remove('show-question');
+            cardContainer.classList.add('hide-question');
+
+            setTimeout(() => {
+                if (currentIndex < activeQuestions.length) {
+                    questionText.innerText = activeQuestions[currentIndex];
+                    progressText.innerText = `${currentIndex + 1} / ${activeQuestions.length}`;
+                } else {
+                    // Kalo pertanyaan habis
+                    questionText.innerHTML = "Yeay! Kalian udah bahas semua pertanyaan di kategori ini. <br><br>Peluk pasanganmu sekarang! ❤️";
+                    progressText.innerText = `Selesai`;
+                    
+                    // Reset to shuffle again if they press next
+                    activeQuestions = shuffleArray([...questionsData[currentCategory]]);
+                    currentIndex = -1; // so next press goes to 0
+                }
+                
+                cardContainer.classList.remove('hide-question');
+                cardContainer.classList.add('show-question');
+            }, 300); // Wait for fade out
+        }
+
+        // Next Question
+        function nextQuestion() {
+            currentIndex++;
+            showQuestion();
+        }
+
+        // Go Back Home
+        function goHome() {
+            questionScreen.classList.add('hidden');
+            homeScreen.classList.remove('hidden');
+        }
+
+        // ========================================================
+        // UNO GAME LOGIC
+        // ========================================================
+        let unoDeck = [];
+        let p1Hand = [];
+        let p2Hand = [];
+        let discardPile = [];
+        let currentTurn = 1; // 1 (Kamu) or 2 (Pasangan)
+        let currentColor = '';
+        let p1Hidden = false; // Default: show cards
+        let p2Hidden = true;  // Default: hide player 2 cards so it's fair on first turn
+        let pendingWildAction = null; 
+
+        const unoColors = ['red', 'blue', 'green', 'yellow'];
+        
+        function generateUnoDeck() {
+            let deck = [];
+            unoColors.forEach(color => {
+                deck.push({ color: color, value: '0', type: 'number' });
+                for (let i = 1; i <= 9; i++) {
+                    deck.push({ color: color, value: i.toString(), type: 'number' });
+                    deck.push({ color: color, value: i.toString(), type: 'number' });
+                }
+                // Action cards
+                ['skip', 'reverse', 'draw2'].forEach(action => {
+                    deck.push({ color: color, value: action, type: 'action' });
+                    deck.push({ color: color, value: action, type: 'action' });
+                });
+            });
+            // Wild cards
+            for (let i = 0; i < 4; i++) {
+                deck.push({ color: 'black', value: 'wild', type: 'wild' });
+                deck.push({ color: 'black', value: 'wild4', type: 'wild' });
+            }
+            return shuffleArray(deck);
+        }
+
+        function getCardHTML(card) {
+            let bgClass = `uno-${card.color}`;
+            let displayValue = card.value;
+            let iconClass = '';
+
+            if (card.value === 'skip') { iconClass = 'fa-ban'; displayValue = ''; }
+            else if (card.value === 'reverse') { iconClass = 'fa-arrows-rotate'; displayValue = ''; }
+            else if (card.value === 'draw2') { displayValue = '+2'; }
+            else if (card.value === 'wild') { displayValue = 'WILD'; }
+            else if (card.value === 'wild4') { displayValue = '+4'; }
+
+            let centerHTML = iconClass 
+                ? `<i class="fa-solid ${iconClass} uno-center-symbol"></i>` 
+                : `<span class="uno-center-symbol">${displayValue}</span>`;
+                
+            let cornerHTML = iconClass 
+                ? `<i class="fa-solid ${iconClass}"></i>` 
+                : displayValue;
+
+            return `
+                <div class="uno-card ${bgClass}">
+                    <span class="uno-corner-symbol">${cornerHTML}</span>
+                    ${centerHTML}
+                    <span class="uno-corner-symbol-br">${cornerHTML}</span>
+                </div>
+            `;
+        }
+        
+        function getCardBackHTML() {
+            return `
+                <div class="uno-card uno-black border-gray-600">
+                    <span class="uno-center-symbol text-red-500 font-bold font-sans italic tracking-tighter" style="text-shadow: 1px 1px 0px white;">UNO</span>
+                </div>
+            `;
+        }
+
+        function startUno() {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('uno-screen').classList.remove('hidden');
+            document.getElementById('uno-screen').style.display = 'flex';
+            initUnoGame();
+        }
+
+        function goHomeFromUno() {
+            document.getElementById('uno-screen').classList.add('hidden');
+            document.getElementById('uno-screen').style.display = 'none';
+            document.getElementById('home-screen').classList.remove('hidden');
+        }
+
+        function initUnoGame() {
+            document.getElementById('winner-modal').classList.add('hidden');
+            document.getElementById('winner-modal').style.display = 'none';
+            document.getElementById('uno-message').innerText = '';
+            
+            unoDeck = generateUnoDeck();
+            p1Hand = [];
+            p2Hand = [];
+            discardPile = [];
+            
+            // Deal 7 cards to each
+            for(let i = 0; i < 7; i++) {
+                p1Hand.push(unoDeck.pop());
+                p2Hand.push(unoDeck.pop());
+            }
+            
+            // Start discard pile (ensure it's a number card to prevent immediate chaos)
+            let firstCard = unoDeck.pop();
+            while(firstCard.type !== 'number') {
+                unoDeck.unshift(firstCard);
+                firstCard = unoDeck.pop();
+            }
+            discardPile.push(firstCard);
+            currentColor = firstCard.color;
+            
+            currentTurn = 1;
+            p1Hidden = false; // Player 1 starts, sees cards
+            p2Hidden = true;  // Player 2 hidden
+            
+            updateEyeIcons();
+            renderBoard();
+        }
+
+        function toggleHand(playerNum) {
+            if (playerNum === 1) {
+                p1Hidden = !p1Hidden;
+            } else {
+                p2Hidden = !p2Hidden;
+            }
+            updateEyeIcons();
+            renderHands();
+        }
+
+        function updateEyeIcons() {
+            const el1 = document.getElementById('p1-eye');
+            const txt1 = document.getElementById('p1-eye-text');
+            el1.className = p1Hidden ? 'fa-solid fa-eye text-brand-500' : 'fa-solid fa-eye-slash text-gray-500';
+            txt1.textContent = p1Hidden ? ' Tampilkan' : ' Sembunyikan';
+            
+            const el2 = document.getElementById('p2-eye');
+            const txt2 = document.getElementById('p2-eye-text');
+            el2.className = p2Hidden ? 'fa-solid fa-eye text-brand-500' : 'fa-solid fa-eye-slash text-gray-500';
+            txt2.textContent = p2Hidden ? ' Tampilkan' : ' Sembunyikan';
+        }
+
+        function renderHands() {
+            const p1Container = document.getElementById('p1-hand');
+            const p2Container = document.getElementById('p2-hand');
+            
+            p1Container.innerHTML = '';
+            p2Container.innerHTML = '';
+            
+            // Render Player 1 Hand
+            p1Hand.forEach((card, index) => {
+                let cardWrap = document.createElement('div');
+                cardWrap.innerHTML = p1Hidden ? getCardBackHTML() : getCardHTML(card);
+                let cardEl = cardWrap.firstElementChild;
+                
+                if (currentTurn === 1 && !p1Hidden) {
+                    cardEl.onclick = () => playCard(1, index);
+                    // Add subtle glow to playable cards
+                    if(checkValidPlay(card)) {
+                        cardEl.style.boxShadow = '0 -4px 10px rgba(74, 222, 128, 0.4)'; // Greenish hint
+                    }
+                } else {
+                    cardEl.style.cursor = 'default';
+                    cardEl.classList.remove('uno-card:hover');
+                    cardEl.style.transform = 'none';
+                }
+                p1Container.appendChild(cardEl);
+            });
+
+            // Render Player 2 Hand
+            p2Hand.forEach((card, index) => {
+                let cardWrap = document.createElement('div');
+                cardWrap.innerHTML = p2Hidden ? getCardBackHTML() : getCardHTML(card);
+                let cardEl = cardWrap.firstElementChild;
+                
+                if (currentTurn === 2 && !p2Hidden) {
+                    cardEl.onclick = () => playCard(2, index);
+                    if(checkValidPlay(card)) {
+                         cardEl.style.boxShadow = '0 4px 10px rgba(74, 222, 128, 0.4)';
+                    }
+                } else {
+                    cardEl.style.cursor = 'default';
+                    cardEl.classList.remove('uno-card:hover');
+                    cardEl.style.transform = 'none';
+                }
+                p2Container.appendChild(cardEl);
+            });
+
+            document.getElementById('p1-card-count').innerText = `${p1Hand.length} Kartu`;
+            document.getElementById('p2-card-count').innerText = `${p2Hand.length} Kartu`;
+        }
+
+        function renderBoard() {
+            renderHands();
+            
+            const topCard = discardPile[discardPile.length - 1];
+            document.getElementById('discard-pile').innerHTML = getCardHTML(topCard);
+            document.getElementById('draw-pile-count').innerText = unoDeck.length;
+
+            // Turn Highlight
+            document.getElementById('p1-area').classList.remove('current-turn-highlight');
+            document.getElementById('p2-area').classList.remove('current-turn-highlight');
+            document.getElementById(`p${currentTurn}-area`).classList.add('current-turn-highlight');
+            
+            document.getElementById('turn-indicator').innerText = `Giliran: ${currentTurn === 1 ? 'Kamu (Player 1)' : 'Pasangan (Player 2)'}`;
+
+            // Show current color indicator if it's a wild card
+            const colorIndicator = document.getElementById('current-color-indicator');
+            if (topCard.color === 'black' || currentColor !== topCard.color) {
+                colorIndicator.classList.remove('hidden');
+                let colorHex = { 'red': '#ef4444', 'blue': '#3b82f6', 'green': '#22c55e', 'yellow': '#eab308' }[currentColor];
+                colorIndicator.style.backgroundColor = colorHex;
+            } else {
+                colorIndicator.classList.add('hidden');
+            }
+        }
+
+        function showMessage(msg) {
+            const el = document.getElementById('uno-message');
+            el.innerText = msg;
+            // Retrigger animation
+            el.classList.remove('animate-fade-in');
+            void el.offsetWidth;
+            el.classList.add('animate-fade-in');
+            
+            setTimeout(() => { if(el.innerText === msg) el.innerText = ''; }, 3000);
+        }
+
+        function drawCardCurrentPlayer() {
+            if (unoDeck.length === 0) {
+                showMessage("Tumpukan kartu habis! Mengacak ulang...");
+                const topCard = discardPile.pop();
+                unoDeck = shuffleArray([...discardPile]);
+                discardPile = [topCard];
+                if(unoDeck.length === 0) return; // Super rare edge case
+            }
+            
+            let card = unoDeck.pop();
+            if (currentTurn === 1) p1Hand.push(card);
+            else p2Hand.push(card);
+            
+            showMessage(`${currentTurn === 1 ? 'Kamu' : 'Pasangan'} mengambil 1 kartu`);
+            switchTurn();
+            renderBoard();
+        }
+
+        function checkValidPlay(card) {
+            const topCard = discardPile[discardPile.length - 1];
+            return (card.color === 'black') || 
+                   (card.color === currentColor) || 
+                   (card.value === topCard.value);
+        }
+
+        function playCard(playerNum, cardIndex) {
+            if (playerNum !== currentTurn) return;
+
+            let hand = playerNum === 1 ? p1Hand : p2Hand;
+            let card = hand[cardIndex];
+
+            if (!checkValidPlay(card)) {
+                showMessage("Kartu ini tidak bisa dikeluarkan!");
+                return;
+            }
+
+            // Remove card from hand and place on discard pile
+            hand.splice(cardIndex, 1);
+            discardPile.push(card);
+            currentColor = card.color;
+
+            // Check Win Condition
+            if (hand.length === 0) {
+                endGame(playerNum);
+                return;
+            }
+            
+            // UNO Shout!
+            if (hand.length === 1) {
+                showMessage(`UNO!! ${playerNum === 1 ? 'Kamu' : 'Pasangan'} sisa 1 kartu! 🔥`);
+            } else {
+                showMessage(""); // clear
+            }
+
+            // Handle Card Effects
+            if (card.color === 'black') {
+                pendingWildAction = card.value; // 'wild' or 'wild4'
+                const modal = document.getElementById('color-picker-modal');
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+                return; // Wait for color selection to switch turn
+            } else {
+                applyCardEffect(card.value);
+            }
+        }
+
+        function selectWildColor(color) {
+            currentColor = color;
+            const modal = document.getElementById('color-picker-modal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+            
+            if (pendingWildAction === 'wild4') {
+                drawCardsForOpponent(4);
+                showMessage(`Waduh! ${currentTurn === 1 ? 'Pasangan' : 'Kamu'} kena +4! Giliran diulang.`);
+                // In 2 player, current player plays again after +4 (opponent draws and skips)
+                pendingWildAction = null;
+                renderBoard();
+            } else {
+                pendingWildAction = null;
+                switchTurn();
+                renderBoard();
+            }
+        }
+
+        function applyCardEffect(value) {
+            let nextTurnPasses = true;
+
+            // Special rules for 2 Players Local UNO:
+            // Action cards effectively give you another turn, because the opponent is skipped.
+            if (value === 'skip' || value === 'reverse') {
+                showMessage(`Skip! Giliran ${currentTurn === 1 ? 'Kamu' : 'Pasangan'} lagi.`);
+                nextTurnPasses = false; 
+            } else if (value === 'draw2') {
+                drawCardsForOpponent(2);
+                showMessage(`Kena +2! Giliran ${currentTurn === 1 ? 'Kamu' : 'Pasangan'} lagi.`);
+                nextTurnPasses = false; 
+            }
+
+            if (nextTurnPasses) {
+                switchTurn();
+            }
+            renderBoard();
+        }
+
+        function drawCardsForOpponent(count) {
+            let targetHand = currentTurn === 1 ? p2Hand : p1Hand;
+            for(let i=0; i<count; i++) {
+                if(unoDeck.length > 0) targetHand.push(unoDeck.pop());
+            }
+        }
+
+        function switchTurn() {
+            // Auto hide/show mechanics for smooth local play
+            if (currentTurn === 1) {
+                currentTurn = 2;
+                p1Hidden = true;  // Auto hide P1
+                p2Hidden = false; // Auto show P2
+            } else {
+                currentTurn = 1;
+                p2Hidden = true;  // Auto hide P2
+                p1Hidden = false; // Auto show P1
+            }
+            updateEyeIcons();
+        }
+
+        function endGame(winnerNum) {
+            renderHands();
+            const winnerModal = document.getElementById('winner-modal');
+            const winnerText = document.getElementById('winner-text');
+            
+            const winnerName = winnerNum === 1 ? 'Kamu' : 'Pasanganmu';
+            winnerText.innerHTML = `Selamat! <b>${winnerName}</b> berhasil menghabiskan kartu duluan! 🏆`;
+            
+            winnerModal.classList.remove('hidden');
+            winnerModal.style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
+
+```
