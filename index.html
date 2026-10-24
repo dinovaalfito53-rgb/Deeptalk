@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruang Cerita - Deep Talk Bareng Pacar & Teman</title>
+    <title>Ruang Cerita - Deep Talk Bareng Pacar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script>
@@ -35,16 +35,12 @@
                         'slide-up': 'slideUp 0.6s ease-out',
                         'blob': 'blob 7s infinite',
                         'bounce-short': 'bounceShort 0.5s ease-in-out 3',
-                        'card-play': 'cardPlay 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                        'card-draw': 'cardDraw 0.4s ease-out',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
                         slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                         blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
-                        bounceShort: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-25%)' } },
-                        cardPlay: { '0%': { transform: 'translateY(40px) scale(0.6)', opacity: '0' }, '100%': { transform: 'translateY(0) scale(1)', opacity: '1' } },
-                        cardDraw: { '0%': { transform: 'scale(0.5) rotate(-10deg)', opacity: '0' }, '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' } }
+                        bounceShort: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-25%)' } }
                     }
                 }
             }
@@ -60,24 +56,20 @@
         .hide-question { opacity: 0; transform: scale(0.95); transition: all 0.4s ease-in-out; }
         .show-question { opacity: 1; transform: scale(1); transition: all 0.4s ease-in-out; }
         
-        /* UNO Animated Styles */
-        .uno-card { width: 58px; height: 86px; border-radius: 8px; display: inline-flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.15); cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); border: 3px solid white; position: relative; background-color: #333; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); user-select: none; flex-shrink: 0; }
-        .uno-card:hover { transform: translateY(-10px) scale(1.08) rotate(1deg); box-shadow: 0 12px 20px rgba(0,0,0,0.25); z-index: 30; }
-        .uno-card:active { transform: translateY(-2px) scale(0.98); }
+        /* UNO Styles */
+        .uno-card { width: 60px; height: 90px; border-radius: 8px; display: inline-flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; font-size: 1.2rem; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 4px solid white; position: relative; background-color: #333; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); user-select: none; flex-shrink: 0; }
+        .uno-card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); z-index: 10; }
         .uno-red { background: linear-gradient(135deg, #ff5555, #cc0000); }
         .uno-blue { background: linear-gradient(135deg, #5555ff, #0000cc); }
         .uno-green { background: linear-gradient(135deg, #55aa55, #008800); }
         .uno-yellow { background: linear-gradient(135deg, #ffdd55, #cca000); color: #333; text-shadow: none; border-color: #fff; }
         .uno-black { background: linear-gradient(135deg, #555, #111); }
-        .uno-center-symbol { font-size: 1.4em; display: block; text-align: center; line-height: 1.1; }
-        .uno-corner-symbol { position: absolute; font-size: 0.5em; top: 4px; left: 5px; }
-        .uno-corner-symbol-br { position: absolute; font-size: 0.5em; bottom: 4px; right: 5px; transform: rotate(180deg); }
-        
-        .anim-play { animation: cardPlay 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .anim-draw { animation: cardDraw 0.35s ease-out forwards; }
-        
-        .hand-container { display: flex; flex-wrap: wrap; gap: -20px; justify-content: center; padding: 10px 4px; max-height: 180px; overflow-y: auto; }
-        .current-turn-highlight { box-shadow: 0 0 20px 6px rgba(236, 72, 153, 0.4) !important; border-color: #fbcfe8 !important; transform: scale(1.01); }
+        .uno-center-symbol { font-size: 1.5em; display: block; text-align: center; line-height: 1.1; }
+        .uno-corner-symbol { position: absolute; font-size: 0.5em; top: 4px; left: 6px; }
+        .uno-corner-symbol-br { position: absolute; font-size: 0.5em; bottom: 4px; right: 6px; transform: rotate(180deg); }
+        .hand-container { display: flex; flex-wrap: wrap; gap: -25px; justify-content: center; padding: 10px; }
+        .hand-container .uno-card { margin-left: 0; }
+        .current-turn-highlight { box-shadow: 0 0 15px 5px rgba(236, 72, 153, 0.3) !important; border-color: #fbcfe8 !important; }
 
         /* Board Game Styles */
         .board-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; background: #fff; padding: 4px; border-radius: 12px; border: 4px solid #a37c6c; box-shadow: 0 10px 25px rgba(163, 124, 108, 0.2); width: 100%; max-width: 350px; margin: 0 auto; aspect-ratio: 1; }
@@ -85,8 +77,11 @@
         .cell-alt { background: #f2e8e5; }
         .cell-snake { background: #fee2e2; color: #dc2626; }
         .cell-ladder { background: #dcfce7; color: #16a34a; }
+        .cell-question { background: #fef08a; color: #a16207; }
         
-        .player-token { width: 22px; height: 22px; border-radius: 50%; position: absolute; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; items-center: center; justify-content: center; font-size: 9px; font-weight: bold; color: white; }
+        .player-token { width: 24px; height: 24px; border-radius: 50%; position: absolute; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: all 0.4s ease-in-out; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; }
+        .token-p1 { background: #ef4444; z-index: 20; transform: translate(-20%, -20%); } /* Merah */
+        .token-p2 { background: #3b82f6; z-index: 10; transform: translate(20%, 20%); } /* Biru */
 
         /* Bottle Spin Styles */
         .bottle-container { position: relative; width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle, #fdf8f6 0%, #f2e8e5 100%); box-shadow: inset 0 0 20px rgba(163, 124, 108, 0.1); border: 2px solid #eaddd7; }
@@ -99,7 +94,7 @@
     <div class="bg-shape shape-2 rounded-full"></div>
     <div class="bg-shape shape-3 rounded-full"></div>
 
-    <main class="w-full max-w-md px-4 py-6 relative z-10 min-h-[90vh] flex flex-col">
+    <main class="w-full max-w-md px-6 py-8 relative z-10 w-full min-h-[90vh] flex flex-col">
         
         <!-- HOME SCREEN -->
         <div id="home-screen" class="flex-1 flex flex-col justify-center animate-fade-in pb-10">
@@ -108,7 +103,7 @@
                     <i class="fa-solid fa-heart"></i>
                 </div>
                 <h1 class="font-serif text-3xl font-semibold text-brand-900 mb-2">Ruang Cerita</h1>
-                <p class="text-brand-600 text-sm font-light">Ngobrol dalam & seru-seruan bareng teman / pacar.</p>
+                <p class="text-brand-600 text-sm font-light">Ngobrol dalam & seru-seruan bareng pacar.</p>
             </div>
 
             <!-- Deep Talk Section -->
@@ -129,13 +124,13 @@
             </div>
 
             <!-- Games Section -->
-            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2">Games Multi-Player (2-10 Orang)</h2>
+            <h2 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2">Games Couple</h2>
             <div class="space-y-3">
                 <button onclick="showGameLobby('uno')" class="w-full text-left p-4 glass-card rounded-2xl hover:-translate-y-1 transition flex items-center gap-4 group border-l-4 border-indigo-400">
                     <div class="w-12 h-12 shrink-0 rounded-full bg-indigo-100 text-indigo-500 flex items-center justify-center text-xl"><i class="fa-solid fa-layer-group"></i></div>
                     <div>
-                        <h3 class="font-medium text-gray-800 group-hover:text-indigo-600">UNO Party</h3>
-                        <p class="text-xs text-gray-500">Adu mekanik habisin kartu rame-rame.</p>
+                        <h3 class="font-medium text-gray-800 group-hover:text-indigo-600">UNO Couple</h3>
+                        <p class="text-xs text-gray-500">Adu mekanik habisin kartu.</p>
                     </div>
                 </button>
                 
@@ -175,43 +170,22 @@
             </div>
         </div>
 
-        <!-- COMMON GAME LOBBY MODAL (SETTINGS JUMLAH & NAMA PEMAIN) -->
-        <div id="game-lobby-modal" class="fixed inset-0 bg-gray-900/60 z-[100] hidden items-center justify-center backdrop-blur-sm px-4 overflow-y-auto py-6">
-            <div class="bg-white p-6 rounded-[2rem] max-w-[340px] w-full text-center shadow-xl my-auto">
-                <div id="lobby-icon" class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-500 text-2xl">
+        <!-- COMMON GAME LOBBY MODAL -->
+        <div id="game-lobby-modal" class="fixed inset-0 bg-gray-900/60 z-[100] hidden items-center justify-center backdrop-blur-sm px-4">
+            <div class="bg-white p-6 rounded-[2rem] max-w-[320px] w-full text-center shadow-xl">
+                <div id="lobby-icon" class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-500 text-2xl">
                     <i class="fa-solid fa-gamepad"></i>
                 </div>
                 <h3 id="lobby-title" class="font-bold text-gray-800 mb-1">Judul Game</h3>
-                <p class="text-xs text-gray-500 mb-4">Atur Jumlah & Nama Pemain (4-10 Orang)</p>
-
-                <!-- Input Player Setup -->
-                <div class="mb-4 text-left">
-                    <label class="block text-xs font-bold text-gray-600 mb-1">Jumlah Pemain:</label>
-                    <select id="player-count-select" onchange="generatePlayerInputs()" class="w-full py-2 px-3 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-gray-50">
-                        <option value="2">2 Pemain</option>
-                        <option value="3">3 Pemain</option>
-                        <option value="4" selected>4 Pemain</option>
-                        <option value="5">5 Pemain</option>
-                        <option value="6">6 Pemain</option>
-                        <option value="7">7 Pemain</option>
-                        <option value="8">8 Pemain</option>
-                        <option value="9">9 Pemain</option>
-                        <option value="10">10 Pemain</option>
-                    </select>
-                </div>
-
-                <div id="player-inputs-container" class="space-y-2 mb-6 max-h-[180px] overflow-y-auto pr-1 text-left">
-                    <!-- Dynamic inputs generated via JS -->
-                </div>
-
-                <div class="space-y-2.5">
-                    <button onclick="startOfflineGame()" class="w-full py-3 border-2 border-gray-100 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition active:scale-95 shadow-md flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play"></i> Mulai Permainan
+                <p class="text-xs text-gray-500 mb-6">Mau main di satu HP atau beda device?</p>
+                <div class="space-y-3">
+                    <button onclick="startOfflineGame()" class="w-full py-3 border-2 border-gray-100 bg-gray-50 text-gray-700 rounded-xl font-medium hover:bg-gray-100 transition active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-mobile-screen"></i> Main 1 HP (Offline)
                     </button>
-                    <button onclick="showOnlineMenu()" class="w-full py-2.5 bg-gray-100 text-gray-700 rounded-xl text-xs font-medium hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-wifi"></i> Mode Online (Beda HP)
+                    <button onclick="showOnlineMenu()" class="w-full py-3 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition active:scale-95 shadow-md flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-wifi"></i> Main Beda HP (Online)
                     </button>
-                    <button onclick="closeLobby()" class="w-full py-1.5 text-gray-400 text-xs hover:text-gray-600">Batal</button>
+                    <button onclick="closeLobby()" class="w-full py-2 text-gray-400 text-sm mt-2 hover:text-gray-600">Batal</button>
                 </div>
             </div>
         </div>
@@ -243,8 +217,8 @@
         <div id="waiting-room-modal" class="fixed inset-0 bg-gray-900/80 z-[120] hidden items-center justify-center backdrop-blur-sm px-4">
             <div class="bg-white p-8 rounded-[2rem] max-w-[300px] w-full text-center shadow-xl">
                 <div class="animate-spin text-brand-500 text-3xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-                <h3 class="font-bold text-gray-800 mb-2">Menunggu Pemain Lain...</h3>
-                <p class="text-sm text-gray-500 mb-4">Bagikan kode ini:</p>
+                <h3 class="font-bold text-gray-800 mb-2">Nunggu Ayang Masuk...</h3>
+                <p class="text-sm text-gray-500 mb-4">Kasih kode ini ke dia ya:</p>
                 <div class="bg-gray-100 py-3 px-6 rounded-xl border border-gray-200 inline-block mb-6 shadow-inner">
                     <span id="display-room-code" class="text-3xl font-mono font-bold text-gray-800 tracking-widest">---</span>
                 </div>
@@ -274,39 +248,49 @@
             <button onclick="goHomeFromGame()" class="absolute top-2 left-0 text-gray-400 hover:text-gray-600 w-10 h-10 flex items-center justify-center rounded-full glass-card z-20">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
-            
-            <div class="flex justify-between items-center mb-2 px-1">
-                <div id="turn-indicator" class="text-xs font-bold bg-white px-3 py-1.5 rounded-full shadow-sm text-brand-600 border border-brand-100">Giliran: -</div>
-                <div class="text-[11px] text-gray-500 font-medium bg-white px-3 py-1.5 rounded-full shadow-sm">
-                    Tumpukan: <span id="draw-pile-count" class="font-bold text-gray-800">0</span>
+            <div class="flex justify-between items-center mb-2 px-2">
+                <div id="turn-indicator" class="text-sm font-bold bg-white px-3 py-1.5 rounded-full shadow-sm text-brand-600 border border-brand-100">Giliran: Kamu</div>
+                <div class="text-xs text-gray-500 font-medium bg-white px-3 py-1.5 rounded-full shadow-sm flex items-center gap-2">
+                    Sisa Tumpukan: <span id="draw-pile-count" class="font-bold text-gray-800"></span>
                 </div>
             </div>
-
-            <!-- List Pemain Lain (Multiplayer Bar) -->
-            <div id="other-players-bar" class="flex gap-2 overflow-x-auto py-2 mb-2 px-1 scrollbar-none">
-                <!-- Dynamic Player Avatars -->
+            <!-- Opponent Hand -->
+            <div id="p2-area" class="w-full bg-white/50 rounded-2xl p-3 border border-white mb-2 transition-all">
+                <div class="flex justify-between items-center mb-2 px-1">
+                    <span class="text-xs font-semibold text-gray-600"><i class="fa-solid fa-user-group mr-1"></i> Pasangan</span>
+                    <div class="flex items-center gap-3">
+                        <span id="p2-card-count" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full"></span>
+                        <button onclick="toggleHand(2)" class="text-xs text-gray-500 hover:text-brand-500 transition px-2 py-1 bg-white rounded-md shadow-sm">
+                            <i id="p2-eye" class="fa-solid fa-eye-slash"></i><span id="p2-eye-text" class="hidden sm:inline"> Sembunyikan</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="p2-hand" class="hand-container min-h-[100px]"></div>
             </div>
-
             <!-- Center Board -->
-            <div class="flex-1 flex flex-col items-center justify-center my-2 relative">
-                <div id="uno-message" class="absolute -top-6 text-xs font-bold text-brand-600 bg-brand-50 px-4 py-1 rounded-full shadow-sm opacity-0 transition-opacity z-20"></div>
+            <div class="flex-1 flex flex-col items-center justify-center my-4 relative">
+                <div id="uno-message" class="absolute -top-6 text-sm font-bold text-brand-600 bg-brand-50 px-4 py-1 rounded-full shadow-sm opacity-0 transition-opacity"></div>
                 <div class="flex gap-6 items-center">
-                    <div id="discard-pile" class="scale-105 shadow-lg rounded-lg transition-transform duration-300"></div>
-                    <div id="draw-pile" onclick="drawCardCurrentPlayer()" class="uno-card uno-black border-gray-500 hover:border-white transition-all cursor-pointer group hover:scale-105">
-                        <span class="uno-center-symbol text-white text-xs font-normal">AMBIL</span>
+                    <div id="discard-pile" class="scale-110 shadow-lg shadow-black/20 rounded-lg"></div>
+                    <div id="draw-pile" onclick="drawCardCurrentPlayer()" class="uno-card uno-black border-gray-500 hover:border-white transition-colors cursor-pointer group">
+                        <span class="uno-center-symbol text-white text-sm font-normal">AMBIL</span>
                         <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 rounded-md transition-colors"></div>
                     </div>
                 </div>
-                <div id="current-color-indicator" class="mt-4 w-7 h-7 rounded-full shadow-inner border-2 border-white hidden animate-pulse"></div>
+                <div id="current-color-indicator" class="mt-6 w-8 h-8 rounded-full shadow-inner border-2 border-white hidden"></div>
             </div>
-
-            <!-- Active Player Hand -->
-            <div id="active-player-area" class="w-full bg-white/60 rounded-2xl p-3 border border-white mt-auto transition-all shadow-md">
-                <div class="flex justify-between items-center mb-1 px-1">
-                    <span id="active-player-name" class="text-xs font-bold text-gray-700"><i class="fa-solid fa-user mr-1"></i> Player</span>
-                    <span id="active-card-count" class="text-[11px] font-bold bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Kartu</span>
+            <!-- Your Hand -->
+            <div id="p1-area" class="w-full bg-white/50 rounded-2xl p-3 border border-white mt-auto transition-all">
+                <div class="flex justify-between items-center mb-2 px-1">
+                    <span class="text-xs font-semibold text-gray-600"><i class="fa-solid fa-user mr-1"></i> Kamu</span>
+                    <div class="flex items-center gap-3">
+                        <span id="p1-card-count" class="text-xs font-bold bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full"></span>
+                        <button onclick="toggleHand(1)" class="text-xs text-gray-500 hover:text-brand-500 transition px-2 py-1 bg-white rounded-md shadow-sm">
+                            <i id="p1-eye" class="fa-solid fa-eye"></i><span id="p1-eye-text" class="hidden sm:inline"> Tampilkan</span>
+                        </button>
+                    </div>
                 </div>
-                <div id="active-hand-container" class="hand-container min-h-[100px]"></div>
+                <div id="p1-hand" class="hand-container min-h-[100px]"></div>
             </div>
         </div>
         
@@ -328,25 +312,28 @@
             <button onclick="goHomeFromGame()" class="absolute top-2 left-0 text-gray-400 hover:text-gray-600 w-10 h-10 flex items-center justify-center rounded-full glass-card z-20">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
-            <div class="text-center mb-4">
+            <div class="text-center mb-6">
                 <h2 class="font-bold text-xl text-gray-800">Ular Tangga Cinta</h2>
-                <p id="ut-turn-indicator" class="text-xs font-semibold text-emerald-600 mt-1">Giliran: -</p>
+                <p id="ut-turn-indicator" class="text-sm font-medium text-emerald-600 mt-1">Giliran: Kamu</p>
             </div>
             
-            <div class="w-full max-w-[350px] mx-auto relative mb-6">
+            <div class="w-full max-w-[350px] mx-auto relative mb-8">
                 <!-- Board Grid -->
-                <div id="ut-board" class="board-grid relative"></div>
-                <!-- Dynamic Player Tokens Container -->
-                <div id="ut-tokens-container"></div>
+                <div id="ut-board" class="board-grid relative">
+                    <!-- Board cells will be generated via JS -->
+                </div>
+                <!-- Tokens -->
+                <div id="ut-token-1" class="player-token token-p1">P1</div>
+                <div id="ut-token-2" class="player-token token-p2">P2</div>
             </div>
 
             <div class="flex-1 flex flex-col justify-end items-center">
-                <p id="ut-message" class="text-xs text-center font-semibold text-gray-600 h-5 mb-3"></p>
+                <p id="ut-message" class="text-sm text-center font-semibold text-gray-600 h-6 mb-4"></p>
                 <div class="flex gap-4 items-center">
-                    <div id="ut-dice-display" class="w-14 h-14 bg-white border-2 border-emerald-200 rounded-2xl flex items-center justify-center text-2xl font-bold text-emerald-600 shadow-sm">
+                    <div id="ut-dice-display" class="w-16 h-16 bg-white border-2 border-emerald-200 rounded-2xl flex items-center justify-center text-3xl font-bold text-emerald-600 shadow-sm">
                         <i class="fa-solid fa-dice-d6"></i>
                     </div>
-                    <button id="ut-btn-roll" onclick="rollDice()" class="py-3.5 px-7 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition active:scale-95 text-sm">
+                    <button id="ut-btn-roll" onclick="rollDice()" class="py-4 px-8 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition active:scale-95">
                         Kocok Dadu!
                     </button>
                 </div>
@@ -358,8 +345,8 @@
             <div class="bg-white p-8 rounded-[2rem] max-w-[320px] w-full text-center shadow-xl border-t-8 border-yellow-400">
                 <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fa-solid fa-star"></i></div>
                 <h3 class="font-bold text-gray-800 mb-2">Kotak Misteri!</h3>
-                <p id="ut-question-text" class="text-gray-600 mb-6 font-medium leading-relaxed text-sm"></p>
-                <button onclick="closeUtQuestion()" class="w-full py-3 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition text-sm">Udah Dijawab</button>
+                <p id="ut-question-text" class="text-gray-600 mb-6 font-medium leading-relaxed"></p>
+                <button onclick="closeUtQuestion()" class="w-full py-3 bg-brand-600 text-white rounded-xl font-medium hover:bg-brand-700 transition">Udah Dijawab</button>
             </div>
         </div>
 
@@ -368,41 +355,45 @@
             <button onclick="goHomeFromGame()" class="absolute top-2 left-0 text-gray-400 hover:text-gray-600 w-10 h-10 flex items-center justify-center rounded-full glass-card z-20">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
-            <div class="text-center mb-8 w-full">
-                <h2 class="font-bold text-2xl text-gray-800 mb-1">Truth or Dare</h2>
-                <p id="tod-turn" class="text-xs font-semibold bg-amber-100 text-amber-800 inline-block px-4 py-1 rounded-full">Giliran: Pemain</p>
+            <div class="text-center mb-10 w-full">
+                <h2 class="font-bold text-2xl text-gray-800 mb-2">Truth or Dare</h2>
+                <p id="tod-turn" class="text-sm font-medium bg-amber-100 text-amber-700 inline-block px-4 py-1 rounded-full">Giliran: Kamu (P1)</p>
             </div>
 
-            <div class="bottle-container flex items-center justify-center mb-8">
+            <div class="bottle-container flex items-center justify-center mb-12">
                 <!-- SVG Bottle -->
                 <svg id="tod-bottle" class="bottle" viewBox="0 0 100 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Glow/Shadow under bottle -->
                     <ellipse cx="50" cy="150" rx="30" ry="120" fill="rgba(0,0,0,0.1)"/>
                     <path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/>
                     <rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/>
+                    <!-- Label -->
                     <rect x="22" y="140" width="56" height="50" fill="white" opacity="0.9"/>
                     <text x="50" y="160" font-family="Arial" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text>
+                    <!-- Highlight -->
                     <path d="M30 100 C30 150 30 200 30 250" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
+                    <!-- Cap arrow pointer -->
                     <path d="M50 0 L65 20 L35 20 Z" fill="#ef4444"/>
                 </svg>
             </div>
 
             <div id="tod-controls" class="w-full max-w-[280px] space-y-4">
-                <button onclick="spinBottle()" class="w-full py-3.5 bg-amber-500 text-white rounded-2xl font-bold shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition active:scale-95 text-base">
+                <button onclick="spinBottle()" class="w-full py-4 bg-amber-500 text-white rounded-2xl font-bold shadow-lg shadow-amber-500/30 hover:bg-amber-600 transition active:scale-95 text-lg">
                     Putar Botol
                 </button>
             </div>
 
             <!-- Choice / Result Area -->
-            <div id="tod-action-area" class="w-full max-w-[300px] mt-2 hidden flex-col items-center animate-slide-up">
-                <p id="tod-target-text" class="text-center font-bold text-gray-700 mb-3 text-sm"></p>
-                <div id="tod-choice-btns" class="grid grid-cols-2 gap-3 w-full mb-3">
-                    <button onclick="selectTod('truth')" class="py-2.5 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600 text-sm">TRUTH</button>
-                    <button onclick="selectTod('dare')" class="py-2.5 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 text-sm">DARE</button>
+            <div id="tod-action-area" class="w-full max-w-[300px] mt-4 hidden flex-col items-center animate-slide-up">
+                <p id="tod-target-text" class="text-center font-bold text-gray-700 mb-4"></p>
+                <div id="tod-choice-btns" class="grid grid-cols-2 gap-4 w-full mb-4">
+                    <button onclick="selectTod('truth')" class="py-3 bg-blue-500 text-white rounded-xl font-bold hover:bg-blue-600">TRUTH</button>
+                    <button onclick="selectTod('dare')" class="py-3 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600">DARE</button>
                 </div>
-                <div id="tod-result-card" class="hidden w-full bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md">
-                    <span id="tod-type-badge" class="text-xs font-bold px-3 py-1 rounded-full mb-2 inline-block"></span>
-                    <p id="tod-result-text" class="text-gray-800 font-medium mb-4 text-sm"></p>
-                    <button onclick="resetTod()" class="w-full py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-200">Selesai / Lanjut</button>
+                <div id="tod-result-card" class="hidden w-full bg-white p-6 rounded-2xl border-2 border-brand-200 text-center shadow-md">
+                    <span id="tod-type-badge" class="text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block"></span>
+                    <p id="tod-result-text" class="text-gray-800 font-medium mb-5"></p>
+                    <button onclick="resetTod()" class="w-full py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-200">Selesai / Lanjut</button>
                 </div>
             </div>
         </div>
@@ -410,12 +401,14 @@
     </main>
 
     <script type="module">
+        // --- FIREBASE IMPORTS & SETUP ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = 'deeptalk-couple-app';
         
+        // KODE FIREBASE KAMU SUDAH DIPASANG DI SINI:
         const firebaseConfig = {
             apiKey: "AIzaSyDRTNchDAoxofiwxWDvhZ6VLtNckYFapWw",
             authDomain: "ruang-cerita-kita.firebaseapp.com",
@@ -433,12 +426,14 @@
             db = getFirestore(app);
             auth = getAuth(app);
             
+            // Login tanpa password agar pemain bisa langsung main (Anonymous Auth)
             async function initAuth() {
                 try {
                     let userCred = await signInAnonymously(auth);
                     userId = userCred.user.uid;
+                    console.log("Berhasil terhubung ke database! ID:", userId);
                 } catch (e) { 
-                    console.error("Error Auth:", e); 
+                    console.error("Error Auth: Pastikan Anonymous sign-in sudah diaktifkan di Firebase", e); 
                 }
             }
             initAuth();
@@ -448,14 +443,10 @@
 
         // --- GLOBAL MULTIPLAYER STATE ---
         let isOnline = false;
-        let myPlayerNumber = 0; // 0-based index
+        let myPlayerNumber = 1;
         let currentRoomCode = null;
         let unsubscribeSnapshot = null;
-        let currentGameType = '';
-
-        // Player Config (Default & Dynamic)
-        let playerNames = ["Pemain 1", "Pemain 2", "Pemain 3", "Pemain 4"];
-        let playerColors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#6366f1', '#84cc16', '#d97706'];
+        let currentGameType = ''; // 'uno', 'ulartangga', 'tod'
 
         // --- DEEP TALK LOGIC ---
         const questionsData = {
@@ -526,7 +517,7 @@
                     document.getElementById('question-text').innerText = activeQuestions[currentQIndex];
                     document.getElementById('progress-text').innerText = `${currentQIndex + 1} / ${activeQuestions.length}`;
                 } else {
-                    document.getElementById('question-text').innerHTML = "Yeay! Pertanyaan habis. <br><br>Peluk pasanganmu / temanmu sekarang! ❤️";
+                    document.getElementById('question-text').innerHTML = "Yeay! Pertanyaan habis. <br><br>Peluk pasanganmu sekarang! ❤️";
                     document.getElementById('progress-text').innerText = `Selesai`;
                     activeQuestions = shuffleArray(questionsData[currentCategory]);
                     currentQIndex = -1; 
@@ -541,51 +532,24 @@
             document.getElementById('home-screen').classList.remove('hidden');
         }
 
-        // --- LOBBY & PLAYER INPUTS LOGIC ---
-        window.generatePlayerInputs = function() {
-            const count = parseInt(document.getElementById('player-count-select').value);
-            const container = document.getElementById('player-inputs-container');
-            container.innerHTML = '';
-            for(let i = 0; i < count; i++) {
-                const val = playerNames[i] || `Pemain ${i+1}`;
-                container.innerHTML += `
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${playerColors[i % playerColors.length]}"></span>
-                        <input type="text" id="p-name-input-${i}" value="${val}" placeholder="Nama Pemain ${i+1}" class="w-full py-1.5 px-3 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium">
-                    </div>
-                `;
-            }
-        }
-
-        function savePlayerNamesFromInputs() {
-            const count = parseInt(document.getElementById('player-count-select').value);
-            playerNames = [];
-            for(let i = 0; i < count; i++) {
-                const el = document.getElementById(`p-name-input-${i}`);
-                const val = el ? el.value.trim() : '';
-                playerNames.push(val || `Pemain ${i+1}`);
-            }
-        }
-
+        // --- GENERIC LOBBY & ONLINE LOGIC ---
         window.showGameLobby = function(type) {
             currentGameType = type;
             let title = '', icon = '', color = '';
-            if(type === 'uno') { title = 'UNO Party'; icon = 'fa-layer-group'; color = 'text-indigo-500 bg-indigo-100'; }
+            if(type === 'uno') { title = 'UNO Couple'; icon = 'fa-layer-group'; color = 'text-indigo-500 bg-indigo-100'; }
             if(type === 'ulartangga') { title = 'Ular Tangga Cinta'; icon = 'fa-dice'; color = 'text-emerald-500 bg-emerald-100'; }
             if(type === 'tod') { title = 'Truth or Dare'; icon = 'fa-wine-bottle'; color = 'text-amber-500 bg-amber-100'; }
             
             document.getElementById('lobby-title').innerText = title;
-            document.getElementById('lobby-icon').className = `w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl ${color}`;
+            document.getElementById('lobby-icon').className = `w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl ${color}`;
             document.getElementById('lobby-icon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
             
-            window.generatePlayerInputs();
             document.getElementById('game-lobby-modal').classList.remove('hidden');
             document.getElementById('game-lobby-modal').style.display = 'flex';
         }
         window.closeLobby = () => { document.getElementById('game-lobby-modal').classList.add('hidden'); document.getElementById('game-lobby-modal').style.display = 'none'; }
         window.showOnlineMenu = () => {
             if(!db || !userId) { alert("Memuat cloud, tunggu sebentar."); return; }
-            savePlayerNamesFromInputs();
             closeLobby();
             document.getElementById('online-menu-modal').classList.remove('hidden');
             document.getElementById('online-menu-modal').style.display = 'flex';
@@ -604,7 +568,6 @@
 
         window.startOfflineGame = function() {
             isOnline = false;
-            savePlayerNamesFromInputs();
             closeLobby();
             document.getElementById('home-screen').classList.add('hidden');
             startGameUI(currentGameType);
@@ -613,10 +576,10 @@
 
         window.hostOnlineGame = async function() {
             const code = Math.random().toString(36).substring(2, 7).toUpperCase();
-            currentRoomCode = code; isOnline = true; myPlayerNumber = 0;
+            currentRoomCode = code; isOnline = true; myPlayerNumber = 1;
             const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
             try {
-                await setDoc(roomRef, { status: 'waiting', gameType: currentGameType, players: [{id: userId, name: playerNames[0]}], names: playerNames });
+                await setDoc(roomRef, { status: 'waiting', gameType: currentGameType, p1: userId, p2: null });
             } catch(e) { document.getElementById('join-error').innerText = "Gagal bikin room."; document.getElementById('join-error').classList.remove('hidden'); return; }
             
             document.getElementById('online-menu-modal').classList.add('hidden'); document.getElementById('online-menu-modal').style.display = 'none';
@@ -626,10 +589,9 @@
             unsubscribeSnapshot = onSnapshot(roomRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    if (data.status === 'playing' && document.getElementById('waiting-room-modal').style.display !== 'none') {
+                    if (data.status === 'playing' && data.p2 && document.getElementById('waiting-room-modal').style.display !== 'none') {
                         document.getElementById('waiting-room-modal').classList.add('hidden'); document.getElementById('waiting-room-modal').style.display = 'none';
                         document.getElementById('home-screen').classList.add('hidden');
-                        if(data.names) playerNames = data.names;
                         initGameLogic(currentGameType);
                         syncState(); 
                         startGameUI(currentGameType);
@@ -649,22 +611,12 @@
             if (!snap.exists()) { errEl.innerText = "Room tidak ditemukan!"; errEl.classList.remove('hidden'); return; }
             
             const data = snap.data();
-            if (data.status === 'waiting' || data.status === 'playing') {
+            if (data.status === 'waiting') {
                 if(data.gameType !== currentGameType) {
                     errEl.innerText = `Room ini untuk game lain!`; errEl.classList.remove('hidden'); return;
                 }
-                currentRoomCode = codeInput; isOnline = true; currentGameType = data.gameType;
-                
-                let pList = data.players || [];
-                let pIndex = pList.findIndex(p => p.id === userId);
-                if(pIndex === -1) {
-                    pIndex = pList.length;
-                    pList.push({ id: userId, name: playerNames[0] || `Pemain ${pIndex+1}` });
-                    await updateDoc(roomRef, { players: pList, status: pList.length >= 2 ? 'playing' : 'waiting' });
-                }
-                myPlayerNumber = pIndex;
-                if(data.names) playerNames = data.names;
-
+                currentRoomCode = codeInput; isOnline = true; myPlayerNumber = 2; currentGameType = data.gameType;
+                await updateDoc(roomRef, { status: 'playing', p2: userId });
                 document.getElementById('online-menu-modal').classList.add('hidden'); document.getElementById('online-menu-modal').style.display = 'none';
                 
                 unsubscribeSnapshot = onSnapshot(roomRef, (docSnap) => {
@@ -679,7 +631,7 @@
                         }
                     }
                 });
-            } else { errEl.innerText = "Room tidak valid!"; errEl.classList.remove('hidden'); }
+            } else { errEl.innerText = "Room penuh/bermain!"; errEl.classList.remove('hidden'); }
         }
 
         function startGameUI(type) {
@@ -710,8 +662,8 @@
         function syncState() {
             if (!isOnline || !currentRoomCode || !userId) return;
             let statePayload = {};
-            if(currentGameType === 'uno') statePayload = { deck: unoDeck, hands: unoHands, discardPile, currentTurn, currentColor, pendingWildAction };
-            if(currentGameType === 'ulartangga') statePayload = { positions: utState.positions, turn: utState.turn, dice: utState.dice, qTrigger: utState.qTrigger };
+            if(currentGameType === 'uno') statePayload = { deck: unoDeck, p1Hand, p2Hand, discardPile, currentTurn, currentColor, pendingWildAction };
+            if(currentGameType === 'ulartangga') statePayload = { p1Pos: utState.p1, p2Pos: utState.p2, turn: utState.turn, dice: utState.dice, qTrigger: utState.qTrigger };
             if(currentGameType === 'tod') statePayload = { rotation: todState.rotation, turn: todState.turn, action: todState.action, result: todState.result, phase: todState.phase };
             
             const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', currentRoomCode);
@@ -720,19 +672,16 @@
 
         function syncFromFirestore(data) {
             if(!data.state) return;
-            if(data.winner !== undefined && data.winner !== null) { showGenericWinner(data.winner); return; }
+            if(data.winner) { showGenericWinner(data.winner); return; }
             
             if(currentGameType === 'uno') {
-                unoDeck = data.state.deck || [];
-                unoHands = data.state.hands || [];
-                discardPile = data.state.discardPile || [];
-                currentTurn = data.state.currentTurn;
-                currentColor = data.state.currentColor;
+                unoDeck = data.state.deck || []; p1Hand = data.state.p1Hand || []; p2Hand = data.state.p2Hand || [];
+                discardPile = data.state.discardPile || []; currentTurn = data.state.currentTurn; currentColor = data.state.currentColor;
                 pendingWildAction = data.state.pendingWildAction;
                 renderUnoBoard();
             }
             if(currentGameType === 'ulartangga') {
-                utState = { positions: data.state.positions || [], turn: data.state.turn, dice: data.state.dice, qTrigger: data.state.qTrigger };
+                utState = { p1: data.state.p1Pos, p2: data.state.p2Pos, turn: data.state.turn, dice: data.state.dice, qTrigger: data.state.qTrigger };
                 renderUtBoard();
             }
             if(currentGameType === 'tod') {
@@ -744,7 +693,7 @@
         window.playAgain = function() {
             document.getElementById('winner-modal').classList.add('hidden'); document.getElementById('winner-modal').style.display = 'none';
             if (isOnline) {
-                if (myPlayerNumber === 0) {
+                if (myPlayerNumber === 1) {
                     initGameLogic(currentGameType);
                     syncState();
                     updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rooms', currentRoomCode), { winner: null });
@@ -756,11 +705,13 @@
 
         function showGenericWinner(winnerNum) {
             const modal = document.getElementById('winner-modal');
-            let name = playerNames[winnerNum] || `Pemain ${winnerNum + 1}`;
+            let isMe = isOnline ? (winnerNum === myPlayerNumber) : (winnerNum === 1);
+            let name = isMe ? 'Kamu' : 'Pasanganmu';
+            if(!isOnline) name = winnerNum === 1 ? 'Player 1' : 'Player 2';
             
             let text = '';
             if(currentGameType === 'uno') text = `<b>${name}</b> menghabiskan kartu duluan!`;
-            if(currentGameType === 'ulartangga') text = `<b>${name}</b> mencapai puncak duluan!`;
+            if(currentGameType === 'ulartangga') text = `<b>${name}</b> mencapai kotak 25 duluan!`;
             
             document.getElementById('winner-text').innerHTML = text;
             modal.classList.remove('hidden'); modal.style.display = 'flex';
@@ -774,10 +725,10 @@
         }
 
         // ==========================================
-        // 1. UNO LOGIC (Updated to Multi-Player 4-10 + Animations)
+        // 1. UNO LOGIC (Modified to fit new structure)
         // ==========================================
-        let unoDeck = [], unoHands = [], discardPile = [];
-        let currentTurn = 0, currentColor = '', pendingWildAction = null;
+        let unoDeck = [], p1Hand = [], p2Hand = [], discardPile = [];
+        let currentTurn = 1, currentColor = '', pendingWildAction = null, p1Hidden = false, p2Hidden = true;
         const unoColors = ['red', 'blue', 'green', 'yellow'];
 
         function initUnoLogic() {
@@ -789,84 +740,72 @@
             });
             for(let i=0;i<4;i++){ deck.push({color: 'black', value: 'wild', type: 'wild'}, {color: 'black', value: 'wild4', type: 'wild'}); }
             unoDeck = shuffleArray(deck);
-            
-            unoHands = [];
-            const numPlayers = playerNames.length;
-            for(let p = 0; p < numPlayers; p++) {
-                let hand = [];
-                for(let i = 0; i < 7; i++) hand.push(unoDeck.pop());
-                unoHands.push(hand);
-            }
-
-            let first = unoDeck.pop();
-            while(first.type !== 'number'){ unoDeck.unshift(first); first = unoDeck.pop(); }
-            discardPile = [first]; currentColor = first.color;
-            currentTurn = 0;
+            p1Hand = []; p2Hand = []; discardPile = [];
+            for(let i=0;i<7;i++){ p1Hand.push(unoDeck.pop()); p2Hand.push(unoDeck.pop()); }
+            let first = unoDeck.pop(); while(first.type !== 'number'){ unoDeck.unshift(first); first = unoDeck.pop(); }
+            discardPile.push(first); currentColor = first.color;
+            currentTurn = 1; p1Hidden = false; p2Hidden = true;
             renderUnoBoard();
         }
 
-        function getCardHTML(c, animate = '') {
+        function getCardHTML(c) {
             if(!c) return '';
             let val = c.value, icon = '';
             if(val==='skip') { icon='fa-ban'; val=''; } else if(val==='reverse') { icon='fa-arrows-rotate'; val=''; }
             else if(val==='draw2') val='+2'; else if(val==='wild') val='WILD'; else if(val==='wild4') val='+4';
             let cHTML = icon ? `<i class="fa-solid ${icon} uno-center-symbol"></i>` : `<span class="uno-center-symbol">${val}</span>`;
             let crHTML = icon ? `<i class="fa-solid ${icon}"></i>` : val;
-            return `<div class="uno-card uno-${c.color} ${animate}"><span class="uno-corner-symbol">${crHTML}</span>${cHTML}<span class="uno-corner-symbol-br">${crHTML}</span></div>`;
+            return `<div class="uno-card uno-${c.color}"><span class="uno-corner-symbol">${crHTML}</span>${cHTML}<span class="uno-corner-symbol-br">${crHTML}</span></div>`;
         }
+        function getCardBackHTML() { return `<div class="uno-card uno-black border-gray-600"><span class="uno-center-symbol text-red-500 font-bold font-sans italic">UNO</span></div>`; }
 
+        window.toggleHand = function(p) { if(isOnline) return; if(p===1) p1Hidden=!p1Hidden; else p2Hidden=!p2Hidden; renderUnoBoard(); }
+        
         function renderUnoBoard() {
             if(currentGameType !== 'uno') return;
+            const bCont = document.getElementById('p1-hand'), tCont = document.getElementById('p2-hand');
+            bCont.innerHTML = ''; tCont.innerHTML = '';
+            let bData, tData, bTurn, tTurn, bHid, tHid;
             
-            // Player Top Bar Avatar List
-            const otherBar = document.getElementById('other-players-bar');
-            otherBar.innerHTML = '';
+            if(isOnline && myPlayerNumber === 2) {
+                bData=p2Hand; tData=p1Hand; bTurn=2; tTurn=1; bHid=false; tHid=true;
+                document.querySelector('#p1-area span.font-semibold').innerHTML = '<i class="fa-solid fa-user mr-1"></i> Kamu (P2)';
+                document.querySelector('#p2-area span.font-semibold').innerHTML = '<i class="fa-solid fa-earth-americas mr-1"></i> Pasangan (P1)';
+            } else {
+                bData=p1Hand; tData=p2Hand; bTurn=1; tTurn=2; bHid=isOnline?false:p1Hidden; tHid=isOnline?true:p2Hidden;
+                document.querySelector('#p1-area span.font-semibold').innerHTML = '<i class="fa-solid fa-user mr-1"></i> Kamu (P1)';
+                document.querySelector('#p2-area span.font-semibold').innerHTML = `<i class="fa-solid ${isOnline?'fa-earth-americas':'fa-user-group'} mr-1"></i> Pasangan (P2)`;
+            }
+
+            const renderHand = (data, cont, turn, hid) => {
+                data.forEach((c, i) => {
+                    let w = document.createElement('div'); w.innerHTML = hid ? getCardBackHTML() : getCardHTML(c);
+                    let el = w.firstElementChild;
+                    if(currentTurn === turn && !hid) {
+                        el.onclick = () => window.playCard(turn, i);
+                        if(checkValidUnoPlay(c)) el.style.boxShadow = '0 -4px 10px rgba(74,222,128,0.4)';
+                    } else { el.style.cursor = 'default'; el.classList.remove('uno-card:hover'); }
+                    cont.appendChild(el);
+                });
+            }
+            renderHand(bData, bCont, bTurn, bHid); renderHand(tData, tCont, tTurn, tHid);
             
-            playerNames.forEach((name, idx) => {
-                const count = unoHands[idx] ? unoHands[idx].length : 0;
-                const isCurrent = currentTurn === idx;
-                const color = playerColors[idx % playerColors.length];
-                
-                const item = document.createElement('div');
-                item.className = `flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold shrink-0 transition-all ${isCurrent ? 'bg-white shadow-md border-2 border-brand-500 scale-105' : 'bg-white/60 text-gray-600'}`;
-                item.innerHTML = `
-                    <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${color}"></span>
-                    <span>${name}</span>
-                    <span class="bg-gray-100 text-gray-800 px-1.5 py-0.2 rounded-full text-[10px] font-bold">${count}</span>
-                `;
-                otherBar.appendChild(item);
-            });
-
-            // Turn info
-            let activeIdx = isOnline ? myPlayerNumber : currentTurn;
-            document.getElementById('turn-indicator').innerText = `Giliran: ${playerNames[currentTurn]}`;
-            document.getElementById('active-player-name').innerHTML = `<i class="fa-solid fa-user mr-1" style="color: ${playerColors[activeIdx % playerColors.length]}"></i> ${playerNames[activeIdx]}`;
-
-            // Hand
-            const handCont = document.getElementById('active-hand-container');
-            handCont.innerHTML = '';
+            document.getElementById('p1-card-count').innerText = bData.length;
+            document.getElementById('p2-card-count').innerText = tData.length;
             
-            let activeHand = unoHands[activeIdx] || [];
-            activeHand.forEach((c, i) => {
-                let w = document.createElement('div');
-                w.innerHTML = getCardHTML(c, 'anim-draw');
-                let el = w.firstElementChild;
-                
-                if(currentTurn === activeIdx) {
-                    el.onclick = () => window.playCard(activeIdx, i);
-                    if(checkValidUnoPlay(c)) el.style.boxShadow = '0 -4px 12px rgba(74,222,128,0.5)';
-                } else {
-                    el.style.cursor = 'default';
-                }
-                handCont.appendChild(el);
-            });
+            document.getElementById('p1-eye').className = p1Hidden ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+            document.getElementById('p2-eye').className = p2Hidden ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+            document.querySelectorAll('#uno-screen button').forEach(b=>{ if(b.onclick && b.onclick.toString().includes('toggleHand')) b.style.display = isOnline?'none':'block'; });
 
-            document.getElementById('active-card-count').innerText = `${activeHand.length} Kartu`;
-
-            if(discardPile.length > 0) {
-                document.getElementById('discard-pile').innerHTML = getCardHTML(discardPile[discardPile.length-1], 'anim-play');
+            if(discardPile.length>0) {
+                document.getElementById('discard-pile').innerHTML = getCardHTML(discardPile[discardPile.length-1]);
                 document.getElementById('draw-pile-count').innerText = unoDeck.length;
             }
+            
+            let turnText = isOnline ? (currentTurn===myPlayerNumber ? "Giliran: Kamu" : "Giliran: Pasangan") : (currentTurn===1 ? 'Giliran: Player 1' : 'Giliran: Player 2');
+            document.getElementById('turn-indicator').innerText = turnText;
+            document.getElementById('p1-area').classList.toggle('current-turn-highlight', currentTurn===bTurn);
+            document.getElementById('p2-area').classList.toggle('current-turn-highlight', currentTurn===tTurn);
             
             const cInd = document.getElementById('current-color-indicator');
             if(discardPile.length && (discardPile[discardPile.length-1].color==='black' || currentColor!==discardPile[discardPile.length-1].color)){
@@ -893,16 +832,16 @@
                 if(!unoDeck.length) return;
             }
             let c = unoDeck.pop();
-            unoHands[currentTurn].push(c);
+            currentTurn===1 ? p1Hand.push(c) : p2Hand.push(c);
             showUnoMsg("Ambil Kartu");
-            
-            currentTurn = (currentTurn + 1) % playerNames.length;
+            currentTurn = currentTurn===1 ? 2 : 1;
+            if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
             if(isOnline) syncState(); else renderUnoBoard();
         }
 
         window.playCard = function(pNum, idx) {
             if(pNum!==currentTurn) return;
-            let hand = unoHands[pNum];
+            let hand = pNum===1 ? p1Hand : p2Hand;
             let c = hand[idx];
             if(!checkValidUnoPlay(c)) { showUnoMsg("Tidak bisa!"); return; }
             
@@ -922,50 +861,48 @@
             currentColor = color;
             document.getElementById('color-picker-modal').classList.add('hidden'); document.getElementById('color-picker-modal').style.display = 'none';
             if(pendingWildAction === 'wild4') {
-                let nextP = (currentTurn + 1) % playerNames.length;
-                for(let i=0;i<4;i++) if(unoDeck.length) unoHands[nextP].push(unoDeck.pop());
+                let target = currentTurn===1 ? p2Hand : p1Hand;
+                for(let i=0;i<4;i++) if(unoDeck.length) target.push(unoDeck.pop());
                 showUnoMsg("+4 Kena mental!");
             } else {
-                currentTurn = (currentTurn + 1) % playerNames.length;
+                currentTurn = currentTurn===1 ? 2 : 1; // wild biasa switch turn
             }
             pendingWildAction = null;
+            if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
             if(isOnline) syncState(); else renderUnoBoard();
         }
 
         function applyUnoEffect(val) {
-            let nextP = (currentTurn + 1) % playerNames.length;
-            if(val==='skip' || val==='reverse') {
-                showUnoMsg("Skip / Lompati!");
-                currentTurn = (currentTurn + 2) % playerNames.length;
-            }
+            let pass = true;
+            if(val==='skip' || val==='reverse') { showUnoMsg("Skip!"); pass = false; }
             else if(val==='draw2') {
-                for(let i=0;i<2;i++) if(unoDeck.length) unoHands[nextP].push(unoDeck.pop());
-                showUnoMsg("+2 Mampus!");
-                currentTurn = (currentTurn + 2) % playerNames.length;
-            } else {
-                currentTurn = nextP;
+                let target = currentTurn===1 ? p2Hand : p1Hand;
+                for(let i=0;i<2;i++) if(unoDeck.length) target.push(unoDeck.pop());
+                showUnoMsg("+2 Mampus!"); pass = false;
             }
+            if(pass) currentTurn = currentTurn===1 ? 2 : 1;
+            if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
             if(isOnline) syncState(); else renderUnoBoard();
         }
 
         // ==========================================
-        // 2. ULAR TANGGA LOGIC (Multi-Player 4-10)
+        // 2. ULAR TANGGA LOGIC
         // ==========================================
-        let utState = { positions: [], turn: 0, dice: 0, qTrigger: null };
+        let utState = { p1: 1, p2: 1, turn: 1, dice: 0, qTrigger: null };
         const utSnakes = { 24: 13, 18: 7, 21: 2 };
         const utLadders = { 4: 14, 9: 20, 11: 22 };
         const utQuestions = [
-            "Apa hal yang paling kamu kangenin dari suasana ngumpul bareng?",
-            "Sebutkan 1 kebiasaan konyol teman di sebelah kananmu!",
-            "Kalau kalian dapet 1 Miliar buat dibagi rata, mau dipakai buat apa?",
-            "Siapa yang paling mungkin telat pas janjian jalan?",
-            "Sebutkan 3 kata yang mendeskripsikan grup ini!",
-            "Tantangan: Gombalin salah satu teman di sini secara acak!",
-            "Tantangan: Nyanyiin lagu hits sekarang juga!"
+            "Apa hal yang paling kamu kangenin dari aku pas kita nggak ketemu?",
+            "Sebutkan 1 hal yang bikin kamu naksir aku pas pertama kenal!",
+            "Kalau kita nikah nanti, kamu pengen resepsi yang kayak gimana?",
+            "Apa kebiasaanku yang paling lucu menurutmu?",
+            "Sebutkan 3 kata yang mendeskripsikan hubungan kita!",
+            "Tantangan: Gombalin aku pakai kata 'Dadu' dan 'Ular'!",
+            "Tantangan: Nyanyiin reff lagu romantis kesukaanmu buat aku sekarang!"
         ];
 
         function initUtLogic() {
-            utState = { positions: playerNames.map(() => 1), turn: 0, dice: 0, qTrigger: null };
+            utState = { p1: 1, p2: 1, turn: 1, dice: 0, qTrigger: null };
             generateUtBoard();
             renderUtBoard();
         }
@@ -973,6 +910,15 @@
         function generateUtBoard() {
             const board = document.getElementById('ut-board');
             board.innerHTML = '';
+            // 5x5 zig zag (25 to 1)
+            let cells = [];
+            for(let r=4; r>=0; r--) {
+                let row = [];
+                for(let c=1; c<=5; c++) row.push(r*5 + c);
+                if(r%2!==0) row.reverse(); // zig zag
+                cells.push(...row.reverse()); // reverse to append from top to bottom
+            }
+            // Fix map for 5x5 visual layout (Top row: 25, 24, 23, 22, 21)
             const map5x5 = [
                 25, 24, 23, 22, 21,
                 16, 17, 18, 19, 20,
@@ -998,41 +944,35 @@
 
         function renderUtBoard() {
             if(currentGameType !== 'ulartangga') return;
-            const container = document.getElementById('ut-tokens-container');
-            container.innerHTML = '';
-
+            // Move tokens
             const getPos = (num) => {
                 let cell = document.getElementById(`cell-${num}`);
-                if(!cell) return { top: 0, left: 0, w: 0, h: 0 };
+                if(!cell) return { top: 0, left: 0 };
                 return { top: cell.offsetTop, left: cell.offsetLeft, w: cell.offsetWidth, h: cell.offsetHeight };
             };
+            
+            let t1 = document.getElementById('ut-token-1');
+            let p1Pos = getPos(utState.p1);
+            t1.style.top = (p1Pos.top + p1Pos.h/2 - 12) + 'px';
+            t1.style.left = (p1Pos.left + p1Pos.w/2 - 12) + 'px';
 
-            utState.positions.forEach((pos, idx) => {
-                let pPos = getPos(pos);
-                let token = document.createElement('div');
-                token.className = 'player-token';
-                token.style.backgroundColor = playerColors[idx % playerColors.length];
-                
-                // Offset multiple tokens inside same cell
-                let offsetX = (idx % 3) * 6 - 6;
-                let offsetY = Math.floor(idx / 3) * 6 - 6;
-                
-                token.style.top = (pPos.top + pPos.h/2 - 11 + offsetY) + 'px';
-                token.style.left = (pPos.left + pPos.w/2 - 11 + offsetX) + 'px';
-                token.innerText = idx + 1;
-                container.appendChild(token);
-            });
+            let t2 = document.getElementById('ut-token-2');
+            let p2Pos = getPos(utState.p2);
+            t2.style.top = (p2Pos.top + p2Pos.h/2 - 12) + 'px';
+            t2.style.left = (p2Pos.left + p2Pos.w/2 - 12) + 'px';
 
-            let turnText = isOnline ? (utState.turn === myPlayerNumber ? "Giliran: Kamu" : `Giliran: ${playerNames[utState.turn]}`) : `Giliran: ${playerNames[utState.turn]}`;
+            // UI
+            let turnText = isOnline ? (utState.turn === myPlayerNumber ? "Giliran: Kamu" : "Giliran: Pasangan") : (utState.turn === 1 ? "Giliran: Player 1 (Merah)" : "Giliran: Player 2 (Biru)");
+            let turnColor = utState.turn === 1 ? 'text-red-600' : 'text-blue-600';
             let ind = document.getElementById('ut-turn-indicator');
-            ind.innerText = turnText;
+            ind.innerText = turnText; ind.className = `text-sm font-bold mt-1 ${turnColor}`;
 
-            document.getElementById('ut-dice-display').innerHTML = utState.dice ? `<span class="text-3xl text-gray-800">${utState.dice}</span>` : `<i class="fa-solid fa-dice-d6"></i>`;
+            document.getElementById('ut-dice-display').innerHTML = utState.dice ? `<span class="text-4xl text-gray-800">${utState.dice}</span>` : `<i class="fa-solid fa-dice-d6"></i>`;
 
             let btn = document.getElementById('ut-btn-roll');
             if(isOnline && utState.turn !== myPlayerNumber) {
                 btn.classList.add('opacity-50', 'pointer-events-none');
-                btn.innerText = "Menunggu...";
+                btn.innerText = "Nunggu Pasangan...";
             } else {
                 btn.classList.remove('opacity-50', 'pointer-events-none');
                 btn.innerText = "Kocok Dadu!";
@@ -1053,28 +993,33 @@
             
             let roll = Math.floor(Math.random() * 6) + 1;
             utState.dice = roll;
-            let currentPos = utState.positions[utState.turn];
+            let currentPos = utState.turn === 1 ? utState.p1 : utState.p2;
             let newPos = currentPos + roll;
-            if(newPos > 25) newPos = 25 - (newPos - 25);
+            if(newPos > 25) newPos = 25 - (newPos - 25); // Bounce back
             
             let msg = `Dapat ${roll}! `;
-            if(utSnakes[newPos]) { msg += "Kena Ular 🐍"; newPos = utSnakes[newPos]; }
+            
+            // Check snakes/ladders
+            if(utSnakes[newPos]) { msg += "Yah kena Ular 🐍"; newPos = utSnakes[newPos]; }
             else if(utLadders[newPos]) { msg += "Naik Tangga! 🪜"; newPos = utLadders[newPos]; }
             
-            utState.positions[utState.turn] = newPos;
+            if(utState.turn === 1) utState.p1 = newPos; else utState.p2 = newPos;
+            
             document.getElementById('ut-message').innerText = msg;
             
+            // Check Win
             if(newPos === 25) {
                 if(isOnline) syncState(); else renderUtBoard();
                 setTimeout(() => handleEndGame(utState.turn), 500);
                 return;
             }
 
+            // Check Question (Every 4th square has a star)
             if(!utSnakes[newPos] && !utLadders[newPos] && newPos%4===0) {
                 let q = utQuestions[Math.floor(Math.random() * utQuestions.length)];
                 utState.qTrigger = q;
             } else {
-                utState.turn = (utState.turn + 1) % playerNames.length;
+                utState.turn = utState.turn === 1 ? 2 : 1;
             }
 
             if(isOnline) syncState(); else renderUtBoard();
@@ -1082,33 +1027,33 @@
 
         window.closeUtQuestion = function() {
             utState.qTrigger = null;
-            utState.turn = (utState.turn + 1) % playerNames.length;
+            utState.turn = utState.turn === 1 ? 2 : 1;
             if(isOnline) syncState(); else renderUtBoard();
         }
 
         // ==========================================
         // 3. TRUTH OR DARE LOGIC
         // ==========================================
-        let todState = { rotation: 0, turn: 0, action: null, result: null, phase: 'spin' };
+        let todState = { rotation: 0, turn: 1, action: null, result: null, phase: 'spin' }; // phases: spin, choice, result
         const todData = {
             truth: [
                 "Hal apa yang paling bikin kamu cemburu tapi kamu diem aja?",
-                "Siapa teman di sini yang paling sering rahasianya kamu simpan?",
-                "Sebutkan 1 hal yang bikin kamu ngerasa bangga sama grup ini!",
-                "Apa impian konyol yang belum pernah kamu ceritain ke siapapun?",
-                "Pernah nggak kamu kesel banget sama salah satu orang di sini? Siapa?"
+                "Kapan terakhir kali kamu nangis karena hubungan kita?",
+                "Sebutkan 1 hal yang bikin kamu ngerasa aku itu 'berbeda' dari mantannmu!",
+                "Apa fantasi/impian liburan berdua yang belum kesampaian?",
+                "Pernah nggak kamu kepikiran buat ninggalin aku? Kapan dan kenapa?"
             ],
             dare: [
-                "Pijitin pundak orang di sebelah kirimu selama 1 menit!",
-                "Bikin pantun gombalan buat teman di sebelah kananmu!",
-                "Post foto konyol bersama di Insta Story / WA selama 1 jam!",
-                "Tatap mata teman di depanmu selama 15 detik tanpa ketawa!",
-                "Praktekin cara jalan temanmu yang paling unik!"
+                "Pijitin tanganku selama 1 menit sambil bilang hal-hal manis!",
+                "Bikin pantun gombalan dadakan sekarang juga!",
+                "Post foto aibku di Story Instagram kamu (atau WA) selama 1 jam!",
+                "Cium keningku dan tatap mataku selama 15 detik tanpa ketawa!",
+                "Praktekin cara ketawaku yang paling aneh menurutmu!"
             ]
         };
 
         function initTodLogic() {
-            todState = { rotation: 0, turn: 0, action: null, result: null, phase: 'spin' };
+            todState = { rotation: 0, turn: 1, action: null, result: null, phase: 'spin' };
             renderTod();
         }
 
@@ -1117,7 +1062,7 @@
             const bottle = document.getElementById('tod-bottle');
             bottle.style.transform = `rotate(${todState.rotation}deg)`;
 
-            let turnText = isOnline ? (todState.turn === myPlayerNumber ? "Giliran: Kamu mutar" : `Giliran: ${playerNames[todState.turn]}`) : `Giliran: ${playerNames[todState.turn]}`;
+            let turnText = isOnline ? (todState.turn === myPlayerNumber ? "Giliran: Kamu mutar" : "Giliran: Pasangan mutar") : (todState.turn === 1 ? "Giliran: P1 Mutar" : "Giliran: P2 Mutar");
             document.getElementById('tod-turn').innerText = turnText;
 
             const btn = document.querySelector('#tod-controls button');
@@ -1127,7 +1072,7 @@
                 document.getElementById('tod-action-area').classList.remove('flex');
                 
                 if(isOnline && todState.turn !== myPlayerNumber) {
-                    btn.classList.add('opacity-50', 'pointer-events-none'); btn.innerText = "Menunggu...";
+                    btn.classList.add('opacity-50', 'pointer-events-none'); btn.innerText = "Menunggu Pasangan...";
                 } else {
                     btn.classList.remove('opacity-50', 'pointer-events-none'); btn.innerText = "Putar Botol";
                 }
@@ -1138,7 +1083,21 @@
                 document.getElementById('tod-choice-btns').style.display = 'grid';
                 document.getElementById('tod-result-card').style.display = 'none';
                 
-                let targetText = `Botol menunjuk pemain! Ayo pilih:`;
+                let targetText = "Siapa yang ditunjuk botol?";
+                if(isOnline) {
+                    // Logic: arrow up means P2 (pasangan) gets asked, arrow down means P1 (kamu) gets asked.
+                    // Simplified: whoever spun, the OTHER person gets the truth/dare.
+                    targetText = todState.turn === myPlayerNumber ? "Pasanganmu yang kena! Suruh dia pilih:" : "Kamu kena! Ayo pilih:";
+                    if(todState.turn !== myPlayerNumber) {
+                        // Pasangan mutar, jadi aku yang milih.
+                        document.getElementById('tod-choice-btns').classList.remove('pointer-events-none', 'opacity-50');
+                    } else {
+                        // Aku mutar, pasangan milih.
+                        document.getElementById('tod-choice-btns').classList.add('pointer-events-none', 'opacity-50');
+                    }
+                } else {
+                    targetText = todState.turn === 1 ? "P2 yang kena! Pilih:" : "P1 yang kena! Pilih:";
+                }
                 document.getElementById('tod-target-text').innerText = targetText;
             } else if (todState.phase === 'result') {
                 document.getElementById('tod-choice-btns').style.display = 'none';
@@ -1147,7 +1106,7 @@
                 
                 let badge = document.getElementById('tod-type-badge');
                 badge.innerText = todState.action.toUpperCase();
-                badge.className = todState.action === 'truth' ? 'text-xs font-bold px-3 py-1 rounded-full mb-2 inline-block bg-blue-100 text-blue-700' : 'text-xs font-bold px-3 py-1 rounded-full mb-2 inline-block bg-rose-100 text-rose-700';
+                badge.className = todState.action === 'truth' ? 'text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block bg-blue-100 text-blue-700' : 'text-xs font-bold px-3 py-1 rounded-full mb-3 inline-block bg-rose-100 text-rose-700';
                 
                 document.getElementById('tod-result-text').innerText = todState.result;
             }
@@ -1156,7 +1115,7 @@
         window.spinBottle = function() {
             if(isOnline && todState.turn !== myPlayerNumber) return;
             
-            let extra = Math.floor(Math.random() * 720) + 720;
+            let extra = Math.floor(Math.random() * 720) + 720; // 2-4 spins
             todState.rotation += extra;
             todState.phase = 'animating';
             
@@ -1177,12 +1136,865 @@
         }
 
         window.resetTod = function() {
-            todState.turn = (todState.turn + 1) % playerNames.length;
+            todState.turn = todState.turn === 1 ? 2 : 1;
             todState.phase = 'spin';
             todState.action = null; todState.result = null;
             if(isOnline) syncState(); else renderTod();
         }
 
     </script>
+
+<!-- =====================================================================
+     ADD-ON "MODE RAME-RAME" (4-10 PEMAIN + USERNAME + ANIMASI UNO)
+     CARA PAKAI: tempel SELURUH isi file ini TEPAT SEBELUM </body>
+     di file aslimu. Tidak ada satu baris pun kode asli yang diubah.
+     ===================================================================== -->
+
+<style id="pt-style">
+/* ---------- Layar & komponen umum ---------- */
+#pt-root{position:fixed;inset:0;z-index:200;background:#fdf8f6;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;font-family:Poppins,sans-serif;color:#1f2937}
+#pt-root.open{display:block}
+.pt-wrap{max-width:440px;margin:0 auto;padding:14px 16px 28px;min-height:100%;display:flex;flex-direction:column}
+.pt-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.85);border:1px solid #eaddd7;color:#8b6255;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pt-lbl{font-size:12px;font-weight:600;color:#9ca3af;margin:0 0 8px 4px}
+.pt-btn{width:100%;padding:14px;border-radius:16px;font-weight:600;font-size:14px;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.pt-btn:active{transform:scale(.97)}
+.pt-btn.off{opacity:.4;pointer-events:none}
+.pt-pri{background:#8b6255;color:#fff;box-shadow:0 8px 20px rgba(139,98,85,.25)}
+.pt-sec{background:#fff;color:#5a382e;border:1px solid #eaddd7}
+.pt-input{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #eaddd7;background:#fff;font-size:14px;outline:none}
+.pt-input:focus{border-color:#a37c6c;box-shadow:0 0 0 3px rgba(163,124,108,.18)}
+.pt-game{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:16px;background:#fff;border:2px solid #f2e8e5;color:#6b7280;font-size:11px;font-weight:600;transition:all .2s}
+.pt-game i{font-size:20px;color:var(--c)}
+.pt-game.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);color:#374151}
+.pt-av{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid #f2e8e5}
+.pt-modal{position:fixed;inset:0;background:rgba(17,24,39,.65);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+.pt-mbox{background:#fff;border-radius:28px;padding:24px;max-width:320px;width:100%;text-align:center;animation:ptLand .4s both}
+#pt-colors{position:fixed;inset:0;background:rgba(17,24,39,.7);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
+#pt-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#1f2937;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;z-index:700;opacity:0;pointer-events:none;transition:all .25s;max-width:88vw;text-align:center}
+#pt-toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Chip pemain ---------- */
+.pt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.pt-strip::-webkit-scrollbar{display:none}
+.pt-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:5px 10px 5px 5px;border-radius:999px;background:#fff;border:2px solid #f2e8e5;font-size:12px;font-weight:500;transition:border-color .2s}
+.pt-chip .pt-nm{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-chip.pt-turn{border-color:#ec4899;animation:ptRing 1.4s infinite}
+.pt-cnt{min-width:20px;text-align:center;font-size:11px;font-weight:700;background:#f2e8e5;color:#5a382e;border-radius:999px;padding:1px 6px}
+.pt-cnt.uno{background:#ef4444;color:#fff;animation:ptPop .5s infinite alternate}
+.pt-pill{font-size:13px;font-weight:700;background:#fff;border:1px solid #f2e8e5;color:#8b6255;padding:6px 14px;border-radius:999px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-pill.me{background:#ec4899;color:#fff;border-color:#ec4899;animation:ptPop .6s ease 2}
+
+/* ---------- UNO ---------- */
+.pt-hand{display:flex;overflow-x:auto;padding:16px 8px 10px;min-height:118px;scrollbar-width:none}
+.pt-hand::-webkit-scrollbar{display:none}
+.pt-cw{flex:0 0 auto}
+.pt-cw+.pt-cw{margin-left:-20px}
+.pt-cw .uno-card{transition:transform .2s,box-shadow .2s,opacity .2s}
+.pt-cw.ok .uno-card{box-shadow:0 -4px 12px rgba(74,222,128,.55)}
+.pt-cw.no .uno-card{opacity:.5}
+.pt-deal{animation:ptDeal .5s cubic-bezier(.2,.8,.2,1) both}
+.pt-land{animation:ptLand .4s cubic-bezier(.2,.8,.2,1) both}
+.pt-pile{border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.pt-draw-ok{animation:ptBreath 1.2s infinite}
+.pt-cover{text-align:center;padding:22px 12px;background:rgba(255,255,255,.8);border:2px dashed #d2bab0;border-radius:20px}
+.pt-fly{position:fixed;z-index:450;pointer-events:none;will-change:transform}
+.pt-dir{animation:ptSpin 4s linear infinite}
+.pt-dir.flip{animation-direction:reverse}
+
+/* ---------- Ular Tangga ---------- */
+.pt-dots{position:absolute;left:0;right:0;bottom:1px;display:flex;flex-wrap:wrap;justify-content:center;gap:1px;padding:0 2px}
+.pt-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.pt-dot.cur{width:13px;height:13px;animation:ptPop .5s infinite alternate}
+.pt-shake{animation:ptShake .18s}
+
+/* ---------- Truth or Dare ---------- */
+.pt-ring{position:relative;width:100%;max-width:330px;aspect-ratio:1;margin:0 auto}
+.pt-seat{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:54px}
+.pt-seat .pt-av{width:38px;height:38px;font-size:15px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s}
+.pt-seat span.nm{font-size:10px;font-weight:600;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5a382e}
+.pt-seat.hit .pt-av{transform:scale(1.35);box-shadow:0 0 0 4px rgba(245,158,11,.5);animation:ptPop .5s infinite alternate}
+.pt-seat.spin .pt-av{box-shadow:0 0 0 3px #ec4899}
+.pt-bottle{position:absolute;left:50%;top:50%;width:38px;height:114px;margin:-57px 0 0 -19px;transition:transform 3s cubic-bezier(.2,.7,.1,1);filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
+
+/* ---------- Banner & confetti ---------- */
+#pt-banner{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:500;opacity:0}
+#pt-banner.show{animation:ptBn 1.5s ease forwards}
+.pt-bn{color:#fff;padding:16px 34px;border-radius:24px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35);border:4px solid #fff}
+.pt-bn-big{font-weight:800;font-size:38px;letter-spacing:.02em;line-height:1.1;text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.pt-bn-sub{font-size:13px;font-weight:500;margin-top:4px;opacity:.95}
+.pt-conf{position:fixed;top:0;z-index:600;pointer-events:none;border-radius:2px}
+
+/* ---------- Animasi untuk UNO ASLI (tanpa mengubah kode asli) ---------- */
+.uno-fx-deal{animation:ptDeal .5s cubic-bezier(.2,.8,.2,1) both}
+.uno-fx-land{animation:ptLand .4s cubic-bezier(.2,.8,.2,1) both}
+.pt-pop{animation:ptPop .35s ease 2}
+
+@keyframes ptDeal{from{transform:translateY(-150px) scale(.5) rotate(-18deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes ptLand{0%{transform:scale(1.6) rotate(-14deg);opacity:0}60%{transform:scale(.94) rotate(3deg);opacity:1}100%{transform:none;opacity:1}}
+@keyframes ptPop{from{transform:scale(1)}to{transform:scale(1.12)}}
+@keyframes ptRing{0%,100%{box-shadow:0 0 0 0 rgba(236,72,153,.45)}50%{box-shadow:0 0 0 7px rgba(236,72,153,0)}}
+@keyframes ptBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes ptSpin{to{transform:rotate(360deg)}}
+@keyframes ptShake{0%{transform:rotate(0)}30%{transform:rotate(-14deg) scale(1.1)}70%{transform:rotate(12deg) scale(1.1)}100%{transform:rotate(0)}}
+@keyframes ptBn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}14%{opacity:1;transform:scale(1.15) rotate(3deg)}24%{transform:scale(1) rotate(0)}78%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1)}}
+@media (prefers-reduced-motion:reduce){.pt-dir,.pt-chip.pt-turn,.pt-draw-ok,.pt-dot.cur,.pt-cnt.uno{animation:none}}
+</style>
+
+<div id="pt-root"></div>
+<div id="pt-banner"></div>
+<div id="pt-toast"></div>
+<div id="pt-colors">
+  <div style="background:#fff;border-radius:28px;padding:22px;max-width:280px;width:100%;text-align:center">
+    <h3 style="font-weight:700;margin-bottom:14px">Pilih Warna</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <button onclick="ptColor('red')" style="height:80px;border-radius:14px;background:#ef4444"></button>
+      <button onclick="ptColor('blue')" style="height:80px;border-radius:14px;background:#3b82f6"></button>
+      <button onclick="ptColor('green')" style="height:80px;border-radius:14px;background:#22c55e"></button>
+      <button onclick="ptColor('yellow')" style="height:80px;border-radius:14px;background:#eab308"></button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     SCRIPT 1 (klasik): efek bersama + animasi UNO asli + tombol di Home
+     ===================================================================== -->
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const rnd = n => Math.floor(Math.random()*n);
+
+  function toast(msg){
+    const t=$('pt-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2000);
+  }
+  function banner(big,color,sub){
+    const b=$('pt-banner'); if(!b) return;
+    b.innerHTML='<div class="pt-bn" style="background:'+color+'"><div class="pt-bn-big">'+big+'</div>'+(sub?'<div class="pt-bn-sub">'+sub+'</div>':'')+'</div>';
+    b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
+  }
+  function confetti(){
+    const cols=['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899'];
+    for(let i=0;i<70;i++){
+      const el=document.createElement('i'); el.className='pt-conf';
+      el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[i%6]+';width:'+(6+rnd(6))+'px;height:'+(8+rnd(8))+'px';
+      document.body.appendChild(el);
+      const a=el.animate([
+        {transform:'translateY(-20px) rotate(0deg)',opacity:1},
+        {transform:'translate('+(rnd(160)-80)+'px,'+(innerHeight+40)+'px) rotate('+rnd(720)+'deg)',opacity:.9}
+      ],{duration:1800+rnd(1600),delay:rnd(500),easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'});
+      a.onfinish=()=>el.remove();
+    }
+  }
+  // terbangkan "kartu" dari elemen A ke elemen B (ukuran kartu 60x90)
+  function fly(fromEl,toEl,html,o){
+    o=o||{}; if(!fromEl||!toEl){ o.onEnd&&o.onEnd(); return; }
+    const a=fromEl.getBoundingClientRect(), b=toEl.getBoundingClientRect();
+    const el=document.createElement('div'); el.className='pt-fly'; el.innerHTML=html;
+    el.style.left=(a.left+a.width/2-30)+'px'; el.style.top=(a.top+a.height/2-45)+'px';
+    document.body.appendChild(el);
+    const dx=(b.left+b.width/2)-(a.left+a.width/2), dy=(b.top+b.height/2)-(a.top+a.height/2);
+    const an=el.animate([
+      {transform:'translate(0,0) scale(.7) rotate(0deg)',opacity:.2},
+      {transform:'translate(0,0) scale(.9) rotate(0deg)',opacity:1,offset:.12},
+      {transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate('+(o.rot||0)+'deg)',opacity:1}
+    ],{duration:o.dur||550,delay:o.delay||0,easing:'cubic-bezier(.2,.8,.2,1)',fill:'both'});
+    an.onfinish=()=>{ el.remove(); o.onEnd&&o.onEnd(); };
+  }
+  window.PTFX={toast,banner,confetti,fly,rnd};
+
+  // ---------- Tombol masuk di Home (menambah DOM saja) ----------
+  const games=document.querySelector('#home-screen .space-y-3');
+  if(games){
+    const h=document.createElement('h2');
+    h.className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2 mt-8';
+    h.textContent='Main Rame-Rame';
+    const b=document.createElement('button');
+    b.className='w-full text-left p-4 glass-card rounded-2xl hover:-translate-y-1 transition flex items-center gap-4 group border-l-4 border-rose-400';
+    b.innerHTML='<div class="w-12 h-12 shrink-0 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div><div><h3 class="font-medium text-gray-800 group-hover:text-rose-600">Mode Rame-Rame</h3><p class="text-xs text-gray-500">4–10 pemain · username · UNO, Ular Tangga, Truth or Dare</p></div>';
+    b.onclick=()=>window.ptOpen&&window.ptOpen();
+    games.parentNode.appendChild(h); games.parentNode.appendChild(b);
+  }
+  window.ptOpen=window.ptOpen||function(){ alert('Mode Rame-Rame belum siap, coba muat ulang halaman.'); };
+
+  // ---------- Animasi UNO ASLI (observer, tanpa menyentuh kode asli) ----------
+  const disc=$('discard-pile'), h1=$('p1-hand'), h2=$('p2-hand'), draw=$('draw-pile'),
+        msg=$('uno-message'), wm=$('winner-modal'), turn=$('turn-indicator');
+  if(disc&&h1&&h2){
+    let cnt={1:0,2:0}, lastTop='', raf=0;
+    const handle=()=>{
+      raf=0;
+      const c1=h1.children.length, c2=h2.children.length, topHTML=disc.innerHTML;
+      [[1,h1,c1],[2,h2,c2]].forEach(([k,el,c])=>{
+        const d=c-cnt[k];
+        if(d>0){ [...el.children].slice(-d).forEach((kid,i)=>{ kid.classList.add('uno-fx-deal'); kid.style.animationDelay=(i*0.07)+'s'; }); }
+      });
+      if(topHTML && topHTML!==lastTop && lastTop!==''){
+        const src = c1<cnt[1] ? h1 : (c2<cnt[2] ? h2 : null);
+        const topEl=disc.firstElementChild;
+        if(src&&topEl){
+          topEl.style.visibility='hidden';
+          fly(src,disc,topHTML,{dur:520,rot:rnd(24)-12,onEnd:()=>{ topEl.style.visibility=''; topEl.classList.add('uno-fx-land'); }});
+        } else if(topEl){ topEl.classList.add('uno-fx-land'); }
+      }
+      cnt={1:c1,2:c2}; lastTop=topHTML;
+    };
+    const kick=()=>{ if(!raf) raf=requestAnimationFrame(handle); };
+    [disc,h1,h2].forEach(el=>new MutationObserver(kick).observe(el,{childList:true}));
+
+    if(msg){
+      const map=[[/UNO/i,'UNO!','#ef4444'],[/Skip/i,'SKIP','#f97316'],[/\+2/,'+2','#3b82f6'],[/\+4/,'+4','#111827'],[/Ambil/i,'AMBIL','#6366f1']];
+      new MutationObserver(()=>{
+        const t=(msg.innerText||'').trim(); if(!t) return;
+        const m=map.find(x=>x[0].test(t));
+        if(m) banner(m[1],m[2],t.replace(/[!]+$/,'')); 
+      }).observe(msg,{childList:true});
+    }
+    if(turn) new MutationObserver(()=>{ turn.classList.remove('pt-pop'); void turn.offsetWidth; turn.classList.add('pt-pop'); }).observe(turn,{childList:true});
+    if(wm){
+      let shown=false;
+      new MutationObserver(()=>{
+        const vis=wm.style.display==='flex'||!wm.classList.contains('hidden');
+        if(vis&&!shown) confetti();
+        shown=vis;
+      }).observe(wm,{attributes:true,attributeFilter:['class','style']});
+    }
+  }
+})();
+</script>
+
+<!-- =====================================================================
+     SCRIPT 2 (module): Mode Rame-Rame 4-10 pemain
+     ===================================================================== -->
+<script type="module">
+const $ = id => document.getElementById(id);
+const {toast,banner,confetti,fly} = window.PTFX;
+
+// ============ KONFIGURASI ============
+const APP_ID='deeptalk-couple-app';
+const MIN_PLAYERS=4, MAX_PLAYERS=10;        // ubah di sini kalau mau
+const COLORS=['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'];
+const COLORHEX={red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308'};
+const GAMES={
+  uno:{title:'UNO',icon:'fa-layer-group',color:'#6366f1'},
+  ut:{title:'Ular Tangga',icon:'fa-dice',color:'#10b981'},
+  tod:{title:'Truth or Dare',icon:'fa-wine-bottle',color:'#f59e0b'}
+};
+
+// <<REDUCERS
+const rnd=n=>Math.floor(Math.random()*n);
+const clone=o=>JSON.parse(JSON.stringify(o));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- UNO ---------- */
+const UNO_COLORS=['red','blue','green','yellow'];
+function unoInit(players){
+  let deck=[];
+  UNO_COLORS.forEach(c=>{
+    deck.push({color:c,value:'0',type:'number'});
+    for(let i=1;i<=9;i++) deck.push({color:c,value:''+i,type:'number'},{color:c,value:''+i,type:'number'});
+    ['skip','reverse','draw2'].forEach(a=>deck.push({color:c,value:a,type:'action'},{color:c,value:a,type:'action'}));
+  });
+  for(let i=0;i<4;i++) deck.push({color:'black',value:'wild',type:'wild'},{color:'black',value:'wild4',type:'wild'});
+  deck=shuffle(deck);
+  const hands={}; players.forEach(p=>hands[p.id]=[]);
+  for(let i=0;i<7;i++) players.forEach(p=>hands[p.id].push(deck.pop()));
+  let first=deck.pop(); while(first.type!=='number'){deck.unshift(first);first=deck.pop();}
+  return {deck,hands,discard:[first],color:first.color,order:players.map(p=>p.id),turn:0,dir:1,winner:null,ev:{n:0,kind:'start'}};
+}
+function unoDrawN(g,id,k){
+  let got=0;
+  for(let i=0;i<k;i++){
+    if(!g.deck.length){ if(g.discard.length<=1) break; const top=g.discard.pop(); g.deck=shuffle(g.discard); g.discard=[top]; }
+    g.hands[id].push(g.deck.pop()); got++;
+  }
+  return got;
+}
+const unoStep=(g,s)=>{const n=g.order.length;return (((g.turn+g.dir*s)%n)+n)%n;};
+function unoReduce(room,a){
+  const g=clone(room.g); if(g.winner) return null;
+  const cur=g.order[g.turn]; const n=g.ev.n+1;
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=unoStep(g,1); g.ev={n,kind:'pass',by:cur}; return g; }
+  if(a.by!==cur&&a.by!=='*') return null;
+  if(a.type==='draw'){ const k=unoDrawN(g,cur,1); g.turn=unoStep(g,1); g.ev={n,kind:'draw',by:cur,cnt:k}; return g; }
+  if(a.type==='play'){
+    const hand=g.hands[cur], c=hand[a.idx]; if(!c) return null;
+    const top=g.discard[g.discard.length-1];
+    if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return null;
+    if(c.color==='black'&&!UNO_COLORS.includes(a.color)) return null;
+    hand.splice(a.idx,1); g.discard.push(c); g.color=c.color==='black'?a.color:c.color;
+    if(hand.length===0){ g.winner=cur; g.ev={n,kind:'win',by:cur,card:c}; return g; }
+    let kind='play',steps=1,to=null,cnt=0; const nxt=g.order[unoStep(g,1)];
+    if(c.value==='skip'){kind='skip';steps=2;to=nxt;}
+    else if(c.value==='reverse'){kind='reverse'; if(g.order.length===2) steps=2; else g.dir*=-1;}
+    else if(c.value==='draw2'){kind='draw2';to=nxt;cnt=unoDrawN(g,nxt,2);steps=2;}
+    else if(c.value==='wild4'){kind='wild4';to=nxt;cnt=unoDrawN(g,nxt,4);steps=2;}
+    else if(c.value==='wild'){kind='wild';}
+    g.turn=unoStep(g,steps);
+    g.ev={n,kind,by:cur,to,cnt,card:c,color:g.color,uno:hand.length===1};
+    return g;
+  }
+  return null;
+}
+
+/* ---------- ULAR TANGGA ---------- */
+const UT_SNAKES={24:13,18:7,21:2}, UT_LADDERS={4:14,9:20,11:22};
+const UT_Q=[
+  "Ceritakan kenangan paling lucu bareng orang-orang di sini!",
+  "Sebutkan 1 kelebihan pemain di sebelah kananmu!",
+  "Apa makanan yang paling bikin kamu happy?",
+  "Kalau besok libur dadakan, kamu mau ngapain?",
+  "Tantangan: Tirukan gaya jalan salah satu pemain!",
+  "Tantangan: Nyanyikan 1 baris lagu favoritmu!",
+  "Apa barang paling random yang pernah kamu beli?",
+  "Sebutkan 3 hal yang kamu syukuri hari ini!",
+  "Tantangan: Bikin pantun untuk pemain pilihanmu!"
+];
+function utInit(players){
+  const pos={}; players.forEach(p=>pos[p.id]=1);
+  return {pos,order:players.map(p=>p.id),turn:0,q:null,winner:null,ev:{n:0,kind:'start'}};
+}
+function utReduce(room,a){
+  const g=clone(room.g); if(g.winner) return null;
+  const cur=g.order[g.turn]; const n=g.ev.n+1;
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'pass',by:cur}; return g; }
+  if(a.by!==cur&&a.by!=='*') return null;
+  if(a.type==='roll'){
+    if(g.q) return null;
+    const from=g.pos[cur], roll=1+rnd(6); let p=from+roll; if(p>25) p=50-p;
+    const landed=p; let kind='move';
+    if(UT_SNAKES[p]){p=UT_SNAKES[p];kind='snake';} else if(UT_LADDERS[p]){p=UT_LADDERS[p];kind='ladder';}
+    g.pos[cur]=p;
+    if(p===25){ g.winner=cur; kind='win'; }
+    else if(kind==='move'&&p%4===0){ g.q=UT_Q[rnd(UT_Q.length)]; kind='star'; }
+    else g.turn=(g.turn+1)%g.order.length;
+    g.ev={n,by:cur,from,roll,landed,to:p,kind};
+    return g;
+  }
+  if(a.type==='ack'){ if(!g.q) return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'ack',by:cur}; return g; }
+  return null;
+}
+
+/* ---------- TRUTH OR DARE ---------- */
+const TOD={
+  truth:[
+    "Kebiasaan paling aneh yang kamu punya apa?",
+    "Siapa di sini yang paling kamu percaya buat simpan rahasia?",
+    "Hal paling memalukan yang pernah terjadi waktu kamu di tempat umum?",
+    "Lagu guilty pleasure kamu apa?",
+    "Pernah pura-pura sibuk biar nggak balas chat? Ceritain!",
+    "Kebohongan kecil apa yang paling sering kamu bilang?",
+    "Kalau harus tukar hidup sehari dengan salah satu orang di sini, pilih siapa dan kenapa?",
+    "Skill tersembunyi apa yang belum banyak orang tahu?",
+    "Pernah salah kirim chat ke orang yang salah? Apa isinya?",
+    "Mimpi apa yang masih kamu simpan sendiri?",
+    "Hal apa yang paling kamu sesali tahun ini?",
+    "Apa ketakutanmu yang paling nggak masuk akal?",
+    "Kapan terakhir kali kamu merasa benar-benar bangga sama diri sendiri?",
+    "Aplikasi apa yang paling bikin kamu buang waktu?",
+    "Siapa orang di sini yang paling gampang akrab sama orang baru?"
+  ],
+  dare:[
+    "Tirukan gaya bicara salah satu pemain, yang lain tebak siapa!",
+    "Nyanyikan satu lagu pilihan pemain di sebelah kirimu (minimal 10 detik)!",
+    "Joget 15 detik tanpa musik!",
+    "Bikin pantun gombal untuk pemain pilihanmu!",
+    "Tunjukkan foto paling lucu di galerimu (yang masih aman)!",
+    "Tirukan suara hewan pilihan grup selama 10 detik!",
+    "Jalan ala model catwalk keliling ruangan!",
+    "Beri pujian tulus ke setiap pemain, masing-masing 1 kalimat!",
+    "Jelaskan film favoritmu hanya dengan gerakan, tanpa suara!",
+    "Tahan tawa 15 detik sementara pemain lain menggodamu!",
+    "Ceritakan kisah kocak dalam 20 detik tanpa tertawa!",
+    "Pasang ekspresi paling dramatis selama 10 detik!",
+    "Bicara dengan logat daerah pilihan grup sampai gilirannya selesai!",
+    "Suit lawan pemain pilihanmu; yang kalah meniru gaya yang menang selama 1 putaran!"
+  ]
+};
+function todInit(players){
+  return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,usedT:[],usedD:[],ev:{n:0,kind:'start'}};
+}
+function todReduce(room,a){
+  const g=clone(room.g); const n=g.ev.n+1, N=g.order.length, spinner=g.order[g.turn];
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'pass'}; return g; }
+  if(a.type==='spin'){
+    if(g.phase!=='spin'||N<2) return null; if(a.by!==spinner&&a.by!=='*') return null;
+    let ti; do{ti=rnd(N);}while(ti===g.turn);
+    const theta=ti*360/N, base=((g.rot%360)+360)%360, delta=((theta-base)+360)%360;
+    g.rot=g.rot+1080+delta; g.target=g.order[ti]; g.phase='choice'; g.ev={n,kind:'spin',by:spinner,to:g.target};
+    return g;
+  }
+  if(a.type==='pick'){
+    if(g.phase!=='choice') return null; if(a.by!==g.target&&a.by!=='*') return null;
+    if(a.kind!=='truth'&&a.kind!=='dare') return null;
+    const key=a.kind==='truth'?'usedT':'usedD', pool=TOD[a.kind]; let used=g[key]||[];
+    if(used.length>=pool.length) used=[];
+    let i; do{i=rnd(pool.length);}while(used.includes(i));
+    used.push(i); g[key]=used; g.kind=a.kind; g.text=pool[i]; g.phase='result'; g.ev={n,kind:'pick'};
+    return g;
+  }
+  if(a.type==='next'){
+    if(g.phase!=='result') return null; if(a.by!==spinner&&a.by!==g.target&&a.by!=='*') return null;
+    g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'next'};
+    return g;
+  }
+  return null;
+}
+const INIT={uno:unoInit,ut:utInit,tod:todInit};
+const REDUCE={uno:unoReduce,ut:utReduce,tod:todReduce};
+// REDUCERS>>
+
+// ============ FIREBASE (opsional: mode 1 HP tetap jalan kalau gagal) ============
+let db=null, auth=null, FS=null;
+try{
+  const base='https://www.gstatic.com/firebasejs/11.6.1/';
+  const [A,Au,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+  const app=A.getApp(); db=F.getFirestore(app); auth=Au.getAuth(app); FS={...F,signInAnonymously:Au.signInAnonymously};
+}catch(e){ console.warn('Party: Firebase tidak tersedia, hanya mode 1 HP.',e); }
+const roomRef=c=>FS.doc(db,'artifacts',APP_ID,'public','data','rooms',c);
+async function ensureUser(){
+  if(!auth) throw new Error('nofb');
+  if(auth.authStateReady) await auth.authStateReady();
+  if(!auth.currentUser) await FS.signInAnonymously(auth);
+  return auth.currentUser.uid;
+}
+
+// ============ STATE ============
+const P={game:'uno',mode:'online',view:'menu',name:'',me:null,code:null,room:null,unsub:null,sig:null,prev:{},localNames:[],revealKey:null};
+try{P.name=localStorage.getItem('pt_name')||'';}catch(e){}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const W=o=>Object.assign(window,o);
+const BY=()=>P.mode==='local'?'*':P.me;
+const pl=id=>(P.room.players.find(p=>p.id===id))||{name:'?',color:'#999'};
+const ini=n=>esc((n||'?')[0].toUpperCase());
+const setRoot=h=>{$('pt-root').innerHTML=h;};
+const chipOf=id=>document.querySelector('[data-pid="'+id+'"]');
+function uniqueName(list,name){
+  const base=(name||'Pemain').trim().slice(0,12)||'Pemain'; let n=base,i=2;
+  while(list.some(p=>(p.name||p).toLowerCase()===n.toLowerCase())) n=base.slice(0,10)+(i++);
+  return n;
+}
+function readName(){
+  const v=($('pt-name')&&$('pt-name').value||P.name||'').trim().slice(0,12);
+  P.name=v; try{localStorage.setItem('pt_name',v);}catch(e){} return v;
+}
+function showErr(m){ const e=$('pt-err'); if(e){e.textContent=m;e.classList.remove('hidden');} else toast(m); }
+
+// ============ VIEW: MENU / LOCAL / LOBBY ============
+function vMenu(){
+  const cfg=GAMES[P.game];
+  return `<div class="pt-wrap">
+  <div class="flex items-center justify-between mb-4">
+    <button onclick="ptClose()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <span class="text-xs text-gray-400">${MIN_PLAYERS}–${MAX_PLAYERS} pemain</span>
+  </div>
+  <h2 class="font-serif text-2xl font-semibold text-brand-900">Mode Rame-Rame</h2>
+  <p class="text-sm text-brand-600 mb-5">Main bareng, tiap pemain punya username sendiri.</p>
+  <p class="pt-lbl">Pilih game</p>
+  <div class="grid grid-cols-3 gap-2 mb-5">
+    ${Object.entries(GAMES).map(([k,g])=>`<button onclick="ptPick('${k}')" class="pt-game ${P.game===k?'sel':''}" style="--c:${g.color}"><i class="fa-solid ${g.icon}"></i>${g.title}</button>`).join('')}
+  </div>
+  <p class="pt-lbl">Username kamu</p>
+  <input id="pt-name" class="pt-input" maxlength="12" placeholder="Contoh: Vanila" value="${esc(P.name)}">
+  <div class="mt-5 space-y-3">
+    <button onclick="ptHost()" class="pt-btn pt-pri"><i class="fa-solid fa-wifi"></i> Buat Room (beda HP)</button>
+    <div class="flex gap-2">
+      <input id="pt-code" class="pt-input" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-family:monospace" maxlength="5" placeholder="KODE">
+      <button onclick="ptJoin()" class="pt-btn pt-sec" style="width:auto;padding:0 22px">Gabung</button>
+    </div>
+    <p id="pt-err" class="text-xs text-red-500 hidden"></p>
+    <div class="flex items-center gap-3"><div class="h-px bg-gray-200 flex-1"></div><span class="text-xs text-gray-400">ATAU</span><div class="h-px bg-gray-200 flex-1"></div></div>
+    <button onclick="ptLocalSetup()" class="pt-btn pt-sec"><i class="fa-solid fa-mobile-screen"></i> Main 1 HP (gantian)</button>
+  </div>
+  <p class="text-[11px] text-gray-400 text-center mt-6">Game terpilih: <b>${cfg.title}</b></p>
+  </div>`;
+}
+function vLocal(){
+  const n=P.localNames.length, cfg=GAMES[P.game];
+  return `<div class="pt-wrap">
+  <div class="flex items-center gap-3 mb-4">
+    <button onclick="ptBackMenu()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div><h2 class="font-semibold text-brand-900">Main 1 HP · ${cfg.title}</h2><p class="text-xs text-gray-400">Tambah username semua pemain (${n}/${MAX_PLAYERS})</p></div>
+  </div>
+  <div class="flex gap-2 mb-3">
+    <input id="pt-ln" class="pt-input" maxlength="12" placeholder="Username pemain" onkeydown="if(event.key==='Enter')ptAddLocal()">
+    <button onclick="ptAddLocal()" class="pt-btn pt-pri" style="width:auto;padding:0 20px">Tambah</button>
+  </div>
+  <div class="space-y-2 mb-5">
+    ${P.localNames.map((nm,i)=>`<div class="pt-row"><span class="pt-av" style="background:${COLORS[i]}">${ini(nm)}</span><span class="flex-1 text-sm font-medium">${esc(nm)}</span><button onclick="ptDelLocal(${i})" class="text-gray-300 hover:text-red-400 px-2"><i class="fa-solid fa-xmark"></i></button></div>`).join('')||'<p class="text-sm text-gray-400 text-center py-6">Belum ada pemain.</p>'}
+  </div>
+  <button onclick="ptLocalStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main${n<MIN_PLAYERS?` (minimal ${MIN_PLAYERS} pemain)`:''}</button>
+  </div>`;
+}
+function vLobby(){
+  const r=P.room, isHost=r.host===P.me, n=r.players.length, cfg=GAMES[r.gameType];
+  return `<div class="pt-wrap">
+  <div class="flex items-center gap-3 mb-4">
+    <button onclick="ptLeave()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div><h2 class="font-semibold text-brand-900">Lobby · ${cfg.title}</h2><p class="text-xs text-gray-400">${n}/${MAX_PLAYERS} pemain</p></div>
+  </div>
+  <div class="text-center bg-white rounded-3xl border border-brand-100 p-5 mb-5">
+    <p class="text-xs text-gray-400 mb-1">Kode room — bagikan ke teman</p>
+    <button onclick="ptCopy()" class="font-mono text-4xl font-bold tracking-widest text-brand-800">${esc(P.code)}</button>
+    <p class="text-[11px] text-gray-400 mt-1">ketuk untuk salin</p>
+  </div>
+  <div class="space-y-2 mb-5">
+    ${r.players.map(p=>`<div class="pt-row"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="flex-1 text-sm font-medium">${esc(p.name)}${p.id===P.me?' (kamu)':''}</span>${p.id===r.host?'<i class="fa-solid fa-crown text-amber-400 text-sm"></i>':''}</div>`).join('')}
+  </div>
+  ${isHost
+    ?`<button onclick="ptStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main${n<MIN_PLAYERS?` (butuh ${MIN_PLAYERS-n} lagi)`:''}</button>`
+    :`<p class="text-center text-sm text-gray-500 mt-auto"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Menunggu host memulai…</p>`}
+  </div>`;
+}
+function ptRender(){
+  if(P.view==='menu') setRoot(vMenu());
+  else if(P.view==='local') setRoot(vLocal());
+  else if(P.view==='lobby') setRoot(vLobby());
+  else renderGame();
+}
+
+// ============ NAVIGASI & ROOM ============
+W({
+  ptOpen(){ $('pt-root').classList.add('open'); document.body.style.overflow='hidden'; ptRender(); },
+  ptClose(){ if(P.room&&P.view==='game'&&!confirm('Keluar dari permainan?')) return; ptLeave(); $('pt-root').classList.remove('open'); document.body.style.overflow=''; },
+  ptPick(k){ readName(); P.game=k; ptRender(); },
+  ptBackMenu(){ P.view='menu'; ptRender(); },
+  ptCopy(){ try{navigator.clipboard.writeText(P.code);toast('Kode disalin');}catch(e){} },
+  ptLocalSetup(){ readName(); P.view='local'; if(!P.localNames.length&&P.name) P.localNames=[P.name]; ptRender(); },
+  ptAddLocal(){
+    const el=$('pt-ln'); const v=(el.value||'').trim(); if(!v) return;
+    if(P.localNames.length>=MAX_PLAYERS) return toast('Maksimal '+MAX_PLAYERS+' pemain');
+    P.localNames.push(uniqueName(P.localNames,v)); ptRender(); $('pt-ln').focus();
+  },
+  ptDelLocal(i){ P.localNames.splice(i,1); ptRender(); },
+  ptLocalStart(){
+    if(P.localNames.length<MIN_PLAYERS) return;
+    const players=P.localNames.map((n,i)=>({id:'L'+i,name:n,color:COLORS[i]}));
+    P.mode='local'; P.me=null; P.code=null; P.sig=null; P.prev={}; P.revealKey=null;
+    P.room={gameType:P.game,players,status:'playing',host:'L0',g:INIT[P.game](players)};
+    onRoom();
+  },
+  async ptHost(){
+    const name=readName(); if(!name) return showErr('Isi username dulu ya');
+    if(!db) return showErr('Firebase belum tersambung. Coba "Main 1 HP".');
+    try{
+      const uid=await ensureUser(); let code,t=0;
+      do{ code=Math.random().toString(36).substring(2,7).toUpperCase(); t++; }while((await FS.getDoc(roomRef(code))).exists()&&t<6);
+      await FS.setDoc(roomRef(code),{party:true,status:'lobby',gameType:P.game,host:uid,players:[{id:uid,name,color:COLORS[0]}],created:Date.now()});
+      P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
+    }catch(e){ console.error(e); showErr('Gagal bikin room. Cek koneksi / aturan Firestore.'); }
+  },
+  async ptJoin(){
+    const name=readName(); if(!name) return showErr('Isi username dulu ya');
+    const code=($('pt-code').value||'').trim().toUpperCase(); if(code.length<4) return showErr('Kode room salah');
+    if(!db) return showErr('Firebase belum tersambung.');
+    try{
+      const uid=await ensureUser();
+      await FS.runTransaction(db,async tx=>{
+        const s=await tx.get(roomRef(code)); if(!s.exists()) throw new Error('nf');
+        const d=s.data(); if(!d.party) throw new Error('other');
+        if(d.players.some(p=>p.id===uid)) return;
+        if(d.status!=='lobby') throw new Error('started');
+        if(d.players.length>=MAX_PLAYERS) throw new Error('full');
+        const color=COLORS.find(c=>!d.players.some(p=>p.color===c))||COLORS[0];
+        tx.update(roomRef(code),{players:[...d.players,{id:uid,name:uniqueName(d.players,name),color}]});
+      });
+      P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
+    }catch(e){
+      const m={nf:'Room tidak ditemukan!',other:'Itu kode room game berdua, bukan Mode Rame-Rame.',started:'Permainan sudah dimulai.',full:'Room penuh (maks '+MAX_PLAYERS+').'}[e.message];
+      showErr(m||'Gagal gabung. Cek koneksi.');
+    }
+  },
+  async ptStart(){
+    const r=P.room; if(r.players.length<MIN_PLAYERS) return toast('Minimal '+MIN_PLAYERS+' pemain');
+    try{
+      await FS.runTransaction(db,async tx=>{
+        const s=await tx.get(roomRef(P.code)); const d=s.data();
+        if(d.host!==P.me||d.status!=='lobby'||d.players.length<MIN_PLAYERS) return;
+        tx.update(roomRef(P.code),{status:'playing',g:clone(INIT[d.gameType](d.players))});
+      });
+    }catch(e){ toast('Gagal memulai'); }
+  },
+  async ptRematch(){
+    const r=P.room;
+    if(P.mode==='local'){ P.prev={}; P.sig=null; P.revealKey=null; r.g=INIT[r.gameType](r.players); onRoom(); return; }
+    try{ await FS.updateDoc(roomRef(P.code),{status:'playing',g:clone(INIT[r.gameType](r.players))}); }catch(e){ toast('Gagal memulai ulang'); }
+  },
+  ptExit(){ if(confirm('Keluar dari permainan?')) ptLeave(); },
+  ptSkip(){ dispatch({type:'skip',by:BY()}); }
+});
+async function ptLeave(){
+  const r=P.room, code=P.code, wasOnline=P.mode==='online';
+  if(P.unsub){P.unsub();P.unsub=null;}
+  if(wasOnline&&r&&code&&db&&r.status==='lobby'){
+    try{
+      if(r.host===P.me) await FS.deleteDoc(roomRef(code));
+      else await FS.runTransaction(db,async tx=>{const s=await tx.get(roomRef(code)); if(s.exists()) tx.update(roomRef(code),{players:s.data().players.filter(p=>p.id!==P.me)});});
+    }catch(e){}
+  }
+  P.room=null;P.code=null;P.mode='online';P.view='menu';P.sig=null;P.prev={};P.utBusy=false;P.utDisp=null;
+  if($('pt-root').classList.contains('open')) ptRender();
+}
+W({ptLeave});
+
+function subscribe(code){
+  if(P.unsub) P.unsub();
+  P.unsub=FS.onSnapshot(roomRef(code),snap=>{
+    if(!snap.exists()){ toast('Room ditutup oleh host'); ptLeave(); return; }
+    P.room=snap.data();
+    if(!P.room.players.some(p=>p.id===P.me)){ toast('Kamu keluar dari room'); ptLeave(); return; }
+    onRoom();
+  },e=>console.error(e));
+}
+function onRoom(){
+  const r=P.room; if(!r) return;
+  if(r.status==='lobby'){ P.view='lobby'; ptRender(); return; }
+  const sig=JSON.stringify([r.status,r.players,r.g]);
+  if(sig===P.sig&&P.view==='game') return;
+  P.sig=sig;
+  if(P.view!=='game'){ P.prev={}; P.view='game'; }
+  renderGame();
+}
+async function dispatch(a){
+  const r=P.room; if(!r) return;
+  if(P.mode==='local'){ const g=REDUCE[r.gameType](r,a); if(g){ r.g=g; onRoom(); } return; }
+  try{
+    await FS.runTransaction(db,async tx=>{
+      const s=await tx.get(roomRef(P.code)); if(!s.exists()) return;
+      const d=s.data(); if(d.status!=='playing') return;
+      const g=REDUCE[d.gameType](d,a); if(!g) return;
+      tx.update(roomRef(P.code),{g:clone(g),lastUpdate:Date.now()});
+    });
+  }catch(e){ console.error(e); toast('Koneksi bermasalah, coba lagi'); }
+}
+
+// ============ GAME: SHARED ============
+function renderGame(){
+  const r=P.room; if(!r||!r.g) return; const g=r.g;
+  if(g.ev.n===0&&(P.prev.evn||0)>0) P.prev={};
+  const isNew=P.prev.evn!==undefined&&g.ev.n>P.prev.evn;
+  ({uno:renderUno,ut:renderUt,tod:renderTod})[r.gameType](isNew);
+  P.prev.evn=g.ev.n;
+}
+function winnerHTML(g,r){
+  if(!g.winner) return '';
+  const p=pl(g.winner), can=P.mode==='local'||r.host===P.me;
+  return `<div class="pt-modal"><div class="pt-mbox">
+    <div style="font-size:52px">🎉</div>
+    <h3 class="font-bold text-xl text-gray-800 mt-1 mb-1">${esc(p.name)} menang!</h3>
+    <p class="text-sm text-gray-500 mb-5">${r.gameType==='uno'?'Kartunya habis duluan':'Sampai di kotak 25 duluan'}</p>
+    ${can?'<button onclick="ptRematch()" class="pt-btn pt-pri mb-2">Main Lagi</button>':'<p class="text-xs text-gray-400 mb-3">Menunggu host mengulang…</p>'}
+    <button onclick="ptLeave()" class="pt-btn pt-sec">Keluar</button></div></div>`;
+}
+function hostSkipBtn(r){
+  return (P.mode==='online'&&r.host===P.me)?'<button onclick="ptSkip()" class="text-xs text-gray-400 underline mt-4 self-center">Lewati giliran (host)</button>':'';
+}
+function topBar(title,right){
+  return `<div class="flex items-center justify-between gap-2 mb-2">
+    <button onclick="ptExit()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="pt-pill ${title.me?'me':''}">${title.text}</div>
+    <div class="text-xs text-gray-500 min-w-[40px] text-right">${right||''}</div></div>`;
+}
+
+// ============ GAME: UNO ============
+function cardHTML(c){
+  let v=c.value,icon='';
+  if(v==='skip')icon='fa-ban'; else if(v==='reverse')icon='fa-arrows-rotate'; else if(v==='draw2')v='+2'; else if(v==='wild')v='WILD'; else if(v==='wild4')v='+4';
+  const mid=icon?`<i class="fa-solid ${icon} uno-center-symbol"></i>`:`<span class="uno-center-symbol"${v==='WILD'?' style="font-size:.9em"':''}>${v}</span>`;
+  const cr=icon?`<i class="fa-solid ${icon}"></i>`:v;
+  return `<div class="uno-card uno-${c.color}"><span class="uno-corner-symbol">${cr}</span>${mid}<span class="uno-corner-symbol-br">${cr}</span></div>`;
+}
+const backHTML=()=>`<div class="uno-card uno-black" style="border-color:#6b7280"><span class="uno-center-symbol" style="color:#ef4444;font-style:italic;font-size:1.1em">UNO</span></div>`;
+const CO={red:0,yellow:1,green:2,blue:3,black:4};
+
+function renderUno(isNew){
+  const r=P.room,g=r.g,order=g.order,cur=order[g.turn],local=P.mode==='local';
+  const viewer=local?cur:P.me, myTurn=local||cur===P.me;
+  const covered=local&&!g.winner&&P.revealKey!==g.ev.n;
+  const hand=g.hands[viewer]||[], top=g.discard[g.discard.length-1];
+  const valid=c=>c.color==='black'||c.color===g.color||c.value===top.value;
+  const prevLen=(P.prev.hl||{})[viewer];
+  if(isNew&&g.winner){ P.winHold=true; setTimeout(()=>{P.winHold=false;renderGame();},1100); }
+  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(b.c.value),undefined,{numeric:true}));
+  let k=0;
+  const handHTML=covered
+    ?`<div class="pt-cover"><p class="text-sm text-gray-600 mb-3">Oper HP ke <b>${esc(pl(cur).name)}</b></p><button onclick="ptReveal()" class="pt-btn pt-pri" style="width:auto;margin:0 auto;padding:12px 24px">Aku ${esc(pl(cur).name)}, lihat kartu</button></div>`
+    :`<div id="pt-myhand" class="pt-hand">${items.map(({c,i})=>{
+        const isN=prevLen===undefined||i>=prevLen; const cls=myTurn?(valid(c)?'ok':'no'):'';
+        const style=isN?`style="animation-delay:${(k++)*0.07}s"`:'';
+        return `<div class="pt-cw ${cls} ${isN?'pt-deal':''}" ${style} onclick="ptPlay(${i})">${cardHTML(c)}</div>`;}).join('')}</div>`;
+  const chips=order.map(id=>{const p=pl(id),c=g.hands[id].length;
+    return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===viewer&&!local?' (kamu)':''}</span><span class="pt-cnt ${c===1?'uno':''}">${c===1?'UNO':c}</span></div>`;}).join('');
+  const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(myTurn?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
+  setRoot(`<div class="pt-wrap">
+    ${topBar(title,`<i class="fa-solid fa-arrow-rotate-right pt-dir ${g.dir<0?'flip':''}"></i>`)}
+    <div class="pt-strip" id="pt-strip">${chips}</div>
+    <div class="flex-1 flex flex-col items-center justify-center my-3">
+      <div class="flex gap-6 items-center">
+        <div id="pt-discard" class="pt-pile">${cardHTML(top)}</div>
+        <div id="pt-drawpile" onclick="ptDraw()" class="uno-card uno-black ${myTurn&&!covered?'pt-draw-ok':''}" style="border-color:#6b7280"><span class="uno-center-symbol" style="color:#fff;font-size:.8rem;font-weight:400">AMBIL</span></div>
+      </div>
+      <div class="flex items-center gap-2 mt-4 text-xs text-gray-500"><span style="width:18px;height:18px;border-radius:50%;background:${COLORHEX[g.color]};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)"></span>Warna aktif · Sisa tumpukan ${g.deck.length}</div>
+    </div>
+    <div class="bg-white/60 rounded-2xl border border-white pb-1">${handHTML}</div>
+    ${hostSkipBtn(r)}
+  </div>${P.winHold?'':winnerHTML(g,r)}`);
+  P.prev.hl=Object.assign(P.prev.hl||{},{[viewer]:hand.length});
+  const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+
+  // ----- animasi -----
+  if(g.winner&&!P.winHold&&!P.prev.win){ P.prev.win=true; confetti(); }
+  if(!isNew) return;
+  const ev=g.ev, nm=id=>id?esc(pl(id).name):'';
+  const src=(ev.by===viewer&&!local)?$('pt-myhand'):chipOf(ev.by);
+  const drawEl=$('pt-drawpile'), discEl=$('pt-discard'), topEl=discEl&&discEl.firstElementChild;
+  if(ev.card){
+    if(topEl) topEl.style.visibility='hidden';
+    fly(src,discEl,cardHTML(ev.card),{dur:560,rot:rnd(30)-15,onEnd:()=>{if(topEl){topEl.style.visibility='';topEl.classList.add('pt-land');}}});
+  }
+  if(ev.kind==='draw'&&(local||ev.by!==P.me)) fly(drawEl,chipOf(ev.by),backHTML(),{dur:480});
+  if(ev.to&&ev.cnt){
+    const dest=(!local&&ev.to===P.me)?$('pt-myhand'):chipOf(ev.to);
+    for(let i=0;i<Math.min(ev.cnt,4);i++) fly(drawEl,dest,backHTML(),{dur:480,delay:600+i*130});
+  }
+  const d=ev.card?650:0;
+  setTimeout(()=>{
+    if(ev.kind==='skip') banner('SKIP','#f97316',nm(ev.to)+' dilewati');
+    else if(ev.kind==='reverse') banner('REVERSE','#3b82f6','Arah putaran berbalik');
+    else if(ev.kind==='draw2') banner('+2','#2563eb',nm(ev.to)+' ambil 2 kartu');
+    else if(ev.kind==='wild4') banner('+4','#111827',nm(ev.to)+' ambil 4 kartu');
+    else if(ev.kind==='wild') banner('WILD','#7c3aed','Warna baru: '+({red:'Merah',blue:'Biru',green:'Hijau',yellow:'Kuning'})[ev.color]);
+    else if(ev.kind==='win') banner('UNO!','#16a34a',nm(ev.by)+' menghabiskan kartu!');
+    if(ev.uno) setTimeout(()=>banner('UNO!','#ef4444',nm(ev.by)+' sisa 1 kartu!'),['skip','reverse','draw2','wild4','wild'].includes(ev.kind)?1600:0);
+  },d);
+  if(!local&&cur===P.me&&navigator.vibrate) navigator.vibrate(60);
+}
+W({
+  ptReveal(){ P.revealKey=P.room.g.ev.n; renderGame(); },
+  ptDraw(){
+    const g=P.room.g; if(g.winner) return;
+    if(!(P.mode==='local'||g.order[g.turn]===P.me)) return;
+    if(P.mode==='local'&&P.revealKey!==g.ev.n) return;
+    dispatch({type:'draw',by:BY()});
+  },
+  ptPlay(i){
+    const g=P.room.g; if(g.winner) return;
+    const cur=g.order[g.turn];
+    if(!(P.mode==='local'||cur===P.me)) return toast('Bukan giliranmu');
+    const viewer=P.mode==='local'?cur:P.me, c=g.hands[viewer][i], top=g.discard[g.discard.length-1];
+    if(!c) return;
+    if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return toast('Kartu ini tidak bisa dimainkan');
+    if(c.color==='black'){ P.pendingIdx=i; $('pt-colors').style.display='flex'; return; }
+    dispatch({type:'play',idx:i,by:BY()});
+  },
+  ptColor(col){ $('pt-colors').style.display='none'; if(P.pendingIdx==null) return; const i=P.pendingIdx; P.pendingIdx=null; dispatch({type:'play',idx:i,color:col,by:BY()}); }
+});
+
+// ============ GAME: ULAR TANGGA ============
+const UT_MAP=[25,24,23,22,21,16,17,18,19,20,15,14,13,12,11,6,7,8,9,10,5,4,3,2,1];
+function utPlace(){
+  const g=P.room.g, pos=Object.assign({},g.pos,P.utDisp||{}), cur=g.order[g.turn];
+  document.querySelectorAll('.pt-dots').forEach(d=>d.innerHTML='');
+  g.order.forEach(id=>{
+    const c=document.querySelector('[data-cell="'+pos[id]+'"] .pt-dots');
+    if(c) c.insertAdjacentHTML('beforeend',`<i class="pt-dot ${id===cur&&!P.utBusy?'cur':''}" style="background:${pl(id).color}"></i>`);
+  });
+}
+function renderUt(isNew){
+  const r=P.room,g=r.g,cur=g.order[g.turn],local=P.mode==='local',mine=local||cur===P.me;
+  const cells=UT_MAP.map(num=>{
+    const cls=(num%2===0?'cell-alt ':'')+(UT_SNAKES[num]?'cell-snake':UT_LADDERS[num]?'cell-ladder':'');
+    const ic=UT_SNAKES[num]?'<i class="fa-solid fa-staff-snake" style="font-size:10px"></i>':UT_LADDERS[num]?'<i class="fa-solid fa-stairs" style="font-size:10px"></i>':(num%4===0?'<i class="fa-solid fa-star" style="font-size:9px;color:#eab308"></i>':'');
+    return `<div class="board-cell ${cls}" data-cell="${num}" style="padding-bottom:12px"><span>${num}</span>${ic}<div class="pt-dots"></div></div>`;
+  }).join('');
+  const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(mine?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
+  const chips=g.order.map(id=>{const p=pl(id);return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===P.me?' (kamu)':''}</span><span class="pt-cnt">${g.pos[id]}</span></div>`;}).join('');
+  const busy=!!P.utBusy;
+  setRoot(`<div class="pt-wrap">
+    ${topBar(title,'')}
+    <div class="pt-strip">${chips}</div>
+    <div class="board-grid my-2" style="max-width:350px">${cells}</div>
+    <p id="pt-msg" class="text-sm text-center font-semibold text-gray-600 min-h-[22px] mt-2">${esc(P.utMsg||'')}</p>
+    <div class="flex gap-4 items-center justify-center mt-3">
+      <div id="pt-dice" class="w-16 h-16 bg-white border-2 border-emerald-200 rounded-2xl flex items-center justify-center text-3xl font-bold text-emerald-600 shadow-sm">${g.ev.roll?g.ev.roll:'<i class="fa-solid fa-dice-d6"></i>'}</div>
+      <button id="pt-roll" onclick="ptRoll()" class="py-4 px-8 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 active:scale-95 transition ${mine&&!busy&&!g.q?'':'opacity-40 pointer-events-none'}">${mine?'Kocok Dadu!':'Menunggu '+esc(pl(cur).name)+'…'}</button>
+    </div>
+    ${hostSkipBtn(r)}
+  </div>
+  ${g.q&&!busy?`<div id="pt-q" class="pt-modal"><div class="pt-mbox" style="border-top:8px solid #facc15">
+    <div style="font-size:30px">⭐</div><h3 class="font-bold text-gray-800 mb-2">Kotak Misteri untuk ${esc(pl(cur).name)}!</h3>
+    <p class="text-gray-600 mb-5 text-sm leading-relaxed">${esc(g.q)}</p>
+    ${mine?'<button onclick="ptAck()" class="pt-btn pt-pri">Udah Dijawab</button>':'<p class="text-xs text-gray-400">Menunggu '+esc(pl(cur).name)+' menjawab…</p>'}</div></div>`:''}
+  ${busy?'':winnerHTML(g,r)}`);
+  if(isNew&&g.ev.kind!=='ack'&&g.ev.kind!=='pass'&&g.ev.roll) utAnimate(g.ev);
+  else{ utPlace(); if(g.winner&&!busy&&!P.prev.win){P.prev.win=true;confetti();} }
+  const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest'});
+}
+function utAnimate(ev){
+  P.utBusy=true; P.utMsg=''; $('pt-q')&&$('pt-q').remove(); $('pt-roll')&&$('pt-roll').classList.add('opacity-40','pointer-events-none');
+  const g=P.room.g, name=esc(pl(ev.by).name); let t=0;
+  const iv=setInterval(()=>{
+    const d=$('pt-dice'); if(d){ d.textContent=1+rnd(6); d.classList.remove('pt-shake'); void d.offsetWidth; d.classList.add('pt-shake'); }
+    if(++t<8) return;
+    clearInterval(iv); if(d) d.textContent=ev.roll;
+    const path=[]; for(let i=1;i<=ev.roll;i++){let p=ev.from+i; if(p>25)p=50-p; path.push(p);}
+    if(ev.to!==ev.landed) path.push(ev.to);
+    let k=0;
+    const step=()=>{
+      if(k>=path.length){
+        P.utDisp=null; P.utBusy=false;
+        P.utMsg=`${pl(ev.by).name} dapat ${ev.roll}! `+({snake:'Yah, kena ular 🐍',ladder:'Naik tangga! 🪜',star:'⭐ Kotak misteri!',win:'Sampai di kotak 25! 🏁'})[ev.kind]||'';
+        if(ev.kind==='snake') banner('🐍','#dc2626',name+' turun ke '+ev.to);
+        else if(ev.kind==='ladder') banner('🪜','#16a34a',name+' naik ke '+ev.to);
+        renderGame(); return;
+      }
+      P.utDisp={[ev.by]:path[k++]}; utPlace();
+      setTimeout(step,(k===path.length&&ev.to!==ev.landed)?550:230);
+    };
+    P.utDisp={[ev.by]:ev.from}; utPlace(); step();
+  },90);
+}
+W({
+  ptRoll(){ const g=P.room.g; if(P.utBusy||g.q) return; dispatch({type:'roll',by:BY()}); },
+  ptAck(){ dispatch({type:'ack',by:BY()}); }
+});
+
+// ============ GAME: TRUTH OR DARE ============
+const BOTTLE=`<svg id="pt-bottle" class="pt-bottle" viewBox="0 0 100 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/><rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/><rect x="22" y="140" width="56" height="50" fill="white" opacity=".9"/><text x="50" y="170" font-family="Arial" font-size="14" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text><path d="M30 100 C30 150 30 200 30 250" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".4"/><path d="M50 -8 L68 16 L32 16 Z" fill="#ef4444"/></svg>`;
+function renderTod(isNew){
+  const r=P.room,g=r.g,N=g.order.length,local=P.mode==='local';
+  const spinnerId=g.order[g.turn], iSpin=local||spinnerId===P.me, iTarget=local||g.target===P.me;
+  if(isNew&&g.ev.kind==='spin'){ P.todRevealAt=Date.now()+3300; setTimeout(()=>renderGame(),3350); }
+  const spinning=g.phase==='choice'&&Date.now()<(P.todRevealAt||0);
+  const showHit=g.phase!=='spin'&&!spinning;
+  const seats=g.order.map((id,i)=>{
+    const t=i*2*Math.PI/N, p=pl(id);
+    return `<div class="pt-seat ${showHit&&id===g.target?'hit':''} ${g.phase==='spin'&&id===spinnerId?'spin':''}" style="left:${50+41*Math.sin(t)}%;top:${50-41*Math.cos(t)}%"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="nm">${esc(p.name)}</span></div>`;
+  }).join('');
+  let panel='';
+  if(g.phase==='spin') panel=`<p class="text-sm text-center mb-3">Giliran <b>${esc(pl(spinnerId).name)}</b> memutar botol</p>
+    <button onclick="ptTod('spin')" class="pt-btn ${iSpin?'':'off'}" style="background:#f59e0b;color:#fff;box-shadow:0 8px 20px rgba(245,158,11,.3)">${iSpin?'Putar Botol':'Menunggu '+esc(pl(spinnerId).name)+'…'}</button>`;
+  else if(spinning) panel=`<p class="text-sm text-center text-gray-500"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Botol berputar…</p>`;
+  else if(g.phase==='choice') panel=`<p class="text-sm text-center mb-3"><b>${esc(pl(g.target).name)}</b> kena! ${iTarget?'Pilih:':'Menunggu pilihan…'}</p>
+    <div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
+  else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md">
+      <span class="text-xs font-bold px-3 py-1 rounded-full inline-block mb-3 ${g.kind==='truth'?'bg-blue-100 text-blue-700':'bg-rose-100 text-rose-700'}">${g.kind.toUpperCase()} · ${esc(pl(g.target).name)}</span>
+      <p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p>
+      <button onclick="ptTod('next')" class="pt-btn pt-sec ${(iTarget||iSpin)?'':'off'}">Selesai / Lanjut</button></div>`;
+  setRoot(`<div class="pt-wrap">
+    ${topBar({text:'Truth or Dare'},'')}
+    <div class="pt-ring my-4">${seats}${BOTTLE}</div>
+    <div class="mt-2">${panel}</div>
+    ${hostSkipBtn(r)}
+  </div>`);
+  const b=$('pt-bottle'), from=P.prev.rot===undefined?g.rot:P.prev.rot;
+  b.style.transition='none'; b.style.transform='rotate('+from+'deg)'; void b.offsetWidth; b.style.transition=''; b.style.transform='rotate('+g.rot+'deg)';
+  P.prev.rot=g.rot;
+}
+W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
+</script>
+
 </body>
 </html>
