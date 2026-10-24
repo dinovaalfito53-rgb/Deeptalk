@@ -403,29 +403,42 @@
     <script type="module">
         // --- FIREBASE IMPORTS & SETUP ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'deeptalk-couple-app';
-        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = 'deeptalk-couple-app';
+        
+        // KODE FIREBASE KAMU SUDAH DIPASANG DI SINI:
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRTNchDAoxofiwxWDvhZ6VLtNckYFapWw",
+            authDomain: "ruang-cerita-kita.firebaseapp.com",
+            projectId: "ruang-cerita-kita",
+            storageBucket: "ruang-cerita-kita.firebasestorage.app",
+            messagingSenderId: "321153066455",
+            appId: "1:321153066455:web:167cd558470802b2a0d792",
+            measurementId: "G-3DS4RQHYQ8"
+        };
 
         let db = null, auth = null, userId = null;
 
-        if (firebaseConfigStr) {
-            try {
-                const firebaseConfig = JSON.parse(firebaseConfigStr);
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                async function initAuth() {
-                    try {
-                        let userCred = initialAuthToken ? await signInWithCustomToken(auth, initialAuthToken) : await signInAnonymously(auth);
-                        userId = userCred.user.uid;
-                    } catch (e) { console.error("Firebase Auth Error", e); }
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Login tanpa password agar pemain bisa langsung main (Anonymous Auth)
+            async function initAuth() {
+                try {
+                    let userCred = await signInAnonymously(auth);
+                    userId = userCred.user.uid;
+                    console.log("Berhasil terhubung ke database! ID:", userId);
+                } catch (e) { 
+                    console.error("Error Auth: Pastikan Anonymous sign-in sudah diaktifkan di Firebase", e); 
                 }
-                initAuth();
-            } catch(e) { console.error("Firebase init failed", e); }
+            }
+            initAuth();
+        } catch(e) { 
+            console.error("Gagal inisiasi Firebase", e); 
         }
 
         // --- GLOBAL MULTIPLAYER STATE ---
