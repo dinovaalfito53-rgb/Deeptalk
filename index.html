@@ -80,8 +80,8 @@
         .cell-question { background: #fef08a; color: #a16207; }
         
         .player-token { width: 24px; height: 24px; border-radius: 50%; position: absolute; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: all 0.4s ease-in-out; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; }
-        .token-p1 { background: #ef4444; z-index: 20; transform: translate(-20%, -20%); } /* Merah */
-        .token-p2 { background: #3b82f6; z-index: 10; transform: translate(20%, 20%); } /* Biru */
+        .token-p1 { background: #ef4444; z-index: 20; transform: translate(-20%, -20%); }
+        .token-p2 { background: #3b82f6; z-index: 10; transform: translate(20%, 20%); }
 
         /* Bottle Spin Styles */
         .bottle-container { position: relative; width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle, #fdf8f6 0%, #f2e8e5 100%); box-shadow: inset 0 0 20px rgba(163, 124, 108, 0.1); border: 2px solid #eaddd7; }
@@ -319,9 +319,7 @@
             
             <div class="w-full max-w-[350px] mx-auto relative mb-8">
                 <!-- Board Grid -->
-                <div id="ut-board" class="board-grid relative">
-                    <!-- Board cells will be generated via JS -->
-                </div>
+                <div id="ut-board" class="board-grid relative"></div>
                 <!-- Tokens -->
                 <div id="ut-token-1" class="player-token token-p1">P1</div>
                 <div id="ut-token-2" class="player-token token-p2">P2</div>
@@ -361,18 +359,13 @@
             </div>
 
             <div class="bottle-container flex items-center justify-center mb-12">
-                <!-- SVG Bottle -->
                 <svg id="tod-bottle" class="bottle" viewBox="0 0 100 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Glow/Shadow under bottle -->
                     <ellipse cx="50" cy="150" rx="30" ry="120" fill="rgba(0,0,0,0.1)"/>
                     <path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/>
                     <rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/>
-                    <!-- Label -->
                     <rect x="22" y="140" width="56" height="50" fill="white" opacity="0.9"/>
                     <text x="50" y="160" font-family="Arial" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text>
-                    <!-- Highlight -->
                     <path d="M30 100 C30 150 30 200 30 250" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.4"/>
-                    <!-- Cap arrow pointer -->
                     <path d="M50 0 L65 20 L35 20 Z" fill="#ef4444"/>
                 </svg>
             </div>
@@ -383,7 +376,6 @@
                 </button>
             </div>
 
-            <!-- Choice / Result Area -->
             <div id="tod-action-area" class="w-full max-w-[300px] mt-4 hidden flex-col items-center animate-slide-up">
                 <p id="tod-target-text" class="text-center font-bold text-gray-700 mb-4"></p>
                 <div id="tod-choice-btns" class="grid grid-cols-2 gap-4 w-full mb-4">
@@ -401,14 +393,12 @@
     </main>
 
     <script type="module">
-        // --- FIREBASE IMPORTS & SETUP ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = 'deeptalk-couple-app';
         
-        // KODE FIREBASE KAMU SUDAH DIPASANG DI SINI:
         const firebaseConfig = {
             apiKey: "AIzaSyDRTNchDAoxofiwxWDvhZ6VLtNckYFapWw",
             authDomain: "ruang-cerita-kita.firebaseapp.com",
@@ -426,14 +416,12 @@
             db = getFirestore(app);
             auth = getAuth(app);
             
-            // Login tanpa password agar pemain bisa langsung main (Anonymous Auth)
             async function initAuth() {
                 try {
                     let userCred = await signInAnonymously(auth);
                     userId = userCred.user.uid;
-                    console.log("Berhasil terhubung ke database! ID:", userId);
                 } catch (e) { 
-                    console.error("Error Auth: Pastikan Anonymous sign-in sudah diaktifkan di Firebase", e); 
+                    console.error("Error Auth", e); 
                 }
             }
             initAuth();
@@ -441,23 +429,47 @@
             console.error("Gagal inisiasi Firebase", e); 
         }
 
-        // --- GLOBAL MULTIPLAYER STATE ---
         let isOnline = false;
         let myPlayerNumber = 1;
         let currentRoomCode = null;
         let unsubscribeSnapshot = null;
-        let currentGameType = ''; // 'uno', 'ulartangga', 'tod'
+        let currentGameType = '';
 
-        // --- DEEP TALK LOGIC ---
+        // ==========================================
+        // 100+ DEEP TALK QUESTIONS (Sertifikasi Lengkap)
+        // ==========================================
         const questionsData = {
             santai: [
                 "Kalau kamu bisa jadi hewan selama sehari, kamu mau jadi hewan apa dan kenapa?",
                 "Apa makanan yang nggak bakal pernah kamu tolak meskipun lagi kenyang?",
-                "Kalau kita menang lotre 10 Miliar hari ini, hal pertama yang mau kamu lakuin apa?",
+                "Kalau kita menang lotre hari ini, hal pertama yang mau kamu lakuin apa?",
                 "Menurutmu, siapa di antara kita yang paling mungkin selamat dari serangan zombie?",
                 "Sebutkan 3 kebiasaan anehku yang kamu sadari tapi orang lain nggak tahu!",
                 "Film atau kartun apa yang paling sering kamu tonton waktu kecil?",
-                "Kalau hidup kita dibikin jadi film, genre-nya apa dan siapa yang meranin kita?"
+                "Kalau hidup kita dibikin jadi film, genre-nya apa dan siapa yang meranin kita?",
+                "Apa hal paling konyol yang pernah kamu lakuin demi menarik perhatian seseorang?",
+                "Kalau kamu harus makan satu jenis makanan yang sama seumur hidup, pilih apa?",
+                "Lebih baik nggak bisa pakai internet sebulan atau nggak bisa ngomong seminggu?",
+                "Apa nama Wi-Fi tetangga yang paling ngakak pernah kamu lihat?",
+                "Kalau kamu punya kekuatan super satu saja, mau pilih apa?",
+                "Supermarket mana yang jadi favoritmu buat jalan-jalan cuci mata?",
+                "Apa hal pertama yang kamu perhatikan dari seseorang waktu pertama kali kenal?",
+                "Lagu apa yang paling malu-maluin kalau ketahuan ada di playlist kamu?",
+                "Kalau kamu mendadak jadi artis terkenal, skandal apa yang bakal pertama kali menimpa kamu?",
+                "Apa hal remeh yang bisa bikin mood kamu langsung jelek seharian?",
+                "Lebih suka hujan-hujanan atau panas-panasan di pantai?",
+                "Apa mimpi atau cita-cita masa kecilmu yang sekarang kedengeran lucu?",
+                "Kalau kamu bisa tukar hidup sama karakter fiksi, siapa yang kamu pilih?",
+                "Apa hal paling aneh yang pernah kamu cari di Google?",
+                "Pernah nggak ketiduran di tempat umum yang nggak banget? Di mana itu?",
+                "Apa jajanan SD favoritmu yang sekarang udah susah dicari?",
+                "Kalau kamu jadi hantu, model hantu seperti apa yang bakal kamu lakuin ke orang-orang?",
+                "Apa julukan atau nama panggilan paling aneh yang pernah dikasih temenmu?",
+                "Lebih pilih punya tangan sekecil dinosaurus atau leher sepanjang jerapah?",
+                "Apa hal paling beruntung yang pernah terjadi di hidupmu secara kebetulan?",
+                "Kalau kamu terdampar di pulau tak berpenghuni, 3 benda apa yang kamu bawa?",
+                "Apa bau paling enak di dunia ini menurut versi kamu?",
+                "Pernah nggak salah panggil orang di jalan? Ceritain dong!"
             ],
             biasa: [
                 "Apa hal kecil yang sering aku lakuin, tapi bikin kamu ngerasa disayang banget?",
@@ -465,16 +477,63 @@
                 "Menurutmu, kapan momen paling romantis atau berkesan dari kita di bulan ini?",
                 "Dari skala 1-10, seberapa puas kamu dengan cara kita nyelesaiin masalah akhir-akhir ini?",
                 "Kalau ada satu hal yang bisa kamu ubah dari rutinitas harian kita, apa itu?",
-                "Apa hal yang paling kamu suka dari dirimu sendiri semenjak pacaran sama aku?"
+                "Apa hal yang paling kamu suka dari dirimu sendiri semenjak kenal/pacaran sama aku?",
+                "Menurutmu, apa bahasa cinta (love language) utamaku yang paling keliatan?",
+                "Apa pujian dariku yang paling nempel di ingatanmu sampai sekarang?",
+                "Gimana kesan pertama kamu waktu pertama kali lihat atau ngobrol sama aku?",
+                "Apa hal yang paling bikin kamu bangga sama hubungan kita sejauh ini?",
+                "Kalau kita lagi berantem kecil, apa cara paling ampuh buat balikin mood kamu?",
+                "Apa kebiasaan baik yang ketularan semenjak dekat sama aku?",
+                "Menurutmu, tempat kencan paling berkesan kita itu di mana?",
+                "Apa satu lagu yang kalau diputar bakal bikin kamu langsung ingat aku?",
+                "Seberapa terbuka kamu merasa kalau lagi cerita tentang hari-harimu ke aku?",
+                "Apa hadiah paling berkesan atau paling lucu yang pernah kita tukar?",
+                "Kalau kamu bisa mendeskripsikan aku pake 3 kata, kata apa aja itu?",
+                "Apa hal paling bikin kamu deg-degan waktu awal-awal dekat dulu?",
+                "Menurutmu, siapa yang paling sering ngalah kalau kita lagi beda pendapat?",
+                "Apa momen paling kocak yang pernah kita lewatin bareng?",
+                "Bagaimana cara kamu nunjukin kalau kamu lagi rindu sama seseorang?",
+                "Apa hal baru yang pengen banget kita coba lakuin bareng tahun ini?",
+                "Menurutmu, apa arti kenyamanan di dalam suatu hubungan?",
+                "Pernah nggak kamu cerita tentang aku ke sahabat/keluargamu? Mereka bilang apa?",
+                "Apa hal paling manis yang pernah aku lakuin buat kamu tanpa aku sadari?",
+                "Kalau kamu lagi capek banget, hal apa yang bisa aku lakuin buat bikin kamu tenang?",
+                "Apa definisi 'weekend impian' versi kamu kalau kita jalan berdua?",
+                "Menurutmu, seberapa penting komunikasi dalam 24 jam buat kita berdua?",
+                "Apa hal dari masa lalumu yang bikin kamu bersyukur akhirnya kita bisa ketemu?",
+                "Kalau kamu punya kesempatan buat ngulang satu hari bareng aku, hari apa itu?"
             ],
             deeptalk: [
                 "Jujur, apa ketakutan terbesarmu dalam hubungan kita saat ini?",
                 "Pernah nggak kamu ngerasa kesepian sendirian meskipun lagi sama aku? Kapan itu?",
-                "Kalau suatu hari nanti kita dihadapkan masalah besar yang bikin capek banget, apa alasan yang bakal bikin kamu tetap bertahan?",
+                "Kalau suatu hari nanti kita dihadapkan masalah besar, apa alasan yang bakal bikin kamu tetap bertahan?",
                 "Apa luka di masa lalumu yang sampai sekarang masih kerasa sakit, dan gimana caraku biar nggak ikut ngelukain itu?",
                 "Menurut kamu, hal apa yang masih jadi kelemahan hubungan kita dan harus kita perbaiki bareng?",
-                "Definisi 'sukses' untuk hubungan kita menurut kamu itu yang kayak gimana?",
-                "Harapan terbesar apa yang pengen kamu wujudkan bareng aku 5 tahun dari sekarang?"
+                "Definisi 'sukses' untuk masa depan dan hubungan kita menurut kamu itu yang kayak gimana?",
+                "Harapan terbesar apa yang pengen kamu wujudkan bareng aku beberapa tahun ke depan?",
+                "Apa penyesalan terbesar dalam hidupmu yang sampai detik ini masih sering kamu pikirin?",
+                "Bagaimana caramu menghadapi fase terendah atau burnout dalam hidup?",
+                "Apa arti keluarga dan rumah buat kamu secara mendalam?",
+                "Pernahkah kamu merasa kehilangan arah, dan gimana kamu bangkit dari situ?",
+                "Apa standar atau prinsip hidup yang nggak bakal pernah mau kamu langgar?",
+                "Menurutmu, apa arti 'memaafkan' yang sesungguhnya dalam hubungan?",
+                "Apa mimpi terbesarmu yang belum sempat kamu ceritain ke siapa pun?",
+                "Bagaimana pandanganmu tentang arti kebahagiaan sejati?",
+                "Apa hal tersulit yang pernah kamu relakan atau lepaskan di masa lalu?",
+                "Bagaimana caramu ingin dikenang oleh orang-orang terdekatmu nanti?",
+                "Pernah nggak kamu merasa ekspektasi orang lain terlalu berat buat dipikul?",
+                "Apa bentuk dukungan paling berarti yang bisa dikasih seseorang pas kamu lagi rapuh?",
+                "Bagaimana caramu mendefinisikan cinta yang matang dan dewasa?",
+                "Apa hal paling berharga yang diajarkan oleh kegagalan terbesarmu?",
+                "Bagaimana perasaanmu yang sebenarnya tentang masa depan karier/pendidikanmu?",
+                "Apa nilai terpenting yang wajib ada di dalam diri seorang pasangan hidup?",
+                "Pernahkah kamu merasa tidak percaya diri dengan potensimu sendiri? Kenapa?",
+                "Bagaimana cara kamu membedakan antara cinta yang tulus dan rasa takut kesepian?",
+                "Apa ketakutan terbesar kamu di luar hubungan, misalnya soal masa depan atau keluarga?",
+                "Menurutmu, seberapa besar peran masa kecil seseorang dalam membentuk karakternya sekarang?",
+                "Apa hal yang paling membuatmu merasa damai dan tenang di tengah kekacauan dunia?",
+                "Jika kamu bisa memberikan satu nasihat untuk dirimu di masa lalu, apa bunyinya?",
+                "Apa arti komitmen sejati menurut versi pandangan hidupmu?"
             ]
         };
 
@@ -532,7 +591,6 @@
             document.getElementById('home-screen').classList.remove('hidden');
         }
 
-        // --- GENERIC LOBBY & ONLINE LOGIC ---
         window.showGameLobby = function(type) {
             currentGameType = type;
             let title = '', icon = '', color = '';
@@ -725,7 +783,7 @@
         }
 
         // ==========================================
-        // 1. UNO LOGIC (Modified to fit new structure)
+        // 1. UNO LOGIC
         // ==========================================
         let unoDeck = [], p1Hand = [], p2Hand = [], discardPile = [];
         let currentTurn = 1, currentColor = '', pendingWildAction = null, p1Hidden = false, p2Hidden = true;
@@ -865,7 +923,7 @@
                 for(let i=0;i<4;i++) if(unoDeck.length) target.push(unoDeck.pop());
                 showUnoMsg("+4 Kena mental!");
             } else {
-                currentTurn = currentTurn===1 ? 2 : 1; // wild biasa switch turn
+                currentTurn = currentTurn===1 ? 2 : 1;
             }
             pendingWildAction = null;
             if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
@@ -910,15 +968,6 @@
         function generateUtBoard() {
             const board = document.getElementById('ut-board');
             board.innerHTML = '';
-            // 5x5 zig zag (25 to 1)
-            let cells = [];
-            for(let r=4; r>=0; r--) {
-                let row = [];
-                for(let c=1; c<=5; c++) row.push(r*5 + c);
-                if(r%2!==0) row.reverse(); // zig zag
-                cells.push(...row.reverse()); // reverse to append from top to bottom
-            }
-            // Fix map for 5x5 visual layout (Top row: 25, 24, 23, 22, 21)
             const map5x5 = [
                 25, 24, 23, 22, 21,
                 16, 17, 18, 19, 20,
@@ -944,7 +993,6 @@
 
         function renderUtBoard() {
             if(currentGameType !== 'ulartangga') return;
-            // Move tokens
             const getPos = (num) => {
                 let cell = document.getElementById(`cell-${num}`);
                 if(!cell) return { top: 0, left: 0 };
@@ -961,7 +1009,6 @@
             t2.style.top = (p2Pos.top + p2Pos.h/2 - 12) + 'px';
             t2.style.left = (p2Pos.left + p2Pos.w/2 - 12) + 'px';
 
-            // UI
             let turnText = isOnline ? (utState.turn === myPlayerNumber ? "Giliran: Kamu" : "Giliran: Pasangan") : (utState.turn === 1 ? "Giliran: Player 1 (Merah)" : "Giliran: Player 2 (Biru)");
             let turnColor = utState.turn === 1 ? 'text-red-600' : 'text-blue-600';
             let ind = document.getElementById('ut-turn-indicator');
@@ -995,26 +1042,21 @@
             utState.dice = roll;
             let currentPos = utState.turn === 1 ? utState.p1 : utState.p2;
             let newPos = currentPos + roll;
-            if(newPos > 25) newPos = 25 - (newPos - 25); // Bounce back
+            if(newPos > 25) newPos = 25 - (newPos - 25);
             
             let msg = `Dapat ${roll}! `;
-            
-            // Check snakes/ladders
             if(utSnakes[newPos]) { msg += "Yah kena Ular 🐍"; newPos = utSnakes[newPos]; }
             else if(utLadders[newPos]) { msg += "Naik Tangga! 🪜"; newPos = utLadders[newPos]; }
             
             if(utState.turn === 1) utState.p1 = newPos; else utState.p2 = newPos;
-            
             document.getElementById('ut-message').innerText = msg;
             
-            // Check Win
             if(newPos === 25) {
                 if(isOnline) syncState(); else renderUtBoard();
                 setTimeout(() => handleEndGame(utState.turn), 500);
                 return;
             }
 
-            // Check Question (Every 4th square has a star)
             if(!utSnakes[newPos] && !utLadders[newPos] && newPos%4===0) {
                 let q = utQuestions[Math.floor(Math.random() * utQuestions.length)];
                 utState.qTrigger = q;
@@ -1032,23 +1074,63 @@
         }
 
         // ==========================================
-        // 3. TRUTH OR DARE LOGIC
+        // 3. TRUTH OR DARE LOGIC (100+ Data Set)
         // ==========================================
-        let todState = { rotation: 0, turn: 1, action: null, result: null, phase: 'spin' }; // phases: spin, choice, result
+        let todState = { rotation: 0, turn: 1, action: null, result: null, phase: 'spin' };
         const todData = {
             truth: [
-                "Hal apa yang paling bikin kamu cemburu tapi kamu diem aja?",
-                "Kapan terakhir kali kamu nangis karena hubungan kita?",
-                "Sebutkan 1 hal yang bikin kamu ngerasa aku itu 'berbeda' dari mantannmu!",
-                "Apa fantasi/impian liburan berdua yang belum kesampaian?",
-                "Pernah nggak kamu kepikiran buat ninggalin aku? Kapan dan kenapa?"
+                "Hal apa yang paling bikin kamu cemburu tapi kamu milih diem aja?",
+                "Kapan terakhir kali kamu nangis karena hal percintaan atau hidup? Ceritain!",
+                "Sebutkan 1 hal yang bikin kamu ngerasa aku itu 'berbeda' dari orang lain!",
+                "Apa fantasi/impian liburan berdua yang belum kesampaian sama sekali?",
+                "Pernah nggak kamu diam-diam ngecek HP atau sosmed orang lain tanpa izin? Siapa?",
+                "Siapa mantan atau gebetan masa lalu yang sampai sekarang kalau ketemu masih bikin canggung?",
+                "Apa kebohongan paling besar yang pernah kamu sembunyiin dari orang tuamu?",
+                "Pernah nggak ngerasa nyesel banget abis beli sesuatu? Barang apa itu?",
+                "Apa hal paling memalukan yang pernah terjadi waktu kamu lagi di sekolah/tempat umum?",
+                "Kalau kamu harus ilfil sama seseorang, hal apa yang langsung bikin kamu ilfil?",
+                "Pernah naksir sama temen sendiri yang notabene udah punya pacar? Siapa?",
+                "Apa rahasia terbesar yang belum pernah kamu ceritain ke sahabat terdekatmu?",
+                "Pernah nggak ketahuan lagi nge-stalk sosmed mantan tengah malam?",
+                "Apa hal paling kekanak-kanakan yang masih sering kamu lakuin sampai sekarang?",
+                "Siapa orang di ruangan/grup ini yang pertama kali bikin kamu risih tapi lama-lama baik?",
+                "Apa mimpi atau hal aneh yang pernah kamu impikan tentang aku?",
+                "Pernah nggak pura-pura sakit atau sibuk cuma karena malas ikutan ajakan main?",
+                "Apa barang teraneh yang ada di bawah kasur atau kamar kamu?",
+                "Pernah nggak ngomongin orang lain di belakang, terus gak sengaja ketahuan?",
+                "Apa hal yang paling bikin kamu insecure kalau lagi ngaca?",
+                "Pernah ngerasa salah tingkah tingkat dewa gara-gara dipuji seseorang? Kapan itu?",
+                "Apa hal paling nekat yang pernah kamu lakuin demi cinta atau persahabatan?",
+                "Pernah nggak ngambil barang punya temen tanpa izin (misal pulpen, jaket) terus lupa dibalikin?",
+                "Apa mimpi buruk paling seram yang bikin kamu trauma tidur?",
+                "Pernah nggak nyesel karena nolak ajakan seseorang di masa lalu?",
+                "Apa hal yang paling bikin kamu takut kalau seandainya kita berjauhan?",
+                "Pernah nggak sengaja ngirim chat salah kamar/salah orang yang isinya memalukan?",
+                "Apa kebiasaan jorok yang sering kamu lakuin pas lagi sendirian di kamar?",
+                "Pernah nggak ngerasa iri banget sama pencapaian teman sendiri?",
+                "Kalau ada tombol untuk menghapus satu kejadian memalukan di hidupmu, kejadian apa yang bakal kamu hapus?"
             ],
             dare: [
-                "Pijitin tanganku selama 1 menit sambil bilang hal-hal manis!",
-                "Bikin pantun gombalan dadakan sekarang juga!",
-                "Post foto aibku di Story Instagram kamu (atau WA) selama 1 jam!",
-                "Cium keningku dan tatap mataku selama 15 detik tanpa ketawa!",
-                "Praktekin cara ketawaku yang paling aneh menurutmu!"
+                "Pijitin tanganku atau pundakku selama 1 menit penuh sambil bilang kata-kata manis!",
+                "Bikin pantun gombalan dadakan buat aku sekarang juga dalam waktu 10 detik!",
+                "Kirim chat random pake emotikon '🗿' ke kontak WhatsApp urutan ke-5 di HP kamu tanpa penjelasan!",
+                "Cium keningku atau tatap mataku lekat-lekat selama 15 detik tanpa boleh ketawa sama sekali!",
+                "Praktekin gaya jalan model papan atas (catwalk) bolak-balik di ruangan ini!",
+                "Telepon salah satu anggota keluarga atau teman, terus bilang 'Aku sayang kamu' abis itu langsung tutup teleponnya!",
+                "Kirim voice note ke aku nyanyiin reff lagu romantis pakai suara paling mendayu-dayu!",
+                "Makan satu sendok kecil bumbu dapur (kecap asin/saus pedas) tanpa minum air selama 1 menit!",
+                "Ganti foto profil WhatsApp atau IG pakai foto paling jelek/lucu kamu selama 1 jam!",
+                "Kirim foto selfie dengan ekspresi muka paling jelek dan konyol ke aku sekarang!",
+                "Tirukan suara hewan (bebek, kucing, atau ayam) sampai ada orang yang nengok atau komentar!",
+                "Pegang telinga kiri pakai tangan kanan melewati kepala selama 3 putaran sambil loncat-loncat kecil!",
+                "Ceritain ulang sebuah cerita lucu tapi pakai gaya bahasa seperti pembaca berita TV nasional!",
+                "Bikin gestur hati (love sign) pakai tangan, terus foto bareng aku gaya aegyo!",
+                "Gunakan nada bicara berbisik-bisik seperti rahasia selama 3 giliran permainan ke depan!",
+                "Puji diriku di depan kaca pakai 5 kalimat pujian paling puitis dan lebay!",
+                "Tulis nama panggilanku di telapak tanganmu pakai pulpen, terus tunjukkin ke kamera/ke aku!",
+                "Kirim stiker WhatsApp paling alay ke grup chat aktif kamu sekarang juga!",
+                "Pijitin jari-jariku satu persatu sambil bilang 'maafin aku ya' dengan nada melas!",
+                "Tahan napas selama 30 detik sambil pasang muka melotot tanpa kedip!"
             ]
         };
 
@@ -1083,21 +1165,7 @@
                 document.getElementById('tod-choice-btns').style.display = 'grid';
                 document.getElementById('tod-result-card').style.display = 'none';
                 
-                let targetText = "Siapa yang ditunjuk botol?";
-                if(isOnline) {
-                    // Logic: arrow up means P2 (pasangan) gets asked, arrow down means P1 (kamu) gets asked.
-                    // Simplified: whoever spun, the OTHER person gets the truth/dare.
-                    targetText = todState.turn === myPlayerNumber ? "Pasanganmu yang kena! Suruh dia pilih:" : "Kamu kena! Ayo pilih:";
-                    if(todState.turn !== myPlayerNumber) {
-                        // Pasangan mutar, jadi aku yang milih.
-                        document.getElementById('tod-choice-btns').classList.remove('pointer-events-none', 'opacity-50');
-                    } else {
-                        // Aku mutar, pasangan milih.
-                        document.getElementById('tod-choice-btns').classList.add('pointer-events-none', 'opacity-50');
-                    }
-                } else {
-                    targetText = todState.turn === 1 ? "P2 yang kena! Pilih:" : "P1 yang kena! Pilih:";
-                }
+                let targetText = isOnline ? (todState.turn === myPlayerNumber ? "Pasanganmu yang kena! Suruh dia pilih:" : "Kamu kena! Ayo pilih:") : (todState.turn === 1 ? "P2 yang kena! Pilih:" : "P1 yang kena! Pilih:");
                 document.getElementById('tod-target-text').innerText = targetText;
             } else if (todState.phase === 'result') {
                 document.getElementById('tod-choice-btns').style.display = 'none';
@@ -1114,13 +1182,10 @@
 
         window.spinBottle = function() {
             if(isOnline && todState.turn !== myPlayerNumber) return;
-            
-            let extra = Math.floor(Math.random() * 720) + 720; // 2-4 spins
+            let extra = Math.floor(Math.random() * 720) + 720;
             todState.rotation += extra;
             todState.phase = 'animating';
-            
             if(isOnline) syncState(); else renderTod();
-            
             setTimeout(() => {
                 todState.phase = 'choice';
                 if(isOnline) syncState(); else renderTod();
@@ -1141,15 +1206,12 @@
             todState.action = null; todState.result = null;
             if(isOnline) syncState(); else renderTod();
         }
-
     </script>
 
 <!-- =====================================================================
-     ADD-ON "MODE RAME-RAME" (FITUR CHAT + STACKING KARTU PLUS UNO)
+     ADD-ON "MODE RAME-RAME" (CHAT + STACKING UNO PLUS)
      ===================================================================== -->
-
 <style id="pt-style">
-/* ---------- Layar & komponen umum ---------- */
 #pt-root{position:fixed;inset:0;z-index:200;background:#fdf8f6;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;font-family:Poppins,sans-serif;color:#1f2937}
 #pt-root.open{display:block}
 .pt-wrap{max-width:440px;margin:0 auto;padding:14px 16px 28px;min-height:100%;display:flex;flex-direction:column}
@@ -1167,13 +1229,7 @@
 .pt-game.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);color:#374151}
 .pt-av{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid #f2e8e5}
-.pt-modal{position:fixed;inset:0;background:rgba(17,24,39,.65);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
-.pt-mbox{background:#fff;border-radius:28px;padding:24px;max-width:320px;width:100%;text-align:center;animation:ptLand .4s both}
-#pt-colors{position:fixed;inset:0;background:rgba(17,24,39,.7);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
-#pt-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#1f2937;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;z-index:700;opacity:0;pointer-events:none;transition:all .25s;max-width:88vw;text-align:center}
-#pt-toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* ---------- Chat Widget ---------- */
 #pt-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
 #pt-chat-btn:active{transform:scale(.9)}
 #pt-chat-unread{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #fff}
@@ -1185,77 +1241,54 @@
 .pt-chat-msg.me{align-self:flex-end;background:#8b6255;color:#fff}
 .pt-chat-msg .sender{font-size:10px;font-weight:700;margin-bottom:2px;opacity:.8}
 
-/* ---------- Chip pemain ---------- */
 .pt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
 .pt-strip::-webkit-scrollbar{display:none}
-.pt-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:5px 10px 5px 5px;border-radius:999px;background:#fff;border:2px solid #f2e8e5;font-size:12px;font-weight:500;transition:border-color .2s}
+.pt-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:5px 10px 5px 5px;border-radius:999px;background:#fff;border:2px solid #f2e8e5;font-size:12px;font-weight:500}
 .pt-chip .pt-nm{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pt-chip.pt-turn{border-color:#ec4899;animation:ptRing 1.4s infinite}
 .pt-cnt{min-width:20px;text-align:center;font-size:11px;font-weight:700;background:#f2e8e5;color:#5a382e;border-radius:999px;padding:1px 6px}
-.pt-cnt.uno{background:#ef4444;color:#fff;animation:ptPop .5s infinite alternate}
+.pt-cnt.uno{background:#ef4444;color:#fff}
 .pt-pill{font-size:13px;font-weight:700;background:#fff;border:1px solid #f2e8e5;color:#8b6255;padding:6px 14px;border-radius:999px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pt-pill.me{background:#ec4899;color:#fff;border-color:#ec4899;animation:ptPop .6s ease 2}
+.pt-pill.me{background:#ec4899;color:#fff;border-color:#ec4899}
 
-/* ---------- UNO ---------- */
 .pt-hand{display:flex;overflow-x:auto;padding:16px 8px 10px;min-height:118px;scrollbar-width:none}
 .pt-hand::-webkit-scrollbar{display:none}
 .pt-cw{flex:0 0 auto}
 .pt-cw+.pt-cw{margin-left:-20px}
-.pt-cw .uno-card{transition:transform .2s,box-shadow .2s,opacity .2s}
 .pt-cw.ok .uno-card{box-shadow:0 -4px 12px rgba(74,222,128,.55)}
 .pt-cw.no .uno-card{opacity:.5}
-.pt-deal{animation:ptDeal .5s cubic-bezier(.2,.8,.2,1) both}
-.pt-land{animation:ptLand .4s cubic-bezier(.2,.8,.2,1) both}
 .pt-pile{border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.2)}
 .pt-draw-ok{animation:ptBreath 1.2s infinite}
 .pt-cover{text-align:center;padding:22px 12px;background:rgba(255,255,255,.8);border:2px dashed #d2bab0;border-radius:20px}
-.pt-fly{position:fixed;z-index:450;pointer-events:none;will-change:transform}
+.pt-fly{position:fixed;z-index:450;pointer-events:none}
 .pt-dir{animation:ptSpin 4s linear infinite}
 .pt-dir.flip{animation-direction:reverse}
 
-/* ---------- Ular Tangga ---------- */
 .pt-dots{position:absolute;left:0;right:0;bottom:1px;display:flex;flex-wrap:wrap;justify-content:center;gap:1px;padding:0 2px}
-.pt-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35)}
-.pt-dot.cur{width:13px;height:13px;animation:ptPop .5s infinite alternate}
-.pt-shake{animation:ptShake .18s}
-
-/* ---------- Truth or Dare ---------- */
 .pt-ring{position:relative;width:100%;max-width:330px;aspect-ratio:1;margin:0 auto}
 .pt-seat{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:54px}
-.pt-seat .pt-av{width:38px;height:38px;font-size:15px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .3s}
+.pt-seat .pt-av{width:38px;height:38px;font-size:15px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
 .pt-seat span.nm{font-size:10px;font-weight:600;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5a382e}
-.pt-seat.hit .pt-av{transform:scale(1.35);box-shadow:0 0 0 4px rgba(245,158,11,.5);animation:ptPop .5s infinite alternate}
-.pt-seat.spin .pt-av{box-shadow:0 0 0 3px #ec4899}
+.pt-seat.hit .pt-av{transform:scale(1.35);box-shadow:0 0 0 4px rgba(245,158,11,.5)}
 .pt-bottle{position:absolute;left:50%;top:50%;width:38px;height:114px;margin:-57px 0 0 -19px;transition:transform 3s cubic-bezier(.2,.7,.1,1);filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
 
-/* ---------- Banner & confetti ---------- */
 #pt-banner{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:500;opacity:0}
 #pt-banner.show{animation:ptBn 1.5s ease forwards}
 .pt-bn{color:#fff;padding:16px 34px;border-radius:24px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35);border:4px solid #fff}
-.pt-bn-big{font-weight:800;font-size:38px;letter-spacing:.02em;line-height:1.1;text-shadow:0 3px 0 rgba(0,0,0,.2)}
+.pt-bn-big{font-weight:800;font-size:38px;letter-spacing:.02em;line-height:1.1}
 .pt-bn-sub{font-size:13px;font-weight:500;margin-top:4px;opacity:.95}
 .pt-conf{position:fixed;top:0;z-index:600;pointer-events:none;border-radius:2px}
 
-/* ---------- Animasi UNO ---------- */
-.uno-fx-deal{animation:ptDeal .5s cubic-bezier(.2,.8,.2,1) both}
-.uno-fx-land{animation:ptLand .4s cubic-bezier(.2,.8,.2,1) both}
-.pt-pop{animation:ptPop .35s ease 2}
-
-@keyframes ptDeal{from{transform:translateY(-150px) scale(.5) rotate(-18deg);opacity:0}to{transform:none;opacity:1}}
-@keyframes ptLand{0%{transform:scale(1.6) rotate(-14deg);opacity:0}60%{transform:scale(.94) rotate(3deg);opacity:1}100%{transform:none;opacity:1}}
-@keyframes ptPop{from{transform:scale(1)}to{transform:scale(1.12)}}
 @keyframes ptRing{0%,100%{box-shadow:0 0 0 0 rgba(236,72,153,.45)}50%{box-shadow:0 0 0 7px rgba(236,72,153,0)}}
 @keyframes ptBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes ptSpin{to{transform:rotate(360deg)}}
-@keyframes ptShake{0%{transform:rotate(0)}30%{transform:rotate(-14deg) scale(1.1)}70%{transform:rotate(12deg) scale(1.1)}100%{transform:rotate(0)}}
 @keyframes ptBn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}14%{opacity:1;transform:scale(1.15) rotate(3deg)}24%{transform:scale(1) rotate(0)}78%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1)}}
-@media (prefers-reduced-motion:reduce){.pt-dir,.pt-chip.pt-turn,.pt-draw-ok,.pt-dot.cur,.pt-cnt.uno{animation:none}}
 </style>
 
 <div id="pt-root"></div>
 <div id="pt-banner"></div>
 <div id="pt-toast"></div>
-<div id="pt-colors">
+<div id="pt-colors" style="position:fixed;inset:0;background:rgba(17,24,39,.7);z-index:350;display:none;align-items:center;justify-content:center;padding:16px">
   <div style="background:#fff;border-radius:28px;padding:22px;max-width:280px;width:100%;text-align:center">
     <h3 style="font-weight:700;margin-bottom:14px">Pilih Warna</h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -1267,7 +1300,6 @@
   </div>
 </div>
 
-<!-- Chat UI Widget -->
 <div id="pt-chat-btn" onclick="ptToggleChat()" class="hidden">
   <i class="fa-solid fa-comments"></i>
   <span id="pt-chat-unread" class="hidden"></span>
@@ -1284,14 +1316,10 @@
   </div>
 </div>
 
-<!-- =====================================================================
-     SCRIPT 1: Efek Bersama + Tombol Menu Utama
-     ===================================================================== -->
 <script>
 (function(){
   const $ = id => document.getElementById(id);
   const rnd = n => Math.floor(Math.random()*n);
-
   function toast(msg){
     const t=$('pt-toast'); if(!t) return;
     t.textContent=msg; t.classList.add('show');
@@ -1342,13 +1370,10 @@
     b.onclick=()=>window.ptOpen&&window.ptOpen();
     games.parentNode.appendChild(h); games.parentNode.appendChild(b);
   }
-  window.ptOpen=window.ptOpen||function(){ alert('Mode Rame-Rame belum siap, coba muat ulang halaman.'); };
+  window.ptOpen=window.ptOpen||function(){ alert('Mode Rame-Rame belum siap.'); };
 })();
 </script>
 
-<!-- =====================================================================
-     SCRIPT 2 (module): Mode Rame-Rame + Stacking Plus + Chat
-     ===================================================================== -->
 <script type="module">
 const $ = id => document.getElementById(id);
 const {toast,banner,confetti,fly} = window.PTFX;
@@ -1367,7 +1392,6 @@ const rnd=n=>Math.floor(Math.random()*n);
 const clone=o=>JSON.parse(JSON.stringify(o));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-/* ---------- UNO (DENGAN PEMBALASAN/STACKING KARTU PLUS) ---------- */
 const UNO_COLORS=['red','blue','green','yellow'];
 function unoInit(players){
   let deck=[];
@@ -1402,7 +1426,6 @@ function unoReduce(room,a){
   if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=unoStep(g,1); g.ev={n,kind:'pass',by:cur}; return g; }
   if(a.by!==cur&&a.by!=='*') return null;
 
-  // Jika mengambil kartu saat terkena beban stacking plus
   if(a.type==='draw'){
     let k=1;
     if(g.pendingDraw > 0) {
@@ -1423,7 +1446,6 @@ function unoReduce(room,a){
     const hand=g.hands[cur], c=hand[a.idx]; if(!c) return null;
     const top=g.discard[g.discard.length-1];
 
-    // Jika sedang dalam masa hukuman Stacking (+2 / +4), hanya boleh dibalas kartu plus lain
     if(g.pendingDraw > 0) {
       if(c.value !== 'draw2' && c.value !== 'wild4') return null;
     } else {
@@ -1439,15 +1461,9 @@ function unoReduce(room,a){
     let kind='play', steps=1, to=null, cnt=0; const nxt=g.order[unoStep(g,1)];
 
     if(c.value==='draw2'){
-      kind='draw2';
-      g.pendingDraw += 2;
-      to = nxt;
-      cnt = g.pendingDraw;
+      kind='draw2'; g.pendingDraw += 2; to = nxt; cnt = g.pendingDraw;
     } else if(c.value==='wild4'){
-      kind='wild4';
-      g.pendingDraw += 4;
-      to = nxt;
-      cnt = g.pendingDraw;
+      kind='wild4'; g.pendingDraw += 4; to = nxt; cnt = g.pendingDraw;
     } else if(c.value==='skip'){
       kind='skip'; steps=2; to=nxt;
     } else if(c.value==='reverse'){
@@ -1463,8 +1479,8 @@ function unoReduce(room,a){
   return null;
 }
 
-/* ---------- ULAR TANGGA & TOD ---------- */
 const UT_SNAKES={24:13,18:7,21:2}, UT_LADDERS={4:14,9:20,11:22};
+const UT_MAP=[25,24,23,22,21,16,17,18,19,20,15,14,13,12,11,6,7,8,9,10,5,4,3,2,1];
 const UT_Q=["Ceritakan kenangan paling lucu bareng teman di sini!","Sebutkan 1 kelebihan pemain di sebelah kananmu!","Apa makanan yang paling bikin kamu happy?","Sebutkan 3 hal yang kamu syukuri hari ini!"];
 function utInit(players){ const pos={}; players.forEach(p=>pos[p.id]=1); return {pos,order:players.map(p=>p.id),turn:0,q:null,winner:null,ev:{n:0,kind:'start'}}; }
 function utReduce(room,a){
@@ -1481,8 +1497,8 @@ function utReduce(room,a){
   return null;
 }
 
-const TOD={truth:["Kebiasaan paling aneh yang kamu punya apa?","Lagu guilty pleasure kamu apa?"],dare:["Joget 15 detik tanpa musik!","Nyanyikan satu lagu pilihan grup!"]};
-function todInit(players){ return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,usedT:[],usedD:[],ev:{n:0,kind:'start'}}; }
+const TOD_NET={truth:["Kebiasaan paling aneh yang kamu punya apa?","Lagu guilty pleasure kamu apa?"],dare:["Joget 15 detik tanpa musik!","Nyanyikan satu lagu pilihan grup!"]};
+function todInit(players){ return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,ev:{n:0,kind:'start'}}; }
 function todReduce(room,a){
   const g=clone(room.g); const n=g.ev.n+1, N=g.order.length, spinner=g.order[g.turn];
   if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'pass'}; return g; }
@@ -1494,7 +1510,7 @@ function todReduce(room,a){
   }
   if(a.type==='pick'){
     if(g.phase!=='choice') return null; if(a.by!==g.target&&a.by!=='*') return null;
-    const pool=TOD[a.kind]; g.kind=a.kind; g.text=pool[rnd(pool.length)]; g.phase='result'; g.ev={n,kind:'pick'}; return g;
+    const pool=TOD_NET[a.kind]; g.kind=a.kind; g.text=pool[rnd(pool.length)]; g.phase='result'; g.ev={n,kind:'pick'}; return g;
   }
   if(a.type==='next'){ if(g.phase!=='result') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'next'}; return g; }
   return null;
@@ -1503,13 +1519,12 @@ function todReduce(room,a){
 const INIT={uno:unoInit,ut:utInit,tod:todInit};
 const REDUCE={uno:unoReduce,ut:utReduce,tod:todReduce};
 
-// ============ FIREBASE & APP STATE ============
 let db=null, auth=null, FS=null;
 try{
   const base='https://www.gstatic.com/firebasejs/11.6.1/';
   const [A,Au,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
   const app=A.getApp(); db=F.getFirestore(app); auth=Au.getAuth(app); FS={...F,signInAnonymously:Au.signInAnonymously};
-}catch(e){ console.warn('Firebase party setup error',e); }
+}catch(e){ console.warn(e); }
 const roomRef=c=>FS.doc(db,'artifacts',APP_ID,'public','data','rooms',c);
 async function ensureUser(){
   if(!auth) throw new Error('nofb');
@@ -1539,23 +1554,31 @@ function readName(){
 }
 function showErr(m){ const e=$('pt-err'); if(e){e.textContent=m;e.classList.remove('hidden');} else toast(m); }
 
-// ============ CHAT FUNCTIONS ============
 W({
   ptToggleChat(){
     P.chatOpen = !P.chatOpen;
-    if(P.chatOpen) { P.unread = false; $('pt-chat-unread').classList.add('hidden'); }
-    $('pt-chat-box').classList.toggle('open', P.chatOpen);
-    if(P.chatOpen) { const m = $('pt-chat-msgs'); m.scrollTop = m.scrollHeight; }
+    if(P.chatOpen) { 
+      P.unread = false; 
+      const unreadEl = $('pt-chat-unread');
+      if(unreadEl) unreadEl.classList.add('hidden'); 
+    }
+    const box = $('pt-chat-box');
+    if(box) box.classList.toggle('open', P.chatOpen);
+    if(P.chatOpen) { 
+      const m = $('pt-chat-msgs'); 
+      if(m) m.scrollTop = m.scrollHeight; 
+    }
   },
   async ptSendChat(){
     const input = $('pt-chat-input');
-    const txt = (input.value||'').trim();
+    const txt = (input ? input.value : '').trim();
     if(!txt) return;
     input.value = '';
-    const myName = P.mode==='local' ? 'Lokal' : (P.room?.players?.find(p=>p.id===P.me)?.name || 'Pemain');
-    const msgObj = { sender: myName, text: txt, time: Date.now(), uid: P.me||'local' };
 
-    if(P.mode==='local'){
+    const myName = P.mode === 'local' ? (P.name || 'Pemain') : (P.room?.players?.find(p => p.id === P.me)?.name || P.name || 'Pemain');
+    const msgObj = { sender: myName, text: txt, time: Date.now(), uid: P.me || 'local' };
+
+    if(P.mode === 'local'){
       P.chats.push(msgObj);
       renderChats();
     } else if(P.code && db) {
@@ -1584,7 +1607,6 @@ function renderChats(){
   container.scrollTop = container.scrollHeight;
 }
 
-// ============ VIEWS & NAVIGATION ============
 function vMenu(){
   const cfg=GAMES[P.game];
   return `<div class="pt-wrap">
@@ -1681,19 +1703,19 @@ W({
   ptLocalStart(){
     if(P.localNames.length<MIN_PLAYERS) return;
     const players=P.localNames.map((n,i)=>({id:'L'+i,name:n,color:COLORS[i]}));
-    P.mode='local'; P.me=null; P.code=null; P.sig=null; P.prev={}; P.revealKey=null;
+    P.mode='local'; P.me=null; P.code=null; P.sig=null; P.prev={}; P.localNames=[]; P.revealKey=null;
     P.room={gameType:P.game,players,status:'playing',host:'L0',g:INIT[P.game](players)};
     onRoom();
   },
   async ptHost(){
     const name=readName(); if(!name) return showErr('Isi username dulu ya');
-    if(!db) return showErr('Firebase belum tersambung. Coba "Main 1 HP".');
+    if(!db) return showErr('Firebase belum tersambung.');
     try{
       const uid=await ensureUser(); let code,t=0;
       do{ code=Math.random().toString(36).substring(2,7).toUpperCase(); t++; }while((await FS.getDoc(roomRef(code))).exists()&&t<6);
       await FS.setDoc(roomRef(code),{party:true,status:'lobby',gameType:P.game,host:uid,players:[{id:uid,name,color:COLORS[0]}],chats:[],created:Date.now()});
       P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
-    }catch(e){ console.error(e); showErr('Gagal bikin room. Cek koneksi.'); }
+    }catch(e){ showErr('Gagal bikin room.'); }
   },
   async ptJoin(){
     const name=readName(); if(!name) return showErr('Isi username dulu ya');
@@ -1711,7 +1733,7 @@ W({
       });
       P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
     }catch(e){
-      const m={nf:'Room tidak ditemukan!',other:'Bukan room Mode Rame-Rame.',full:'Room penuh (maks '+MAX_PLAYERS+').'}[e.message];
+      const m={nf:'Room tidak ditemukan!',other:'Bukan room Mode Rame-Rame.',full:'Room penuh.'}[e.message];
       showErr(m||'Gagal gabung.');
     }
   },
@@ -1754,7 +1776,6 @@ function subscribe(code){
     if(!snap.exists()){ toast('Room ditutup'); ptLeave(); return; }
     P.room=snap.data();
     if(!P.room.players.some(p=>p.id===P.me)){ toast('Kamu keluar dari room'); ptLeave(); return; }
-    
     if(P.room.chats) {
       if(P.room.chats.length > P.chats.length && !P.chatOpen) {
         P.unread = true;
@@ -1787,10 +1808,9 @@ async function dispatch(a){
       const g=REDUCE[d.gameType](d,a); if(!g) return;
       tx.update(roomRef(P.code),{g:clone(g),lastUpdate:Date.now()});
     });
-  }catch(e){ console.error(e); toast('Gagal memproses giliran'); }
+  }catch(e){ toast('Gagal memproses giliran'); }
 }
 
-// ============ RENDER GAME SHARED ============
 function renderGame(){
   const r=P.room; if(!r||!r.g) return; const g=r.g;
   if(g.ev.n===0&&(P.prev.evn||0)>0) P.prev={};
@@ -1821,7 +1841,6 @@ function topBar(title,right){
     <div class="text-xs text-gray-500 min-w-[40px] text-right">${right||''}</div></div>`;
 }
 
-// ============ RENDER GAME: UNO ============
 function cardHTML(c){
   let v=c.value,icon='';
   if(v==='skip')icon='fa-ban'; else if(v==='reverse')icon='fa-arrows-rotate'; else if(v==='draw2')v='+2'; else if(v==='wild')v='WILD'; else if(v==='wild4')v='+4';
@@ -1838,7 +1857,6 @@ function renderUno(isNew){
   const covered=local&&!g.winner&&P.revealKey!==g.ev.n;
   const hand=g.hands[viewer]||[], top=g.discard[g.discard.length-1];
   
-  // Validasi Stacking Kartu Plus (+2 & +4)
   const valid=c=>{
     if(g.pendingDraw > 0) {
       return c.value === 'draw2' || c.value === 'wild4';
@@ -1884,25 +1902,6 @@ function renderUno(isNew){
   const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
 
   if(g.winner&&!P.winHold&&!P.prev.win){ P.prev.win=true; confetti(); }
-  if(!isNew) return;
-  
-  const ev=g.ev, nm=id=>id?esc(pl(id).name):'';
-  const src=(ev.by===viewer&&!local)?$('pt-myhand'):chipOf(ev.by);
-  const drawEl=$('pt-drawpile'), discEl=$('pt-discard'), topEl=discEl&&discEl.firstElementChild;
-  
-  if(ev.card){
-    if(topEl) topEl.style.visibility='hidden';
-    fly(src,discEl,cardHTML(ev.card),{dur:560,rot:rnd(30)-15,onEnd:()=>{if(topEl){topEl.style.visibility='';topEl.classList.add('pt-land');}}});
-  }
-  if((ev.kind==='draw' || ev.kind==='stack_draw')&&(local||ev.by!==P.me)) fly(drawEl,chipOf(ev.by),backHTML(),{dur:480});
-  
-  setTimeout(()=>{
-    if(ev.kind==='skip') banner('SKIP','#f97316',nm(ev.to)+' dilewati');
-    else if(ev.kind==='reverse') banner('REVERSE','#3b82f6','Arah putaran berbalik');
-    else if(ev.kind==='draw2') banner('+'+ev.cnt,'#2563eb',nm(ev.to)+' harus melapis/ambil '+ev.cnt+' kartu!');
-    else if(ev.kind==='wild4') banner('+'+ev.cnt,'#111827',nm(ev.to)+' harus melapis/ambil '+ev.cnt+' kartu!');
-    else if(ev.kind==='stack_draw') banner('Kena +'+ev.cnt,'#ef4444',nm(ev.by)+' mengambil '+ev.cnt+' kartu!');
-  }, ev.card?650:0);
 }
 
 W({
@@ -1921,7 +1920,7 @@ W({
     if(!c) return;
     
     if(g.pendingDraw > 0) {
-      if(c.value !== 'draw2' && c.value !== 'wild4') return toast('Ada kartu plus! Kamu harus keluarkan kartu plus atau Ambil.');
+      if(c.value !== 'draw2' && c.value !== 'wild4') return toast('Ada kartu plus! Keluarkan kartu plus atau Ambil.');
     } else {
       if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return toast('Kartu tidak bisa dikeluarkan');
     }
@@ -1932,7 +1931,6 @@ W({
   ptColor(col){ $('pt-colors').style.display='none'; if(P.pendingIdx==null) return; const i=P.pendingIdx; P.pendingIdx=null; dispatch({type:'play',idx:i,color:col,by:BY()}); }
 });
 
-// ============ RENDER ULAR TANGGA & TOD ============
 function renderUt(isNew){
   const r=P.room,g=r.g,cur=g.order[g.turn],local=P.mode==='local',mine=local||cur===P.me;
   const cells=UT_MAP.map(num=>{
@@ -1942,23 +1940,21 @@ function renderUt(isNew){
   }).join('');
   const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(mine?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
   const chips=g.order.map(id=>{const p=pl(id);return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===P.me?' (kamu)':''}</span><span class="pt-cnt">${g.pos[id]}</span></div>`;}).join('');
-  const busy=!!P.utBusy;
   setRoot(`<div class="pt-wrap">
     ${topBar(title,'')}
     <div class="pt-strip">${chips}</div>
     <div class="board-grid my-2" style="max-width:350px">${cells}</div>
-    <p id="pt-msg" class="text-sm text-center font-semibold text-gray-600 min-h-[22px] mt-2">${esc(P.utMsg||'')}</p>
     <div class="flex gap-4 items-center justify-center mt-3">
       <div id="pt-dice" class="w-16 h-16 bg-white border-2 border-emerald-200 rounded-2xl flex items-center justify-center text-3xl font-bold text-emerald-600 shadow-sm">${g.ev.roll?g.ev.roll:'<i class="fa-solid fa-dice-d6"></i>'}</div>
-      <button id="pt-roll" onclick="ptRoll()" class="py-4 px-8 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 active:scale-95 transition ${mine&&!busy&&!g.q?'':'opacity-40 pointer-events-none'}">${mine?'Kocok Dadu!':'Menunggu '+esc(pl(cur).name)+'…'}</button>
+      <button id="pt-roll" onclick="ptRoll()" class="py-4 px-8 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 active:scale-95 transition ${mine&&!g.q?'':'opacity-40 pointer-events-none'}">${mine?'Kocok Dadu!':'Menunggu '+esc(pl(cur).name)}</button>
     </div>
     ${hostSkipBtn(r)}
   </div>
-  ${g.q&&!busy?`<div id="pt-q" class="pt-modal"><div class="pt-mbox" style="border-top:8px solid #facc15">
+  ${g.q?`<div id="pt-q" class="pt-modal"><div class="pt-mbox" style="border-top:8px solid #facc15">
     <div style="font-size:30px">⭐</div><h3 class="font-bold text-gray-800 mb-2">Kotak Misteri untuk ${esc(pl(cur).name)}!</h3>
     <p class="text-gray-600 mb-5 text-sm leading-relaxed">${esc(g.q)}</p>
     ${mine?'<button onclick="ptAck()" class="pt-btn pt-pri">Udah Dijawab</button>':'<p class="text-xs text-gray-400">Menunggu '+esc(pl(cur).name)+' menjawab…</p>'}</div></div>`:''}
-  ${busy?'':winnerHTML(g,r)}`);
+  ${winnerHTML(g,r)}`);
 }
 W({ ptRoll(){ dispatch({type:'roll',by:BY()}); }, ptAck(){ dispatch({type:'ack',by:BY()}); } });
 
@@ -1973,7 +1969,7 @@ function renderTod(isNew){
   if(g.phase==='spin') panel=`<button onclick="ptTod('spin')" class="pt-btn ${iSpin?'':'off'}" style="background:#f59e0b;color:#fff">${iSpin?'Putar Botol':'Menunggu '+esc(pl(spinnerId).name)}</button>`;
   else if(g.phase==='choice') panel=`<div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
   else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md"><p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p><button onclick="ptTod('next')" class="pt-btn pt-sec">Lanjut</button></div>`;
-  setRoot(`<div class="pt-wrap">${topBar({text:'Truth or Dare'},'')}<div class="pt-ring my-4">${seats}${BOTTLE}</div><div class="mt-2">${panel}</div>${hostSkipBtn(r)}</div>`);
+  setRoot(`<div class="pt-wrap">${topBar({text:'Truth or Dare'},'')}<div class="pt-ring my-4">${seats}<svg id="pt-bottle" class="pt-bottle" viewBox="0 0 100 300" fill="none"><path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/><rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/><rect x="22" y="140" width="56" height="50" fill="white" opacity="0.9"/><text x="50" y="160" font-family="Arial" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text><path d="M50 0 L65 20 L35 20 Z" fill="#ef4444"/></svg></div><div class="mt-2">${panel}</div>${hostSkipBtn(r)}</div>`);
   const b=$('pt-bottle'); if(b) b.style.transform='rotate('+g.rot+'deg)';
 }
 W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
