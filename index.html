@@ -1145,9 +1145,7 @@
     </script>
 
 <!-- =====================================================================
-     ADD-ON "MODE RAME-RAME" (4-10 PEMAIN + USERNAME + ANIMASI UNO)
-     CARA PAKAI: tempel SELURUH isi file ini TEPAT SEBELUM </body>
-     di file aslimu. Tidak ada satu baris pun kode asli yang diubah.
+     ADD-ON "MODE RAME-RAME" (FITUR CHAT + STACKING KARTU PLUS UNO)
      ===================================================================== -->
 
 <style id="pt-style">
@@ -1174,6 +1172,18 @@
 #pt-colors{position:fixed;inset:0;background:rgba(17,24,39,.7);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
 #pt-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#1f2937;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;z-index:700;opacity:0;pointer-events:none;transition:all .25s;max-width:88vw;text-align:center}
 #pt-toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- Chat Widget ---------- */
+#pt-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
+#pt-chat-btn:active{transform:scale(.9)}
+#pt-chat-unread{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #fff}
+#pt-chat-box{position:fixed;bottom:80px;right:20px;z-index:390;width:310px;height:380px;background:#fff;border-radius:24px;box-shadow:0 12px 35px rgba(0,0,0,.15);border:1px solid #f2e8e5;display:none;flex-direction:column;overflow:hidden}
+#pt-chat-box.open{display:flex}
+.pt-chat-head{padding:12px 16px;background:#fdf8f6;border-bottom:1px solid #f2e8e5;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:13px;color:#5a382e}
+.pt-chat-msgs{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:12px}
+.pt-chat-msg{max-width:82%;padding:8px 12px;border-radius:14px;background:#f2e8e5;color:#374151;word-break:break-word}
+.pt-chat-msg.me{align-self:flex-end;background:#8b6255;color:#fff}
+.pt-chat-msg .sender{font-size:10px;font-weight:700;margin-bottom:2px;opacity:.8}
 
 /* ---------- Chip pemain ---------- */
 .pt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
@@ -1226,7 +1236,7 @@
 .pt-bn-sub{font-size:13px;font-weight:500;margin-top:4px;opacity:.95}
 .pt-conf{position:fixed;top:0;z-index:600;pointer-events:none;border-radius:2px}
 
-/* ---------- Animasi untuk UNO ASLI (tanpa mengubah kode asli) ---------- */
+/* ---------- Animasi UNO ---------- */
 .uno-fx-deal{animation:ptDeal .5s cubic-bezier(.2,.8,.2,1) both}
 .uno-fx-land{animation:ptLand .4s cubic-bezier(.2,.8,.2,1) both}
 .pt-pop{animation:ptPop .35s ease 2}
@@ -1257,8 +1267,25 @@
   </div>
 </div>
 
+<!-- Chat UI Widget -->
+<div id="pt-chat-btn" onclick="ptToggleChat()" class="hidden">
+  <i class="fa-solid fa-comments"></i>
+  <span id="pt-chat-unread" class="hidden"></span>
+</div>
+<div id="pt-chat-box">
+  <div class="pt-chat-head">
+    <span><i class="fa-solid fa-comments mr-2"></i>Obrolan Room</span>
+    <button onclick="ptToggleChat()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div id="pt-chat-msgs" class="pt-chat-msgs"></div>
+  <div style="padding:10px;border-top:1px solid #f2e8e5;display:flex;gap:6px">
+    <input id="pt-chat-input" class="pt-input" style="padding:8px 12px;font-size:12px;border-radius:10px" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter')ptSendChat()">
+    <button onclick="ptSendChat()" class="pt-btn pt-pri" style="width:auto;padding:0 14px;border-radius:10px;font-size:12px"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
 <!-- =====================================================================
-     SCRIPT 1 (klasik): efek bersama + animasi UNO asli + tombol di Home
+     SCRIPT 1: Efek Bersama + Tombol Menu Utama
      ===================================================================== -->
 <script>
 (function(){
@@ -1288,7 +1315,6 @@
       a.onfinish=()=>el.remove();
     }
   }
-  // terbangkan "kartu" dari elemen A ke elemen B (ukuran kartu 60x90)
   function fly(fromEl,toEl,html,o){
     o=o||{}; if(!fromEl||!toEl){ o.onEnd&&o.onEnd(); return; }
     const a=fromEl.getBoundingClientRect(), b=toEl.getBoundingClientRect();
@@ -1305,7 +1331,6 @@
   }
   window.PTFX={toast,banner,confetti,fly,rnd};
 
-  // ---------- Tombol masuk di Home (menambah DOM saja) ----------
   const games=document.querySelector('#home-screen .space-y-3');
   if(games){
     const h=document.createElement('h2');
@@ -1313,68 +1338,23 @@
     h.textContent='Main Rame-Rame';
     const b=document.createElement('button');
     b.className='w-full text-left p-4 glass-card rounded-2xl hover:-translate-y-1 transition flex items-center gap-4 group border-l-4 border-rose-400';
-    b.innerHTML='<div class="w-12 h-12 shrink-0 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div><div><h3 class="font-medium text-gray-800 group-hover:text-rose-600">Mode Rame-Rame</h3><p class="text-xs text-gray-500">4–10 pemain · username · UNO, Ular Tangga, Truth or Dare</p></div>';
+    b.innerHTML='<div class="w-12 h-12 shrink-0 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div><div><h3 class="font-medium text-gray-800 group-hover:text-rose-600">Mode Rame-Rame</h3><p class="text-xs text-gray-500">2–10 pemain · Stacking Plus · Chat Room</p></div>';
     b.onclick=()=>window.ptOpen&&window.ptOpen();
     games.parentNode.appendChild(h); games.parentNode.appendChild(b);
   }
   window.ptOpen=window.ptOpen||function(){ alert('Mode Rame-Rame belum siap, coba muat ulang halaman.'); };
-
-  // ---------- Animasi UNO ASLI (observer, tanpa menyentuh kode asli) ----------
-  const disc=$('discard-pile'), h1=$('p1-hand'), h2=$('p2-hand'), draw=$('draw-pile'),
-        msg=$('uno-message'), wm=$('winner-modal'), turn=$('turn-indicator');
-  if(disc&&h1&&h2){
-    let cnt={1:0,2:0}, lastTop='', raf=0;
-    const handle=()=>{
-      raf=0;
-      const c1=h1.children.length, c2=h2.children.length, topHTML=disc.innerHTML;
-      [[1,h1,c1],[2,h2,c2]].forEach(([k,el,c])=>{
-        const d=c-cnt[k];
-        if(d>0){ [...el.children].slice(-d).forEach((kid,i)=>{ kid.classList.add('uno-fx-deal'); kid.style.animationDelay=(i*0.07)+'s'; }); }
-      });
-      if(topHTML && topHTML!==lastTop && lastTop!==''){
-        const src = c1<cnt[1] ? h1 : (c2<cnt[2] ? h2 : null);
-        const topEl=disc.firstElementChild;
-        if(src&&topEl){
-          topEl.style.visibility='hidden';
-          fly(src,disc,topHTML,{dur:520,rot:rnd(24)-12,onEnd:()=>{ topEl.style.visibility=''; topEl.classList.add('uno-fx-land'); }});
-        } else if(topEl){ topEl.classList.add('uno-fx-land'); }
-      }
-      cnt={1:c1,2:c2}; lastTop=topHTML;
-    };
-    const kick=()=>{ if(!raf) raf=requestAnimationFrame(handle); };
-    [disc,h1,h2].forEach(el=>new MutationObserver(kick).observe(el,{childList:true}));
-
-    if(msg){
-      const map=[[/UNO/i,'UNO!','#ef4444'],[/Skip/i,'SKIP','#f97316'],[/\+2/,'+2','#3b82f6'],[/\+4/,'+4','#111827'],[/Ambil/i,'AMBIL','#6366f1']];
-      new MutationObserver(()=>{
-        const t=(msg.innerText||'').trim(); if(!t) return;
-        const m=map.find(x=>x[0].test(t));
-        if(m) banner(m[1],m[2],t.replace(/[!]+$/,'')); 
-      }).observe(msg,{childList:true});
-    }
-    if(turn) new MutationObserver(()=>{ turn.classList.remove('pt-pop'); void turn.offsetWidth; turn.classList.add('pt-pop'); }).observe(turn,{childList:true});
-    if(wm){
-      let shown=false;
-      new MutationObserver(()=>{
-        const vis=wm.style.display==='flex'||!wm.classList.contains('hidden');
-        if(vis&&!shown) confetti();
-        shown=vis;
-      }).observe(wm,{attributes:true,attributeFilter:['class','style']});
-    }
-  }
 })();
 </script>
 
 <!-- =====================================================================
-     SCRIPT 2 (module): Mode Rame-Rame 4-10 pemain
+     SCRIPT 2 (module): Mode Rame-Rame + Stacking Plus + Chat
      ===================================================================== -->
 <script type="module">
 const $ = id => document.getElementById(id);
 const {toast,banner,confetti,fly} = window.PTFX;
 
-// ============ KONFIGURASI ============
 const APP_ID='deeptalk-couple-app';
-const MIN_PLAYERS=4, MAX_PLAYERS=10;        // ubah di sini kalau mau
+const MIN_PLAYERS=2, MAX_PLAYERS=10;
 const COLORS=['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'];
 const COLORHEX={red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308'};
 const GAMES={
@@ -1383,12 +1363,11 @@ const GAMES={
   tod:{title:'Truth or Dare',icon:'fa-wine-bottle',color:'#f59e0b'}
 };
 
-// <<REDUCERS
 const rnd=n=>Math.floor(Math.random()*n);
 const clone=o=>JSON.parse(JSON.stringify(o));
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-/* ---------- UNO ---------- */
+/* ---------- UNO (DENGAN PEMBALASAN/STACKING KARTU PLUS) ---------- */
 const UNO_COLORS=['red','blue','green','yellow'];
 function unoInit(players){
   let deck=[];
@@ -1402,120 +1381,108 @@ function unoInit(players){
   const hands={}; players.forEach(p=>hands[p.id]=[]);
   for(let i=0;i<7;i++) players.forEach(p=>hands[p.id].push(deck.pop()));
   let first=deck.pop(); while(first.type!=='number'){deck.unshift(first);first=deck.pop();}
-  return {deck,hands,discard:[first],color:first.color,order:players.map(p=>p.id),turn:0,dir:1,winner:null,ev:{n:0,kind:'start'}};
+  return {deck,hands,discard:[first],color:first.color,order:players.map(p=>p.id),turn:0,dir:1,pendingDraw:0,winner:null,ev:{n:0,kind:'start'}};
 }
+
 function unoDrawN(g,id,k){
   let got=0;
   for(let i=0;i<k;i++){
     if(!g.deck.length){ if(g.discard.length<=1) break; const top=g.discard.pop(); g.deck=shuffle(g.discard); g.discard=[top]; }
-    g.hands[id].push(g.deck.pop()); got++;
+    if(g.deck.length) { g.hands[id].push(g.deck.pop()); got++; }
   }
   return got;
 }
+
 const unoStep=(g,s)=>{const n=g.order.length;return (((g.turn+g.dir*s)%n)+n)%n;};
+
 function unoReduce(room,a){
   const g=clone(room.g); if(g.winner) return null;
   const cur=g.order[g.turn]; const n=g.ev.n+1;
+  
   if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=unoStep(g,1); g.ev={n,kind:'pass',by:cur}; return g; }
   if(a.by!==cur&&a.by!=='*') return null;
-  if(a.type==='draw'){ const k=unoDrawN(g,cur,1); g.turn=unoStep(g,1); g.ev={n,kind:'draw',by:cur,cnt:k}; return g; }
+
+  // Jika mengambil kartu saat terkena beban stacking plus
+  if(a.type==='draw'){
+    let k=1;
+    if(g.pendingDraw > 0) {
+      k = unoDrawN(g,cur,g.pendingDraw);
+      const totalTake = g.pendingDraw;
+      g.pendingDraw = 0;
+      g.turn = unoStep(g,1);
+      g.ev = {n, kind:'stack_draw', by:cur, cnt:totalTake};
+      return g;
+    }
+    k = unoDrawN(g,cur,1);
+    g.turn = unoStep(g,1);
+    g.ev = {n, kind:'draw', by:cur, cnt:k};
+    return g;
+  }
+
   if(a.type==='play'){
     const hand=g.hands[cur], c=hand[a.idx]; if(!c) return null;
     const top=g.discard[g.discard.length-1];
-    if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return null;
+
+    // Jika sedang dalam masa hukuman Stacking (+2 / +4), hanya boleh dibalas kartu plus lain
+    if(g.pendingDraw > 0) {
+      if(c.value !== 'draw2' && c.value !== 'wild4') return null;
+    } else {
+      if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return null;
+    }
+
     if(c.color==='black'&&!UNO_COLORS.includes(a.color)) return null;
+
     hand.splice(a.idx,1); g.discard.push(c); g.color=c.color==='black'?a.color:c.color;
+
     if(hand.length===0){ g.winner=cur; g.ev={n,kind:'win',by:cur,card:c}; return g; }
-    let kind='play',steps=1,to=null,cnt=0; const nxt=g.order[unoStep(g,1)];
-    if(c.value==='skip'){kind='skip';steps=2;to=nxt;}
-    else if(c.value==='reverse'){kind='reverse'; if(g.order.length===2) steps=2; else g.dir*=-1;}
-    else if(c.value==='draw2'){kind='draw2';to=nxt;cnt=unoDrawN(g,nxt,2);steps=2;}
-    else if(c.value==='wild4'){kind='wild4';to=nxt;cnt=unoDrawN(g,nxt,4);steps=2;}
-    else if(c.value==='wild'){kind='wild';}
-    g.turn=unoStep(g,steps);
-    g.ev={n,kind,by:cur,to,cnt,card:c,color:g.color,uno:hand.length===1};
+
+    let kind='play', steps=1, to=null, cnt=0; const nxt=g.order[unoStep(g,1)];
+
+    if(c.value==='draw2'){
+      kind='draw2';
+      g.pendingDraw += 2;
+      to = nxt;
+      cnt = g.pendingDraw;
+    } else if(c.value==='wild4'){
+      kind='wild4';
+      g.pendingDraw += 4;
+      to = nxt;
+      cnt = g.pendingDraw;
+    } else if(c.value==='skip'){
+      kind='skip'; steps=2; to=nxt;
+    } else if(c.value==='reverse'){
+      kind='reverse'; if(g.order.length===2) steps=2; else g.dir*=-1;
+    } else if(c.value==='wild'){
+      kind='wild';
+    }
+
+    g.turn = unoStep(g, steps);
+    g.ev = {n, kind, by:cur, to, cnt, card:c, color:g.color, uno:hand.length===1};
     return g;
   }
   return null;
 }
 
-/* ---------- ULAR TANGGA ---------- */
+/* ---------- ULAR TANGGA & TOD ---------- */
 const UT_SNAKES={24:13,18:7,21:2}, UT_LADDERS={4:14,9:20,11:22};
-const UT_Q=[
-  "Ceritakan kenangan paling lucu bareng orang-orang di sini!",
-  "Sebutkan 1 kelebihan pemain di sebelah kananmu!",
-  "Apa makanan yang paling bikin kamu happy?",
-  "Kalau besok libur dadakan, kamu mau ngapain?",
-  "Tantangan: Tirukan gaya jalan salah satu pemain!",
-  "Tantangan: Nyanyikan 1 baris lagu favoritmu!",
-  "Apa barang paling random yang pernah kamu beli?",
-  "Sebutkan 3 hal yang kamu syukuri hari ini!",
-  "Tantangan: Bikin pantun untuk pemain pilihanmu!"
-];
-function utInit(players){
-  const pos={}; players.forEach(p=>pos[p.id]=1);
-  return {pos,order:players.map(p=>p.id),turn:0,q:null,winner:null,ev:{n:0,kind:'start'}};
-}
+const UT_Q=["Ceritakan kenangan paling lucu bareng teman di sini!","Sebutkan 1 kelebihan pemain di sebelah kananmu!","Apa makanan yang paling bikin kamu happy?","Sebutkan 3 hal yang kamu syukuri hari ini!"];
+function utInit(players){ const pos={}; players.forEach(p=>pos[p.id]=1); return {pos,order:players.map(p=>p.id),turn:0,q:null,winner:null,ev:{n:0,kind:'start'}}; }
 function utReduce(room,a){
-  const g=clone(room.g); if(g.winner) return null;
-  const cur=g.order[g.turn]; const n=g.ev.n+1;
+  const g=clone(room.g); if(g.winner) return null; const cur=g.order[g.turn]; const n=g.ev.n+1;
   if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'pass',by:cur}; return g; }
   if(a.by!==cur&&a.by!=='*') return null;
   if(a.type==='roll'){
-    if(g.q) return null;
-    const from=g.pos[cur], roll=1+rnd(6); let p=from+roll; if(p>25) p=50-p;
-    const landed=p; let kind='move';
-    if(UT_SNAKES[p]){p=UT_SNAKES[p];kind='snake';} else if(UT_LADDERS[p]){p=UT_LADDERS[p];kind='ladder';}
-    g.pos[cur]=p;
-    if(p===25){ g.winner=cur; kind='win'; }
-    else if(kind==='move'&&p%4===0){ g.q=UT_Q[rnd(UT_Q.length)]; kind='star'; }
-    else g.turn=(g.turn+1)%g.order.length;
-    g.ev={n,by:cur,from,roll,landed,to:p,kind};
-    return g;
+    if(g.q) return null; const from=g.pos[cur], roll=1+rnd(6); let p=from+roll; if(p>25) p=50-p;
+    let kind='move'; if(UT_SNAKES[p]){p=UT_SNAKES[p];kind='snake';} else if(UT_LADDERS[p]){p=UT_LADDERS[p];kind='ladder';}
+    g.pos[cur]=p; if(p===25){ g.winner=cur; kind='win'; } else if(kind==='move'&&p%4===0){ g.q=UT_Q[rnd(UT_Q.length)]; kind='star'; } else g.turn=(g.turn+1)%g.order.length;
+    g.ev={n,by:cur,from,roll,landed:from+roll,to:p,kind}; return g;
   }
   if(a.type==='ack'){ if(!g.q) return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'ack',by:cur}; return g; }
   return null;
 }
 
-/* ---------- TRUTH OR DARE ---------- */
-const TOD={
-  truth:[
-    "Kebiasaan paling aneh yang kamu punya apa?",
-    "Siapa di sini yang paling kamu percaya buat simpan rahasia?",
-    "Hal paling memalukan yang pernah terjadi waktu kamu di tempat umum?",
-    "Lagu guilty pleasure kamu apa?",
-    "Pernah pura-pura sibuk biar nggak balas chat? Ceritain!",
-    "Kebohongan kecil apa yang paling sering kamu bilang?",
-    "Kalau harus tukar hidup sehari dengan salah satu orang di sini, pilih siapa dan kenapa?",
-    "Skill tersembunyi apa yang belum banyak orang tahu?",
-    "Pernah salah kirim chat ke orang yang salah? Apa isinya?",
-    "Mimpi apa yang masih kamu simpan sendiri?",
-    "Hal apa yang paling kamu sesali tahun ini?",
-    "Apa ketakutanmu yang paling nggak masuk akal?",
-    "Kapan terakhir kali kamu merasa benar-benar bangga sama diri sendiri?",
-    "Aplikasi apa yang paling bikin kamu buang waktu?",
-    "Siapa orang di sini yang paling gampang akrab sama orang baru?"
-  ],
-  dare:[
-    "Tirukan gaya bicara salah satu pemain, yang lain tebak siapa!",
-    "Nyanyikan satu lagu pilihan pemain di sebelah kirimu (minimal 10 detik)!",
-    "Joget 15 detik tanpa musik!",
-    "Bikin pantun gombal untuk pemain pilihanmu!",
-    "Tunjukkan foto paling lucu di galerimu (yang masih aman)!",
-    "Tirukan suara hewan pilihan grup selama 10 detik!",
-    "Jalan ala model catwalk keliling ruangan!",
-    "Beri pujian tulus ke setiap pemain, masing-masing 1 kalimat!",
-    "Jelaskan film favoritmu hanya dengan gerakan, tanpa suara!",
-    "Tahan tawa 15 detik sementara pemain lain menggodamu!",
-    "Ceritakan kisah kocak dalam 20 detik tanpa tertawa!",
-    "Pasang ekspresi paling dramatis selama 10 detik!",
-    "Bicara dengan logat daerah pilihan grup sampai gilirannya selesai!",
-    "Suit lawan pemain pilihanmu; yang kalah meniru gaya yang menang selama 1 putaran!"
-  ]
-};
-function todInit(players){
-  return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,usedT:[],usedD:[],ev:{n:0,kind:'start'}};
-}
+const TOD={truth:["Kebiasaan paling aneh yang kamu punya apa?","Lagu guilty pleasure kamu apa?"],dare:["Joget 15 detik tanpa musik!","Nyanyikan satu lagu pilihan grup!"]};
+function todInit(players){ return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,usedT:[],usedD:[],ev:{n:0,kind:'start'}}; }
 function todReduce(room,a){
   const g=clone(room.g); const n=g.ev.n+1, N=g.order.length, spinner=g.order[g.turn];
   if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'pass'}; return g; }
@@ -1523,36 +1490,26 @@ function todReduce(room,a){
     if(g.phase!=='spin'||N<2) return null; if(a.by!==spinner&&a.by!=='*') return null;
     let ti; do{ti=rnd(N);}while(ti===g.turn);
     const theta=ti*360/N, base=((g.rot%360)+360)%360, delta=((theta-base)+360)%360;
-    g.rot=g.rot+1080+delta; g.target=g.order[ti]; g.phase='choice'; g.ev={n,kind:'spin',by:spinner,to:g.target};
-    return g;
+    g.rot=g.rot+1080+delta; g.target=g.order[ti]; g.phase='choice'; g.ev={n,kind:'spin',by:spinner,to:g.target}; return g;
   }
   if(a.type==='pick'){
     if(g.phase!=='choice') return null; if(a.by!==g.target&&a.by!=='*') return null;
-    if(a.kind!=='truth'&&a.kind!=='dare') return null;
-    const key=a.kind==='truth'?'usedT':'usedD', pool=TOD[a.kind]; let used=g[key]||[];
-    if(used.length>=pool.length) used=[];
-    let i; do{i=rnd(pool.length);}while(used.includes(i));
-    used.push(i); g[key]=used; g.kind=a.kind; g.text=pool[i]; g.phase='result'; g.ev={n,kind:'pick'};
-    return g;
+    const pool=TOD[a.kind]; g.kind=a.kind; g.text=pool[rnd(pool.length)]; g.phase='result'; g.ev={n,kind:'pick'}; return g;
   }
-  if(a.type==='next'){
-    if(g.phase!=='result') return null; if(a.by!==spinner&&a.by!==g.target&&a.by!=='*') return null;
-    g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'next'};
-    return g;
-  }
+  if(a.type==='next'){ if(g.phase!=='result') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'next'}; return g; }
   return null;
 }
+
 const INIT={uno:unoInit,ut:utInit,tod:todInit};
 const REDUCE={uno:unoReduce,ut:utReduce,tod:todReduce};
-// REDUCERS>>
 
-// ============ FIREBASE (opsional: mode 1 HP tetap jalan kalau gagal) ============
+// ============ FIREBASE & APP STATE ============
 let db=null, auth=null, FS=null;
 try{
   const base='https://www.gstatic.com/firebasejs/11.6.1/';
   const [A,Au,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
   const app=A.getApp(); db=F.getFirestore(app); auth=Au.getAuth(app); FS={...F,signInAnonymously:Au.signInAnonymously};
-}catch(e){ console.warn('Party: Firebase tidak tersedia, hanya mode 1 HP.',e); }
+}catch(e){ console.warn('Firebase party setup error',e); }
 const roomRef=c=>FS.doc(db,'artifacts',APP_ID,'public','data','rooms',c);
 async function ensureUser(){
   if(!auth) throw new Error('nofb');
@@ -1561,8 +1518,7 @@ async function ensureUser(){
   return auth.currentUser.uid;
 }
 
-// ============ STATE ============
-const P={game:'uno',mode:'online',view:'menu',name:'',me:null,code:null,room:null,unsub:null,sig:null,prev:{},localNames:[],revealKey:null};
+const P={game:'uno',mode:'online',view:'menu',name:'',me:null,code:null,room:null,unsub:null,sig:null,prev:{},localNames:[],revealKey:null,chats:[],chatOpen:false,unread:false};
 try{P.name=localStorage.getItem('pt_name')||'';}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const W=o=>Object.assign(window,o);
@@ -1571,6 +1527,7 @@ const pl=id=>(P.room.players.find(p=>p.id===id))||{name:'?',color:'#999'};
 const ini=n=>esc((n||'?')[0].toUpperCase());
 const setRoot=h=>{$('pt-root').innerHTML=h;};
 const chipOf=id=>document.querySelector('[data-pid="'+id+'"]');
+
 function uniqueName(list,name){
   const base=(name||'Pemain').trim().slice(0,12)||'Pemain'; let n=base,i=2;
   while(list.some(p=>(p.name||p).toLowerCase()===n.toLowerCase())) n=base.slice(0,10)+(i++);
@@ -1582,16 +1539,61 @@ function readName(){
 }
 function showErr(m){ const e=$('pt-err'); if(e){e.textContent=m;e.classList.remove('hidden');} else toast(m); }
 
-// ============ VIEW: MENU / LOCAL / LOBBY ============
+// ============ CHAT FUNCTIONS ============
+W({
+  ptToggleChat(){
+    P.chatOpen = !P.chatOpen;
+    if(P.chatOpen) { P.unread = false; $('pt-chat-unread').classList.add('hidden'); }
+    $('pt-chat-box').classList.toggle('open', P.chatOpen);
+    if(P.chatOpen) { const m = $('pt-chat-msgs'); m.scrollTop = m.scrollHeight; }
+  },
+  async ptSendChat(){
+    const input = $('pt-chat-input');
+    const txt = (input.value||'').trim();
+    if(!txt) return;
+    input.value = '';
+    const myName = P.mode==='local' ? 'Lokal' : (P.room?.players?.find(p=>p.id===P.me)?.name || 'Pemain');
+    const msgObj = { sender: myName, text: txt, time: Date.now(), uid: P.me||'local' };
+
+    if(P.mode==='local'){
+      P.chats.push(msgObj);
+      renderChats();
+    } else if(P.code && db) {
+      try {
+        await FS.runTransaction(db, async tx => {
+          const s = await tx.get(roomRef(P.code));
+          if(!s.exists()) return;
+          const chats = s.data().chats || [];
+          chats.push(msgObj);
+          tx.update(roomRef(P.code), { chats });
+        });
+      } catch(e){ console.error(e); }
+    }
+  }
+});
+
+function renderChats(){
+  const container = $('pt-chat-msgs');
+  if(!container) return;
+  container.innerHTML = P.chats.map(c => `
+    <div class="pt-chat-msg ${c.uid===P.me ? 'me':''}">
+      <div class="sender">${esc(c.sender)}</div>
+      <div>${esc(c.text)}</div>
+    </div>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+// ============ VIEWS & NAVIGATION ============
 function vMenu(){
   const cfg=GAMES[P.game];
   return `<div class="pt-wrap">
   <div class="flex items-center justify-between mb-4">
     <button onclick="ptClose()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
-    <span class="text-xs text-gray-400">${MIN_PLAYERS}–${MAX_PLAYERS} pemain</span>
+    <span class="text-xs text-gray-400">Siapapun yang punya kode bisa masuk</span>
   </div>
   <h2 class="font-serif text-2xl font-semibold text-brand-900">Mode Rame-Rame</h2>
-  <p class="text-sm text-brand-600 mb-5">Main bareng, tiap pemain punya username sendiri.</p>
+  <p class="text-sm text-brand-600 mb-5">Main bareng tanpa batas minimum 4 orang!</p>
   <p class="pt-lbl">Pilih game</p>
   <div class="grid grid-cols-3 gap-2 mb-5">
     ${Object.entries(GAMES).map(([k,g])=>`<button onclick="ptPick('${k}')" class="pt-game ${P.game===k?'sel':''}" style="--c:${g.color}"><i class="fa-solid ${g.icon}"></i>${g.title}</button>`).join('')}
@@ -1599,7 +1601,7 @@ function vMenu(){
   <p class="pt-lbl">Username kamu</p>
   <input id="pt-name" class="pt-input" maxlength="12" placeholder="Contoh: Vanila" value="${esc(P.name)}">
   <div class="mt-5 space-y-3">
-    <button onclick="ptHost()" class="pt-btn pt-pri"><i class="fa-solid fa-wifi"></i> Buat Room (beda HP)</button>
+    <button onclick="ptHost()" class="pt-btn pt-pri"><i class="fa-solid fa-wifi"></i> Buat Room Baru</button>
     <div class="flex gap-2">
       <input id="pt-code" class="pt-input" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-family:monospace" maxlength="5" placeholder="KODE">
       <button onclick="ptJoin()" class="pt-btn pt-sec" style="width:auto;padding:0 22px">Gabung</button>
@@ -1608,15 +1610,15 @@ function vMenu(){
     <div class="flex items-center gap-3"><div class="h-px bg-gray-200 flex-1"></div><span class="text-xs text-gray-400">ATAU</span><div class="h-px bg-gray-200 flex-1"></div></div>
     <button onclick="ptLocalSetup()" class="pt-btn pt-sec"><i class="fa-solid fa-mobile-screen"></i> Main 1 HP (gantian)</button>
   </div>
-  <p class="text-[11px] text-gray-400 text-center mt-6">Game terpilih: <b>${cfg.title}</b></p>
   </div>`;
 }
+
 function vLocal(){
   const n=P.localNames.length, cfg=GAMES[P.game];
   return `<div class="pt-wrap">
   <div class="flex items-center gap-3 mb-4">
     <button onclick="ptBackMenu()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
-    <div><h2 class="font-semibold text-brand-900">Main 1 HP · ${cfg.title}</h2><p class="text-xs text-gray-400">Tambah username semua pemain (${n}/${MAX_PLAYERS})</p></div>
+    <div><h2 class="font-semibold text-brand-900">Main 1 HP · ${cfg.title}</h2><p class="text-xs text-gray-400">Username pemain (${n}/${MAX_PLAYERS})</p></div>
   </div>
   <div class="flex gap-2 mb-3">
     <input id="pt-ln" class="pt-input" maxlength="12" placeholder="Username pemain" onkeydown="if(event.key==='Enter')ptAddLocal()">
@@ -1625,37 +1627,44 @@ function vLocal(){
   <div class="space-y-2 mb-5">
     ${P.localNames.map((nm,i)=>`<div class="pt-row"><span class="pt-av" style="background:${COLORS[i]}">${ini(nm)}</span><span class="flex-1 text-sm font-medium">${esc(nm)}</span><button onclick="ptDelLocal(${i})" class="text-gray-300 hover:text-red-400 px-2"><i class="fa-solid fa-xmark"></i></button></div>`).join('')||'<p class="text-sm text-gray-400 text-center py-6">Belum ada pemain.</p>'}
   </div>
-  <button onclick="ptLocalStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main${n<MIN_PLAYERS?` (minimal ${MIN_PLAYERS} pemain)`:''}</button>
+  <button onclick="ptLocalStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main</button>
   </div>`;
 }
+
 function vLobby(){
   const r=P.room, isHost=r.host===P.me, n=r.players.length, cfg=GAMES[r.gameType];
   return `<div class="pt-wrap">
   <div class="flex items-center gap-3 mb-4">
     <button onclick="ptLeave()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
-    <div><h2 class="font-semibold text-brand-900">Lobby · ${cfg.title}</h2><p class="text-xs text-gray-400">${n}/${MAX_PLAYERS} pemain</p></div>
+    <div><h2 class="font-semibold text-brand-900">Lobby · ${cfg.title}</h2><p class="text-xs text-gray-400">${n} Pemain telah masuk</p></div>
   </div>
   <div class="text-center bg-white rounded-3xl border border-brand-100 p-5 mb-5">
-    <p class="text-xs text-gray-400 mb-1">Kode room — bagikan ke teman</p>
+    <p class="text-xs text-gray-400 mb-1">Kode room — Siapapun yang punya kode bisa masuk!</p>
     <button onclick="ptCopy()" class="font-mono text-4xl font-bold tracking-widest text-brand-800">${esc(P.code)}</button>
-    <p class="text-[11px] text-gray-400 mt-1">ketuk untuk salin</p>
+    <p class="text-[11px] text-gray-400 mt-1">Ketuk untuk menyalin kode</p>
   </div>
   <div class="space-y-2 mb-5">
     ${r.players.map(p=>`<div class="pt-row"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="flex-1 text-sm font-medium">${esc(p.name)}${p.id===P.me?' (kamu)':''}</span>${p.id===r.host?'<i class="fa-solid fa-crown text-amber-400 text-sm"></i>':''}</div>`).join('')}
   </div>
   ${isHost
-    ?`<button onclick="ptStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main${n<MIN_PLAYERS?` (butuh ${MIN_PLAYERS-n} lagi)`:''}</button>`
+    ?`<button onclick="ptStart()" class="pt-btn pt-pri mt-auto">Mulai Permainan Langsung</button>`
     :`<p class="text-center text-sm text-gray-500 mt-auto"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Menunggu host memulai…</p>`}
   </div>`;
 }
+
 function ptRender(){
   if(P.view==='menu') setRoot(vMenu());
   else if(P.view==='local') setRoot(vLocal());
   else if(P.view==='lobby') setRoot(vLobby());
   else renderGame();
+
+  const chatBtn = $('pt-chat-btn');
+  if(chatBtn) {
+    if(P.view==='game' || P.view==='lobby') chatBtn.classList.remove('hidden');
+    else chatBtn.classList.add('hidden');
+  }
 }
 
-// ============ NAVIGASI & ROOM ============
 W({
   ptOpen(){ $('pt-root').classList.add('open'); document.body.style.overflow='hidden'; ptRender(); },
   ptClose(){ if(P.room&&P.view==='game'&&!confirm('Keluar dari permainan?')) return; ptLeave(); $('pt-root').classList.remove('open'); document.body.style.overflow=''; },
@@ -1682,9 +1691,9 @@ W({
     try{
       const uid=await ensureUser(); let code,t=0;
       do{ code=Math.random().toString(36).substring(2,7).toUpperCase(); t++; }while((await FS.getDoc(roomRef(code))).exists()&&t<6);
-      await FS.setDoc(roomRef(code),{party:true,status:'lobby',gameType:P.game,host:uid,players:[{id:uid,name,color:COLORS[0]}],created:Date.now()});
+      await FS.setDoc(roomRef(code),{party:true,status:'lobby',gameType:P.game,host:uid,players:[{id:uid,name,color:COLORS[0]}],chats:[],created:Date.now()});
       P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
-    }catch(e){ console.error(e); showErr('Gagal bikin room. Cek koneksi / aturan Firestore.'); }
+    }catch(e){ console.error(e); showErr('Gagal bikin room. Cek koneksi.'); }
   },
   async ptJoin(){
     const name=readName(); if(!name) return showErr('Isi username dulu ya');
@@ -1696,23 +1705,22 @@ W({
         const s=await tx.get(roomRef(code)); if(!s.exists()) throw new Error('nf');
         const d=s.data(); if(!d.party) throw new Error('other');
         if(d.players.some(p=>p.id===uid)) return;
-        if(d.status!=='lobby') throw new Error('started');
         if(d.players.length>=MAX_PLAYERS) throw new Error('full');
         const color=COLORS.find(c=>!d.players.some(p=>p.color===c))||COLORS[0];
         tx.update(roomRef(code),{players:[...d.players,{id:uid,name:uniqueName(d.players,name),color}]});
       });
       P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
     }catch(e){
-      const m={nf:'Room tidak ditemukan!',other:'Itu kode room game berdua, bukan Mode Rame-Rame.',started:'Permainan sudah dimulai.',full:'Room penuh (maks '+MAX_PLAYERS+').'}[e.message];
-      showErr(m||'Gagal gabung. Cek koneksi.');
+      const m={nf:'Room tidak ditemukan!',other:'Bukan room Mode Rame-Rame.',full:'Room penuh (maks '+MAX_PLAYERS+').'}[e.message];
+      showErr(m||'Gagal gabung.');
     }
   },
   async ptStart(){
-    const r=P.room; if(r.players.length<MIN_PLAYERS) return toast('Minimal '+MIN_PLAYERS+' pemain');
+    const r=P.room; if(r.players.length < MIN_PLAYERS) return toast('Butuh minimal 2 pemain');
     try{
       await FS.runTransaction(db,async tx=>{
         const s=await tx.get(roomRef(P.code)); const d=s.data();
-        if(d.host!==P.me||d.status!=='lobby'||d.players.length<MIN_PLAYERS) return;
+        if(d.host!==P.me||d.players.length<MIN_PLAYERS) return;
         tx.update(roomRef(P.code),{status:'playing',g:clone(INIT[d.gameType](d.players))});
       });
     }catch(e){ toast('Gagal memulai'); }
@@ -1720,11 +1728,12 @@ W({
   async ptRematch(){
     const r=P.room;
     if(P.mode==='local'){ P.prev={}; P.sig=null; P.revealKey=null; r.g=INIT[r.gameType](r.players); onRoom(); return; }
-    try{ await FS.updateDoc(roomRef(P.code),{status:'playing',g:clone(INIT[r.gameType](r.players))}); }catch(e){ toast('Gagal memulai ulang'); }
+    try{ await FS.updateDoc(roomRef(P.code),{status:'playing',g:clone(INIT[r.gameType](r.players))}); }catch(e){ toast('Gagal ulang'); }
   },
   ptExit(){ if(confirm('Keluar dari permainan?')) ptLeave(); },
   ptSkip(){ dispatch({type:'skip',by:BY()}); }
 });
+
 async function ptLeave(){
   const r=P.room, code=P.code, wasOnline=P.mode==='online';
   if(P.unsub){P.unsub();P.unsub=null;}
@@ -1734,7 +1743,7 @@ async function ptLeave(){
       else await FS.runTransaction(db,async tx=>{const s=await tx.get(roomRef(code)); if(s.exists()) tx.update(roomRef(code),{players:s.data().players.filter(p=>p.id!==P.me)});});
     }catch(e){}
   }
-  P.room=null;P.code=null;P.mode='online';P.view='menu';P.sig=null;P.prev={};P.utBusy=false;P.utDisp=null;
+  P.room=null;P.code=null;P.mode='online';P.view='menu';P.sig=null;P.prev={};P.chats=[];
   if($('pt-root').classList.contains('open')) ptRender();
 }
 W({ptLeave});
@@ -1742,12 +1751,22 @@ W({ptLeave});
 function subscribe(code){
   if(P.unsub) P.unsub();
   P.unsub=FS.onSnapshot(roomRef(code),snap=>{
-    if(!snap.exists()){ toast('Room ditutup oleh host'); ptLeave(); return; }
+    if(!snap.exists()){ toast('Room ditutup'); ptLeave(); return; }
     P.room=snap.data();
     if(!P.room.players.some(p=>p.id===P.me)){ toast('Kamu keluar dari room'); ptLeave(); return; }
+    
+    if(P.room.chats) {
+      if(P.room.chats.length > P.chats.length && !P.chatOpen) {
+        P.unread = true;
+        $('pt-chat-unread')?.classList.remove('hidden');
+      }
+      P.chats = P.room.chats;
+      renderChats();
+    }
     onRoom();
   },e=>console.error(e));
 }
+
 function onRoom(){
   const r=P.room; if(!r) return;
   if(r.status==='lobby'){ P.view='lobby'; ptRender(); return; }
@@ -1757,6 +1776,7 @@ function onRoom(){
   if(P.view!=='game'){ P.prev={}; P.view='game'; }
   renderGame();
 }
+
 async function dispatch(a){
   const r=P.room; if(!r) return;
   if(P.mode==='local'){ const g=REDUCE[r.gameType](r,a); if(g){ r.g=g; onRoom(); } return; }
@@ -1767,10 +1787,10 @@ async function dispatch(a){
       const g=REDUCE[d.gameType](d,a); if(!g) return;
       tx.update(roomRef(P.code),{g:clone(g),lastUpdate:Date.now()});
     });
-  }catch(e){ console.error(e); toast('Koneksi bermasalah, coba lagi'); }
+  }catch(e){ console.error(e); toast('Gagal memproses giliran'); }
 }
 
-// ============ GAME: SHARED ============
+// ============ RENDER GAME SHARED ============
 function renderGame(){
   const r=P.room; if(!r||!r.g) return; const g=r.g;
   if(g.ev.n===0&&(P.prev.evn||0)>0) P.prev={};
@@ -1778,6 +1798,7 @@ function renderGame(){
   ({uno:renderUno,ut:renderUt,tod:renderTod})[r.gameType](isNew);
   P.prev.evn=g.ev.n;
 }
+
 function winnerHTML(g,r){
   if(!g.winner) return '';
   const p=pl(g.winner), can=P.mode==='local'||r.host===P.me;
@@ -1788,9 +1809,11 @@ function winnerHTML(g,r){
     ${can?'<button onclick="ptRematch()" class="pt-btn pt-pri mb-2">Main Lagi</button>':'<p class="text-xs text-gray-400 mb-3">Menunggu host mengulang…</p>'}
     <button onclick="ptLeave()" class="pt-btn pt-sec">Keluar</button></div></div>`;
 }
+
 function hostSkipBtn(r){
   return (P.mode==='online'&&r.host===P.me)?'<button onclick="ptSkip()" class="text-xs text-gray-400 underline mt-4 self-center">Lewati giliran (host)</button>':'';
 }
+
 function topBar(title,right){
   return `<div class="flex items-center justify-between gap-2 mb-2">
     <button onclick="ptExit()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
@@ -1798,7 +1821,7 @@ function topBar(title,right){
     <div class="text-xs text-gray-500 min-w-[40px] text-right">${right||''}</div></div>`;
 }
 
-// ============ GAME: UNO ============
+// ============ RENDER GAME: UNO ============
 function cardHTML(c){
   let v=c.value,icon='';
   if(v==='skip')icon='fa-ban'; else if(v==='reverse')icon='fa-arrows-rotate'; else if(v==='draw2')v='+2'; else if(v==='wild')v='WILD'; else if(v==='wild4')v='+4';
@@ -1814,63 +1837,74 @@ function renderUno(isNew){
   const viewer=local?cur:P.me, myTurn=local||cur===P.me;
   const covered=local&&!g.winner&&P.revealKey!==g.ev.n;
   const hand=g.hands[viewer]||[], top=g.discard[g.discard.length-1];
-  const valid=c=>c.color==='black'||c.color===g.color||c.value===top.value;
+  
+  // Validasi Stacking Kartu Plus (+2 & +4)
+  const valid=c=>{
+    if(g.pendingDraw > 0) {
+      return c.value === 'draw2' || c.value === 'wild4';
+    }
+    return c.color==='black'||c.color===g.color||c.value===top.value;
+  };
+
   const prevLen=(P.prev.hl||{})[viewer];
   if(isNew&&g.winner){ P.winHold=true; setTimeout(()=>{P.winHold=false;renderGame();},1100); }
-  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(b.c.value),undefined,{numeric:true}));
+  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(a.c.value),undefined,{numeric:true}));
   let k=0;
+  
   const handHTML=covered
     ?`<div class="pt-cover"><p class="text-sm text-gray-600 mb-3">Oper HP ke <b>${esc(pl(cur).name)}</b></p><button onclick="ptReveal()" class="pt-btn pt-pri" style="width:auto;margin:0 auto;padding:12px 24px">Aku ${esc(pl(cur).name)}, lihat kartu</button></div>`
     :`<div id="pt-myhand" class="pt-hand">${items.map(({c,i})=>{
         const isN=prevLen===undefined||i>=prevLen; const cls=myTurn?(valid(c)?'ok':'no'):'';
         const style=isN?`style="animation-delay:${(k++)*0.07}s"`:'';
         return `<div class="pt-cw ${cls} ${isN?'pt-deal':''}" ${style} onclick="ptPlay(${i})">${cardHTML(c)}</div>`;}).join('')}</div>`;
+  
   const chips=order.map(id=>{const p=pl(id),c=g.hands[id].length;
     return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===viewer&&!local?' (kamu)':''}</span><span class="pt-cnt ${c===1?'uno':''}">${c===1?'UNO':c}</span></div>`;}).join('');
+  
   const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(myTurn?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
+  
   setRoot(`<div class="pt-wrap">
     ${topBar(title,`<i class="fa-solid fa-arrow-rotate-right pt-dir ${g.dir<0?'flip':''}"></i>`)}
     <div class="pt-strip" id="pt-strip">${chips}</div>
     <div class="flex-1 flex flex-col items-center justify-center my-3">
+      ${g.pendingDraw > 0 ? `<div class="mb-2 text-xs font-bold bg-red-100 text-red-600 px-3 py-1 rounded-full animate-bounce">Tumpukan Kartu Plus: +${g.pendingDraw}! Balas atau Ambil!</div>` : ''}
       <div class="flex gap-6 items-center">
         <div id="pt-discard" class="pt-pile">${cardHTML(top)}</div>
-        <div id="pt-drawpile" onclick="ptDraw()" class="uno-card uno-black ${myTurn&&!covered?'pt-draw-ok':''}" style="border-color:#6b7280"><span class="uno-center-symbol" style="color:#fff;font-size:.8rem;font-weight:400">AMBIL</span></div>
+        <div id="pt-drawpile" onclick="ptDraw()" class="uno-card uno-black ${myTurn&&!covered?'pt-draw-ok':''}" style="border-color:#6b7280">
+          <span class="uno-center-symbol" style="color:#fff;font-size:.8rem;font-weight:400">${g.pendingDraw > 0 ? 'AMBIL +'+g.pendingDraw : 'AMBIL'}</span>
+        </div>
       </div>
       <div class="flex items-center gap-2 mt-4 text-xs text-gray-500"><span style="width:18px;height:18px;border-radius:50%;background:${COLORHEX[g.color]};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)"></span>Warna aktif · Sisa tumpukan ${g.deck.length}</div>
     </div>
     <div class="bg-white/60 rounded-2xl border border-white pb-1">${handHTML}</div>
     ${hostSkipBtn(r)}
   </div>${P.winHold?'':winnerHTML(g,r)}`);
+  
   P.prev.hl=Object.assign(P.prev.hl||{},{[viewer]:hand.length});
   const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
 
-  // ----- animasi -----
   if(g.winner&&!P.winHold&&!P.prev.win){ P.prev.win=true; confetti(); }
   if(!isNew) return;
+  
   const ev=g.ev, nm=id=>id?esc(pl(id).name):'';
   const src=(ev.by===viewer&&!local)?$('pt-myhand'):chipOf(ev.by);
   const drawEl=$('pt-drawpile'), discEl=$('pt-discard'), topEl=discEl&&discEl.firstElementChild;
+  
   if(ev.card){
     if(topEl) topEl.style.visibility='hidden';
     fly(src,discEl,cardHTML(ev.card),{dur:560,rot:rnd(30)-15,onEnd:()=>{if(topEl){topEl.style.visibility='';topEl.classList.add('pt-land');}}});
   }
-  if(ev.kind==='draw'&&(local||ev.by!==P.me)) fly(drawEl,chipOf(ev.by),backHTML(),{dur:480});
-  if(ev.to&&ev.cnt){
-    const dest=(!local&&ev.to===P.me)?$('pt-myhand'):chipOf(ev.to);
-    for(let i=0;i<Math.min(ev.cnt,4);i++) fly(drawEl,dest,backHTML(),{dur:480,delay:600+i*130});
-  }
-  const d=ev.card?650:0;
+  if((ev.kind==='draw' || ev.kind==='stack_draw')&&(local||ev.by!==P.me)) fly(drawEl,chipOf(ev.by),backHTML(),{dur:480});
+  
   setTimeout(()=>{
     if(ev.kind==='skip') banner('SKIP','#f97316',nm(ev.to)+' dilewati');
     else if(ev.kind==='reverse') banner('REVERSE','#3b82f6','Arah putaran berbalik');
-    else if(ev.kind==='draw2') banner('+2','#2563eb',nm(ev.to)+' ambil 2 kartu');
-    else if(ev.kind==='wild4') banner('+4','#111827',nm(ev.to)+' ambil 4 kartu');
-    else if(ev.kind==='wild') banner('WILD','#7c3aed','Warna baru: '+({red:'Merah',blue:'Biru',green:'Hijau',yellow:'Kuning'})[ev.color]);
-    else if(ev.kind==='win') banner('UNO!','#16a34a',nm(ev.by)+' menghabiskan kartu!');
-    if(ev.uno) setTimeout(()=>banner('UNO!','#ef4444',nm(ev.by)+' sisa 1 kartu!'),['skip','reverse','draw2','wild4','wild'].includes(ev.kind)?1600:0);
-  },d);
-  if(!local&&cur===P.me&&navigator.vibrate) navigator.vibrate(60);
+    else if(ev.kind==='draw2') banner('+'+ev.cnt,'#2563eb',nm(ev.to)+' harus melapis/ambil '+ev.cnt+' kartu!');
+    else if(ev.kind==='wild4') banner('+'+ev.cnt,'#111827',nm(ev.to)+' harus melapis/ambil '+ev.cnt+' kartu!');
+    else if(ev.kind==='stack_draw') banner('Kena +'+ev.cnt,'#ef4444',nm(ev.by)+' mengambil '+ev.cnt+' kartu!');
+  }, ev.card?650:0);
 }
+
 W({
   ptReveal(){ P.revealKey=P.room.g.ev.n; renderGame(); },
   ptDraw(){
@@ -1885,23 +1919,20 @@ W({
     if(!(P.mode==='local'||cur===P.me)) return toast('Bukan giliranmu');
     const viewer=P.mode==='local'?cur:P.me, c=g.hands[viewer][i], top=g.discard[g.discard.length-1];
     if(!c) return;
-    if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return toast('Kartu ini tidak bisa dimainkan');
+    
+    if(g.pendingDraw > 0) {
+      if(c.value !== 'draw2' && c.value !== 'wild4') return toast('Ada kartu plus! Kamu harus keluarkan kartu plus atau Ambil.');
+    } else {
+      if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return toast('Kartu tidak bisa dikeluarkan');
+    }
+
     if(c.color==='black'){ P.pendingIdx=i; $('pt-colors').style.display='flex'; return; }
     dispatch({type:'play',idx:i,by:BY()});
   },
   ptColor(col){ $('pt-colors').style.display='none'; if(P.pendingIdx==null) return; const i=P.pendingIdx; P.pendingIdx=null; dispatch({type:'play',idx:i,color:col,by:BY()}); }
 });
 
-// ============ GAME: ULAR TANGGA ============
-const UT_MAP=[25,24,23,22,21,16,17,18,19,20,15,14,13,12,11,6,7,8,9,10,5,4,3,2,1];
-function utPlace(){
-  const g=P.room.g, pos=Object.assign({},g.pos,P.utDisp||{}), cur=g.order[g.turn];
-  document.querySelectorAll('.pt-dots').forEach(d=>d.innerHTML='');
-  g.order.forEach(id=>{
-    const c=document.querySelector('[data-cell="'+pos[id]+'"] .pt-dots');
-    if(c) c.insertAdjacentHTML('beforeend',`<i class="pt-dot ${id===cur&&!P.utBusy?'cur':''}" style="background:${pl(id).color}"></i>`);
-  });
-}
+// ============ RENDER ULAR TANGGA & TOD ============
 function renderUt(isNew){
   const r=P.room,g=r.g,cur=g.order[g.turn],local=P.mode==='local',mine=local||cur===P.me;
   const cells=UT_MAP.map(num=>{
@@ -1928,70 +1959,22 @@ function renderUt(isNew){
     <p class="text-gray-600 mb-5 text-sm leading-relaxed">${esc(g.q)}</p>
     ${mine?'<button onclick="ptAck()" class="pt-btn pt-pri">Udah Dijawab</button>':'<p class="text-xs text-gray-400">Menunggu '+esc(pl(cur).name)+' menjawab…</p>'}</div></div>`:''}
   ${busy?'':winnerHTML(g,r)}`);
-  if(isNew&&g.ev.kind!=='ack'&&g.ev.kind!=='pass'&&g.ev.roll) utAnimate(g.ev);
-  else{ utPlace(); if(g.winner&&!busy&&!P.prev.win){P.prev.win=true;confetti();} }
-  const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest'});
 }
-function utAnimate(ev){
-  P.utBusy=true; P.utMsg=''; $('pt-q')&&$('pt-q').remove(); $('pt-roll')&&$('pt-roll').classList.add('opacity-40','pointer-events-none');
-  const g=P.room.g, name=esc(pl(ev.by).name); let t=0;
-  const iv=setInterval(()=>{
-    const d=$('pt-dice'); if(d){ d.textContent=1+rnd(6); d.classList.remove('pt-shake'); void d.offsetWidth; d.classList.add('pt-shake'); }
-    if(++t<8) return;
-    clearInterval(iv); if(d) d.textContent=ev.roll;
-    const path=[]; for(let i=1;i<=ev.roll;i++){let p=ev.from+i; if(p>25)p=50-p; path.push(p);}
-    if(ev.to!==ev.landed) path.push(ev.to);
-    let k=0;
-    const step=()=>{
-      if(k>=path.length){
-        P.utDisp=null; P.utBusy=false;
-        P.utMsg=`${pl(ev.by).name} dapat ${ev.roll}! `+({snake:'Yah, kena ular 🐍',ladder:'Naik tangga! 🪜',star:'⭐ Kotak misteri!',win:'Sampai di kotak 25! 🏁'})[ev.kind]||'';
-        if(ev.kind==='snake') banner('🐍','#dc2626',name+' turun ke '+ev.to);
-        else if(ev.kind==='ladder') banner('🪜','#16a34a',name+' naik ke '+ev.to);
-        renderGame(); return;
-      }
-      P.utDisp={[ev.by]:path[k++]}; utPlace();
-      setTimeout(step,(k===path.length&&ev.to!==ev.landed)?550:230);
-    };
-    P.utDisp={[ev.by]:ev.from}; utPlace(); step();
-  },90);
-}
-W({
-  ptRoll(){ const g=P.room.g; if(P.utBusy||g.q) return; dispatch({type:'roll',by:BY()}); },
-  ptAck(){ dispatch({type:'ack',by:BY()}); }
-});
+W({ ptRoll(){ dispatch({type:'roll',by:BY()}); }, ptAck(){ dispatch({type:'ack',by:BY()}); } });
 
-// ============ GAME: TRUTH OR DARE ============
-const BOTTLE=`<svg id="pt-bottle" class="pt-bottle" viewBox="0 0 100 300" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/><rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/><rect x="22" y="140" width="56" height="50" fill="white" opacity=".9"/><text x="50" y="170" font-family="Arial" font-size="14" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text><path d="M30 100 C30 150 30 200 30 250" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".4"/><path d="M50 -8 L68 16 L32 16 Z" fill="#ef4444"/></svg>`;
 function renderTod(isNew){
   const r=P.room,g=r.g,N=g.order.length,local=P.mode==='local';
   const spinnerId=g.order[g.turn], iSpin=local||spinnerId===P.me, iTarget=local||g.target===P.me;
-  if(isNew&&g.ev.kind==='spin'){ P.todRevealAt=Date.now()+3300; setTimeout(()=>renderGame(),3350); }
-  const spinning=g.phase==='choice'&&Date.now()<(P.todRevealAt||0);
-  const showHit=g.phase!=='spin'&&!spinning;
   const seats=g.order.map((id,i)=>{
     const t=i*2*Math.PI/N, p=pl(id);
-    return `<div class="pt-seat ${showHit&&id===g.target?'hit':''} ${g.phase==='spin'&&id===spinnerId?'spin':''}" style="left:${50+41*Math.sin(t)}%;top:${50-41*Math.cos(t)}%"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="nm">${esc(p.name)}</span></div>`;
+    return `<div class="pt-seat ${id===g.target?'hit':''}" style="left:${50+41*Math.sin(t)}%;top:${50-41*Math.cos(t)}%"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="nm">${esc(p.name)}</span></div>`;
   }).join('');
   let panel='';
-  if(g.phase==='spin') panel=`<p class="text-sm text-center mb-3">Giliran <b>${esc(pl(spinnerId).name)}</b> memutar botol</p>
-    <button onclick="ptTod('spin')" class="pt-btn ${iSpin?'':'off'}" style="background:#f59e0b;color:#fff;box-shadow:0 8px 20px rgba(245,158,11,.3)">${iSpin?'Putar Botol':'Menunggu '+esc(pl(spinnerId).name)+'…'}</button>`;
-  else if(spinning) panel=`<p class="text-sm text-center text-gray-500"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Botol berputar…</p>`;
-  else if(g.phase==='choice') panel=`<p class="text-sm text-center mb-3"><b>${esc(pl(g.target).name)}</b> kena! ${iTarget?'Pilih:':'Menunggu pilihan…'}</p>
-    <div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
-  else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md">
-      <span class="text-xs font-bold px-3 py-1 rounded-full inline-block mb-3 ${g.kind==='truth'?'bg-blue-100 text-blue-700':'bg-rose-100 text-rose-700'}">${g.kind.toUpperCase()} · ${esc(pl(g.target).name)}</span>
-      <p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p>
-      <button onclick="ptTod('next')" class="pt-btn pt-sec ${(iTarget||iSpin)?'':'off'}">Selesai / Lanjut</button></div>`;
-  setRoot(`<div class="pt-wrap">
-    ${topBar({text:'Truth or Dare'},'')}
-    <div class="pt-ring my-4">${seats}${BOTTLE}</div>
-    <div class="mt-2">${panel}</div>
-    ${hostSkipBtn(r)}
-  </div>`);
-  const b=$('pt-bottle'), from=P.prev.rot===undefined?g.rot:P.prev.rot;
-  b.style.transition='none'; b.style.transform='rotate('+from+'deg)'; void b.offsetWidth; b.style.transition=''; b.style.transform='rotate('+g.rot+'deg)';
-  P.prev.rot=g.rot;
+  if(g.phase==='spin') panel=`<button onclick="ptTod('spin')" class="pt-btn ${iSpin?'':'off'}" style="background:#f59e0b;color:#fff">${iSpin?'Putar Botol':'Menunggu '+esc(pl(spinnerId).name)}</button>`;
+  else if(g.phase==='choice') panel=`<div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
+  else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md"><p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p><button onclick="ptTod('next')" class="pt-btn pt-sec">Lanjut</button></div>`;
+  setRoot(`<div class="pt-wrap">${topBar({text:'Truth or Dare'},'')}<div class="pt-ring my-4">${seats}${BOTTLE}</div><div class="mt-2">${panel}</div>${hostSkipBtn(r)}</div>`);
+  const b=$('pt-bottle'); if(b) b.style.transform='rotate('+g.rot+'deg)';
 }
 W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
 </script>
