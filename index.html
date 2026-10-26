@@ -86,18 +86,6 @@
         /* Bottle Spin Styles */
         .bottle-container { position: relative; width: 200px; height: 200px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle, #fdf8f6 0%, #f2e8e5 100%); box-shadow: inset 0 0 20px rgba(163, 124, 108, 0.1); border: 2px solid #eaddd7; }
         .bottle { position: absolute; top: 50%; left: 50%; width: 40px; height: 140px; margin-top: -70px; margin-left: -20px; transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1); filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)); transform-origin: center center; }
-
-        /* Global Chat Widget for Duo Mode */
-        #global-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
-        #global-chat-btn:active{transform:scale(.9)}
-        #global-chat-unread{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #fff}
-        #global-chat-box{position:fixed;bottom:80px;right:20px;z-index:390;width:310px;height:380px;background:#fff;border-radius:24px;box-shadow:0 12px 35px rgba(0,0,0,.15);border:1px solid #f2e8e5;display:none;flex-direction:column;overflow:hidden}
-        #global-chat-box.open{display:flex}
-        .global-chat-head{padding:12px 16px;background:#fdf8f6;border-bottom:1px solid #f2e8e5;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:13px;color:#5a382e}
-        .global-chat-msgs{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:12px}
-        .global-chat-msg{max-width:82%;padding:8px 12px;border-radius:14px;background:#f2e8e5;color:#374151;word-break:break-word}
-        .global-chat-msg.me{align-self:flex-end;background:#8b6255;color:#fff}
-        .global-chat-msg .sender{font-size:10px;font-weight:700;margin-bottom:2px;opacity:.8}
     </style>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center relative">
@@ -251,6 +239,10 @@
             </div>
         </div>
 
+        <!-- ======================= -->
+        <!-- GAME SCREENS START HERE -->
+        <!-- ======================= -->
+
         <!-- 1. UNO SCREEN -->
         <div id="uno-screen" class="hidden flex-col h-full animate-fade-in pb-4 pt-12">
             <button onclick="goHomeFromGame()" class="absolute top-2 left-0 text-gray-400 hover:text-gray-600 w-10 h-10 flex items-center justify-center rounded-full glass-card z-20">
@@ -262,6 +254,7 @@
                     Sisa Tumpukan: <span id="draw-pile-count" class="font-bold text-gray-800"></span>
                 </div>
             </div>
+            <!-- Opponent Hand -->
             <div id="p2-area" class="w-full bg-white/50 rounded-2xl p-3 border border-white mb-2 transition-all">
                 <div class="flex justify-between items-center mb-2 px-1">
                     <span class="text-xs font-semibold text-gray-600"><i class="fa-solid fa-user-group mr-1"></i> Pasangan</span>
@@ -274,6 +267,7 @@
                 </div>
                 <div id="p2-hand" class="hand-container min-h-[100px]"></div>
             </div>
+            <!-- Center Board -->
             <div class="flex-1 flex flex-col items-center justify-center my-4 relative">
                 <div id="uno-message" class="absolute -top-6 text-sm font-bold text-brand-600 bg-brand-50 px-4 py-1 rounded-full shadow-sm opacity-0 transition-opacity"></div>
                 <div class="flex gap-6 items-center">
@@ -285,6 +279,7 @@
                 </div>
                 <div id="current-color-indicator" class="mt-6 w-8 h-8 rounded-full shadow-inner border-2 border-white hidden"></div>
             </div>
+            <!-- Your Hand -->
             <div id="p1-area" class="w-full bg-white/50 rounded-2xl p-3 border border-white mt-auto transition-all">
                 <div class="flex justify-between items-center mb-2 px-1">
                     <span class="text-xs font-semibold text-gray-600"><i class="fa-solid fa-user mr-1"></i> Kamu</span>
@@ -299,6 +294,7 @@
             </div>
         </div>
         
+        <!-- UNO Color Picker Modal -->
         <div id="color-picker-modal" class="fixed inset-0 bg-gray-900/80 z-[100] hidden items-center justify-center backdrop-blur-sm px-4">
             <div class="bg-white p-6 rounded-[2rem] max-w-[280px] w-full text-center shadow-xl">
                 <h3 class="font-bold text-gray-800 mb-4">Pilih Warna</h3>
@@ -322,7 +318,9 @@
             </div>
             
             <div class="w-full max-w-[350px] mx-auto relative mb-8">
+                <!-- Board Grid -->
                 <div id="ut-board" class="board-grid relative"></div>
+                <!-- Tokens -->
                 <div id="ut-token-1" class="player-token token-p1">P1</div>
                 <div id="ut-token-2" class="player-token token-p2">P2</div>
             </div>
@@ -340,6 +338,7 @@
             </div>
         </div>
 
+        <!-- UT Question Modal -->
         <div id="ut-question-modal" class="fixed inset-0 bg-gray-900/80 z-[100] hidden items-center justify-center backdrop-blur-sm px-4">
             <div class="bg-white p-8 rounded-[2rem] max-w-[320px] w-full text-center shadow-xl border-t-8 border-yellow-400">
                 <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fa-solid fa-star"></i></div>
@@ -393,23 +392,6 @@
 
     </main>
 
-    <!-- Global Chat Widget untuk Game Duo / Room Mode -->
-    <div id="global-chat-btn" onclick="toggleGlobalChat()" class="hidden">
-        <i class="fa-solid fa-comments"></i>
-        <span id="global-chat-unread" class="hidden"></span>
-    </div>
-    <div id="global-chat-box">
-        <div class="global-chat-head">
-            <span><i class="fa-solid fa-comments mr-2"></i>Obrolan Room</span>
-            <button onclick="toggleGlobalChat()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div id="global-chat-msgs" class="global-chat-msgs"></div>
-        <div style="padding:10px;border-top:1px solid #f2e8e5;display:flex;gap:6px">
-            <input id="global-chat-input" class="pt-input" style="padding:8px 12px;font-size:12px;border-radius:10px" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter')sendGlobalChat()">
-            <button onclick="sendGlobalChat()" class="pt-btn pt-pri" style="width:auto;padding:0 14px;border-radius:10px;font-size:12px;background:#8b6255;color:#fff"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -428,7 +410,6 @@
         };
 
         let db = null, auth = null, userId = null;
-        let globalChats = [], chatBoxOpen = false, chatUnread = false;
 
         try {
             const app = initializeApp(firebaseConfig);
@@ -454,77 +435,9 @@
         let unsubscribeSnapshot = null;
         let currentGameType = '';
 
-        // Global Chat Handlers untuk Game Duo Online
-        window.toggleGlobalChat = function() {
-            chatBoxOpen = !chatBoxOpen;
-            if(chatBoxOpen) { 
-                chatUnread = false; 
-                const unreadEl = document.getElementById('global-chat-unread');
-                if(unreadEl) unreadEl.classList.add('hidden'); 
-            }
-            const box = document.getElementById('global-chat-box');
-            if(box) box.classList.toggle('open', chatBoxOpen);
-            if(chatBoxOpen) { 
-                const m = document.getElementById('global-chat-msgs'); 
-                if(m) m.scrollTop = m.scrollHeight; 
-            }
-        };
-
-        window.sendGlobalChat = async function() {
-            const input = document.getElementById('global-chat-input');
-            const txt = (input ? input.value : '').trim();
-            if(!txt) return;
-            input.value = '';
-
-            let myName = 'Pemain';
-            if (isOnline && currentRoomCode) {
-                myName = myPlayerNumber === 1 ? 'Player 1' : 'Player 2';
-            }
-
-            const msgObj = { 
-                sender: myName, 
-                text: txt, 
-                time: Date.now(), 
-                uid: userId || 'local' 
-            };
-
-            if(isOnline && currentRoomCode && db) {
-                try {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'rooms', currentRoomCode), {
-                        chats: [...globalChats, msgObj]
-                    });
-                } catch(e){ 
-                    console.error("Gagal kirim chat:", e); 
-                }
-            } else {
-                globalChats.push(msgObj);
-                renderGlobalChats();
-            }
-        };
-
-        function renderGlobalChats() {
-            const container = document.getElementById('global-chat-msgs');
-            if(!container) return;
-            container.innerHTML = globalChats.map(c => `
-                <div class="global-chat-msg ${c.uid === userId ? 'me':''}">
-                  <div class="sender">${c.sender}</div>
-                  <div>${c.text}</div>
-                </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function checkChatWidgetVisibility() {
-            const btn = document.getElementById('global-chat-btn');
-            if(btn) {
-                if(isOnline && currentRoomCode) {
-                    btn.classList.remove('hidden');
-                } else {
-                    btn.classList.add('hidden');
-                }
-            }
-        }
-
+        // ==========================================
+        // 100+ DEEP TALK QUESTIONS (Sertifikasi Lengkap)
+        // ==========================================
         const questionsData = {
             santai: [
                 "Kalau kamu bisa jadi hewan selama sehari, kamu mau jadi hewan apa dan kenapa?",
@@ -576,7 +489,7 @@
                 "Seberapa terbuka kamu merasa kalau lagi cerita tentang hari-harimu ke aku?",
                 "Apa hadiah paling berkesan atau paling lucu yang pernah kita tukar?",
                 "Kalau kamu bisa mendeskripsikan aku pake 3 kata, kata apa aja itu?",
-                "Apa hal yang paling bikin kamu deg-degan waktu awal-awal dekat dulu?",
+                "Apa hal paling bikin kamu deg-degan waktu awal-awal dekat dulu?",
                 "Menurutmu, siapa yang paling sering ngalah kalau kita lagi beda pendapat?",
                 "Apa momen paling kocak yang pernah kita lewatin bareng?",
                 "Bagaimana cara kamu nunjukin kalau kamu lagi rindu sama seseorang?",
@@ -707,15 +620,12 @@
         }
         window.cancelHosting = () => {
             if(unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
-            isOnline = false;
-            checkChatWidgetVisibility();
             document.getElementById('waiting-room-modal').classList.add('hidden'); document.getElementById('waiting-room-modal').style.display = 'none';
             window.showOnlineMenu();
         }
 
         window.startOfflineGame = function() {
             isOnline = false;
-            checkChatWidgetVisibility();
             closeLobby();
             document.getElementById('home-screen').classList.add('hidden');
             startGameUI(currentGameType);
@@ -725,10 +635,9 @@
         window.hostOnlineGame = async function() {
             const code = Math.random().toString(36).substring(2, 7).toUpperCase();
             currentRoomCode = code; isOnline = true; myPlayerNumber = 1;
-            checkChatWidgetVisibility();
             const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
             try {
-                await setDoc(roomRef, { status: 'waiting', gameType: currentGameType, p1: userId, p2: null, chats: [] });
+                await setDoc(roomRef, { status: 'waiting', gameType: currentGameType, p1: userId, p2: null });
             } catch(e) { document.getElementById('join-error').innerText = "Gagal bikin room."; document.getElementById('join-error').classList.remove('hidden'); return; }
             
             document.getElementById('online-menu-modal').classList.add('hidden'); document.getElementById('online-menu-modal').style.display = 'none';
@@ -738,16 +647,6 @@
             unsubscribeSnapshot = onSnapshot(roomRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
-                    if(data.chats) {
-                        if(data.chats.length > globalChats.length && !chatBoxOpen) {
-                            chatUnread = true;
-                            document.getElementById('global-chat-unread')?.classList.remove('hidden');
-                        }
-                        globalChats = data.chats;
-                        renderGlobalChats();
-                    }
-
                     if (data.status === 'playing' && data.p2 && document.getElementById('waiting-room-modal').style.display !== 'none') {
                         document.getElementById('waiting-room-modal').classList.add('hidden'); document.getElementById('waiting-room-modal').style.display = 'none';
                         document.getElementById('home-screen').classList.add('hidden');
@@ -775,23 +674,12 @@
                     errEl.innerText = `Room ini untuk game lain!`; errEl.classList.remove('hidden'); return;
                 }
                 currentRoomCode = codeInput; isOnline = true; myPlayerNumber = 2; currentGameType = data.gameType;
-                checkChatWidgetVisibility();
                 await updateDoc(roomRef, { status: 'playing', p2: userId });
                 document.getElementById('online-menu-modal').classList.add('hidden'); document.getElementById('online-menu-modal').style.display = 'none';
                 
                 unsubscribeSnapshot = onSnapshot(roomRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const roomData = docSnap.data();
-                        
-                        if(roomData.chats) {
-                            if(roomData.chats.length > globalChats.length && !chatBoxOpen) {
-                                chatUnread = true;
-                                document.getElementById('global-chat-unread')?.classList.remove('hidden');
-                            }
-                            globalChats = roomData.chats;
-                            renderGlobalChats();
-                        }
-
                         if (roomData.state) {
                             syncFromFirestore(roomData);
                             if (document.getElementById(`${currentGameType}-screen`).classList.contains('hidden')) {
@@ -816,8 +704,6 @@
         window.goHomeFromGame = function() {
             if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
             isOnline = false;
-            currentRoomCode = null;
-            checkChatWidgetVisibility();
             document.getElementById('winner-modal').classList.add('hidden'); document.getElementById('winner-modal').style.display = 'none';
             document.getElementById('uno-screen').classList.add('hidden'); document.getElementById('uno-screen').classList.remove('flex');
             document.getElementById('ulartangga-screen').classList.add('hidden'); document.getElementById('ulartangga-screen').classList.remove('flex');
@@ -1068,7 +954,9 @@
             "Sebutkan 1 hal yang bikin kamu naksir aku pas pertama kenal!",
             "Kalau kita nikah nanti, kamu pengen resepsi yang kayak gimana?",
             "Apa kebiasaanku yang paling lucu menurutmu?",
-            "Sebutkan 3 kata yang mendeskripsikan hubungan kita!"
+            "Sebutkan 3 kata yang mendeskripsikan hubungan kita!",
+            "Tantangan: Gombalin aku pakai kata 'Dadu' dan 'Ular'!",
+            "Tantangan: Nyanyiin reff lagu romantis kesukaanmu buat aku sekarang!"
         ];
 
         function initUtLogic() {
@@ -1186,7 +1074,7 @@
         }
 
         // ==========================================
-        // 3. TRUTH OR DARE LOGIC
+        // 3. TRUTH OR DARE LOGIC (100+ Data Set)
         // ==========================================
         let todState = { rotation: 0, turn: 1, action: null, result: null, phase: 'spin' };
         const todData = {
@@ -1319,5 +1207,936 @@
             if(isOnline) syncState(); else renderTod();
         }
     </script>
+
+<!-- =====================================================================
+     ADD-ON "MODE RAME-RAME" (CHAT + STACKING UNO PLUS)
+     ===================================================================== -->
+<style id="pt-style">
+#pt-root{position:fixed;inset:0;z-index:200;background:#fdf8f6;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;font-family:Poppins,sans-serif;color:#1f2937}
+#pt-root.open{display:block}
+.pt-wrap{max-width:440px;margin:0 auto;padding:14px 16px 28px;min-height:100%;display:flex;flex-direction:column}
+.pt-icon{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.85);border:1px solid #eaddd7;color:#8b6255;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pt-lbl{font-size:12px;font-weight:600;color:#9ca3af;margin:0 0 8px 4px}
+.pt-btn{width:100%;padding:14px;border-radius:16px;font-weight:600;font-size:14px;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.pt-btn:active{transform:scale(.97)}
+.pt-btn.off{opacity:.4;pointer-events:none}
+.pt-pri{background:#8b6255;color:#fff;box-shadow:0 8px 20px rgba(139,98,85,.25)}
+.pt-sec{background:#fff;color:#5a382e;border:1px solid #eaddd7}
+.pt-input{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #eaddd7;background:#fff;font-size:14px;outline:none}
+.pt-input:focus{border-color:#a37c6c;box-shadow:0 0 0 3px rgba(163,124,108,.18)}
+.pt-game{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:16px;background:#fff;border:2px solid #f2e8e5;color:#6b7280;font-size:11px;font-weight:600;transition:all .2s}
+.pt-game i{font-size:20px;color:var(--c)}
+.pt-game.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 10%,#fff);color:#374151}
+.pt-av{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid #f2e8e5}
+
+#pt-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
+#pt-chat-btn:active{transform:scale(.9)}
+#pt-chat-unread{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #fff}
+#pt-chat-box{position:fixed;bottom:80px;right:20px;z-index:390;width:310px;height:380px;background:#fff;border-radius:24px;box-shadow:0 12px 35px rgba(0,0,0,.15);border:1px solid #f2e8e5;display:none;flex-direction:column;overflow:hidden}
+#pt-chat-box.open{display:flex}
+.pt-chat-head{padding:12px 16px;background:#fdf8f6;border-bottom:1px solid #f2e8e5;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:13px;color:#5a382e}
+.pt-chat-msgs{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:12px}
+.pt-chat-msg{max-width:82%;padding:8px 12px;border-radius:14px;background:#f2e8e5;color:#374151;word-break:break-word}
+.pt-chat-msg.me{align-self:flex-end;background:#8b6255;color:#fff}
+.pt-chat-msg .sender{font-size:10px;font-weight:700;margin-bottom:2px;opacity:.8}
+
+.pt-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none}
+.pt-strip::-webkit-scrollbar{display:none}
+.pt-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:5px 10px 5px 5px;border-radius:999px;background:#fff;border:2px solid #f2e8e5;font-size:12px;font-weight:500}
+.pt-chip .pt-nm{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-chip.pt-turn{border-color:#ec4899;animation:ptRing 1.4s infinite}
+.pt-cnt{min-width:20px;text-align:center;font-size:11px;font-weight:700;background:#f2e8e5;color:#5a382e;border-radius:999px;padding:1px 6px}
+.pt-cnt.uno{background:#ef4444;color:#fff}
+.pt-pill{font-size:13px;font-weight:700;background:#fff;border:1px solid #f2e8e5;color:#8b6255;padding:6px 14px;border-radius:999px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-pill.me{background:#ec4899;color:#fff;border-color:#ec4899}
+
+.pt-hand{display:flex;overflow-x:auto;padding:16px 8px 10px;min-height:118px;scrollbar-width:none}
+.pt-hand::-webkit-scrollbar{display:none}
+.pt-cw{flex:0 0 auto}
+.pt-cw+.pt-cw{margin-left:-20px}
+.pt-cw.ok .uno-card{box-shadow:0 -4px 12px rgba(74,222,128,.55)}
+.pt-cw.no .uno-card{opacity:.5}
+.pt-pile{border-radius:10px;box-shadow:0 10px 24px rgba(0,0,0,.2)}
+.pt-draw-ok{animation:ptBreath 1.2s infinite}
+.pt-cover{text-align:center;padding:22px 12px;background:rgba(255,255,255,.8);border:2px dashed #d2bab0;border-radius:20px}
+.pt-fly{position:fixed;z-index:450;pointer-events:none}
+.pt-dir{animation:ptSpin 4s linear infinite}
+.pt-dir.flip{animation-direction:reverse}
+
+.pt-dots{position:absolute;left:0;right:0;bottom:1px;display:flex;flex-wrap:wrap;justify-content:center;gap:1px;padding:0 2px}
+.pt-ring{position:relative;width:100%;max-width:330px;aspect-ratio:1;margin:0 auto}
+.pt-seat{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:54px}
+.pt-seat .pt-av{width:38px;height:38px;font-size:15px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.pt-seat span.nm{font-size:10px;font-weight:600;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5a382e}
+.pt-seat.hit .pt-av{transform:scale(1.35);box-shadow:0 0 0 4px rgba(245,158,11,.5)}
+.pt-bottle{position:absolute;left:50%;top:50%;width:38px;height:114px;margin:-57px 0 0 -19px;transition:transform 3s cubic-bezier(.2,.7,.1,1);filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
+
+#pt-banner{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:500;opacity:0}
+#pt-banner.show{animation:ptBn 1.5s ease forwards}
+.pt-bn{color:#fff;padding:16px 34px;border-radius:24px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35);border:4px solid #fff}
+.pt-bn-big{font-weight:800;font-size:38px;letter-spacing:.02em;line-height:1.1}
+.pt-bn-sub{font-size:13px;font-weight:500;margin-top:4px;opacity:.95}
+.pt-conf{position:fixed;top:0;z-index:600;pointer-events:none;border-radius:2px}
+
+@keyframes ptRing{0%,100%{box-shadow:0 0 0 0 rgba(236,72,153,.45)}50%{box-shadow:0 0 0 7px rgba(236,72,153,0)}}
+@keyframes ptBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes ptSpin{to{transform:rotate(360deg)}}
+@keyframes ptBn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}14%{opacity:1;transform:scale(1.15) rotate(3deg)}24%{transform:scale(1) rotate(0)}78%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1)}}
+</style>
+
+<div id="pt-root"></div>
+<div id="pt-banner"></div>
+<div id="pt-toast"></div>
+<div id="pt-colors" style="position:fixed;inset:0;background:rgba(17,24,39,.7);z-index:350;display:none;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#fff;border-radius:28px;padding:22px;max-width:280px;width:100%;text-align:center">
+    <h3 style="font-weight:700;margin-bottom:14px">Pilih Warna</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <button onclick="ptColor('red')" style="height:80px;border-radius:14px;background:#ef4444"></button>
+      <button onclick="ptColor('blue')" style="height:80px;border-radius:14px;background:#3b82f6"></button>
+      <button onclick="ptColor('green')" style="height:80px;border-radius:14px;background:#22c55e"></button>
+      <button onclick="ptColor('yellow')" style="height:80px;border-radius:14px;background:#eab308"></button>
+    </div>
+  </div>
+</div>
+
+<div id="pt-chat-btn" onclick="ptToggleChat()" class="hidden">
+  <i class="fa-solid fa-comments"></i>
+  <span id="pt-chat-unread" class="hidden"></span>
+</div>
+<div id="pt-chat-box">
+  <div class="pt-chat-head">
+    <span><i class="fa-solid fa-comments mr-2"></i>Obrolan Room</span>
+    <button onclick="ptToggleChat()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div id="pt-chat-msgs" class="pt-chat-msgs"></div>
+  <div style="padding:10px;border-top:1px solid #f2e8e5;display:flex;gap:6px">
+    <input id="pt-chat-input" class="pt-input" style="padding:8px 12px;font-size:12px;border-radius:10px" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter')ptSendChat()">
+    <button onclick="ptSendChat()" class="pt-btn pt-pri" style="width:auto;padding:0 14px;border-radius:10px;font-size:12px"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const rnd = n => Math.floor(Math.random()*n);
+  function toast(msg){
+    const t=$('pt-toast'); if(!t) return;
+    t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2000);
+  }
+  function banner(big,color,sub){
+    const b=$('pt-banner'); if(!b) return;
+    b.innerHTML='<div class="pt-bn" style="background:'+color+'"><div class="pt-bn-big">'+big+'</div>'+(sub?'<div class="pt-bn-sub">'+sub+'</div>':'')+'</div>';
+    b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
+  }
+  function confetti(){
+    const cols=['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899'];
+    for(let i=0;i<70;i++){
+      const el=document.createElement('i'); el.className='pt-conf';
+      el.style.cssText='left:'+Math.random()*100+'vw;background:'+cols[i%6]+';width:'+(6+rnd(6))+'px;height:'+(8+rnd(8))+'px';
+      document.body.appendChild(el);
+      const a=el.animate([
+        {transform:'translateY(-20px) rotate(0deg)',opacity:1},
+        {transform:'translate('+(rnd(160)-80)+'px,'+(innerHeight+40)+'px) rotate('+rnd(720)+'deg)',opacity:.9}
+      ],{duration:1800+rnd(1600),delay:rnd(500),easing:'cubic-bezier(.3,.6,.4,1)',fill:'forwards'});
+      a.onfinish=()=>el.remove();
+    }
+  }
+  function fly(fromEl,toEl,html,o){
+    o=o||{}; if(!fromEl||!toEl){ o.onEnd&&o.onEnd(); return; }
+    const a=fromEl.getBoundingClientRect(), b=toEl.getBoundingClientRect();
+    const el=document.createElement('div'); el.className='pt-fly'; el.innerHTML=html;
+    el.style.left=(a.left+a.width/2-30)+'px'; el.style.top=(a.top+a.height/2-45)+'px';
+    document.body.appendChild(el);
+    const dx=(b.left+b.width/2)-(a.left+a.width/2), dy=(b.top+b.height/2)-(a.top+a.height/2);
+    const an=el.animate([
+      {transform:'translate(0,0) scale(.7) rotate(0deg)',opacity:.2},
+      {transform:'translate(0,0) scale(.9) rotate(0deg)',opacity:1,offset:.12},
+      {transform:'translate('+dx+'px,'+dy+'px) scale(1) rotate('+(o.rot||0)+'deg)',opacity:1}
+    ],{duration:o.dur||550,delay:o.delay||0,easing:'cubic-bezier(.2,.8,.2,1)',fill:'both'});
+    an.onfinish=()=>{ el.remove(); o.onEnd&&o.onEnd(); };
+  }
+  window.PTFX={toast,banner,confetti,fly,rnd};
+
+  const games=document.querySelector('#home-screen .space-y-3');
+  if(games){
+    const h=document.createElement('h2');
+    h.className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-2 mt-8';
+    h.textContent='Main Rame-Rame';
+    const b=document.createElement('button');
+    b.className='w-full text-left p-4 glass-card rounded-2xl hover:-translate-y-1 transition flex items-center gap-4 group border-l-4 border-rose-400';
+    b.innerHTML='<div class="w-12 h-12 shrink-0 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div><div><h3 class="font-medium text-gray-800 group-hover:text-rose-600">Mode Rame-Rame</h3><p class="text-xs text-gray-500">2–10 pemain · Stacking Plus · Chat Room</p></div>';
+    b.onclick=()=>window.ptOpen&&window.ptOpen();
+    games.parentNode.appendChild(h); games.parentNode.appendChild(b);
+  }
+  window.ptOpen=window.ptOpen||function(){ alert('Mode Rame-Rame belum siap.'); };
+})();
+</script>
+
+<script type="module">
+const $ = id => document.getElementById(id);
+const {toast,banner,confetti,fly} = window.PTFX;
+
+const APP_ID='deeptalk-couple-app';
+const MIN_PLAYERS=2, MAX_PLAYERS=10;
+const COLORS=['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'];
+const COLORHEX={red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308'};
+const GAMES={
+  uno:{title:'UNO',icon:'fa-layer-group',color:'#6366f1'},
+  ut:{title:'Ular Tangga',icon:'fa-dice',color:'#10b981'},
+  tod:{title:'Truth or Dare',icon:'fa-wine-bottle',color:'#f59e0b'}
+};
+
+const rnd=n=>Math.floor(Math.random()*n);
+const clone=o=>JSON.parse(JSON.stringify(o));
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const UNO_COLORS=['red','blue','green','yellow'];
+function unoInit(players){
+  let deck=[];
+  UNO_COLORS.forEach(c=>{
+    deck.push({color:c,value:'0',type:'number'});
+    for(let i=1;i<=9;i++) deck.push({color:c,value:''+i,type:'number'},{color:c,value:''+i,type:'number'});
+    ['skip','reverse','draw2'].forEach(a=>deck.push({color:c,value:a,type:'action'},{color:c,value:a,type:'action'}));
+  });
+  for(let i=0;i<4;i++) deck.push({color:'black',value:'wild',type:'wild'},{color:'black',value:'wild4',type:'wild'});
+  deck=shuffle(deck);
+  const hands={}; players.forEach(p=>hands[p.id]=[]);
+  for(let i=0;i<7;i++) players.forEach(p=>hands[p.id].push(deck.pop()));
+  let first=deck.pop(); while(first.type!=='number'){deck.unshift(first);first=deck.pop();}
+  return {deck,hands,discard:[first],color:first.color,order:players.map(p=>p.id),turn:0,dir:1,pendingDraw:0,winner:null,ev:{n:0,kind:'start'}};
+}
+
+function unoDrawN(g,id,k){
+  let got=0;
+  for(let i=0;i<k;i++){
+    if(!g.deck.length){ if(g.discard.length<=1) break; const top=g.discard.pop(); g.deck=shuffle(g.discard); g.discard=[top]; }
+    if(g.deck.length) { g.hands[id].push(g.deck.pop()); got++; }
+  }
+  return got;
+}
+
+const unoStep=(g,s)=>{const n=g.order.length;return (((g.turn+g.dir*s)%n)+n)%n;};
+
+function unoReduce(room,a){
+  const g=clone(room.g); if(g.winner) return null;
+  const cur=g.order[g.turn]; const n=g.ev.n+1;
+  
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=unoStep(g,1); g.ev={n,kind:'pass',by:cur}; return g; }
+  if(a.by!==cur&&a.by!=='*') return null;
+
+  if(a.type==='draw'){
+    let k=1;
+    if(g.pendingDraw > 0) {
+      k = unoDrawN(g,cur,g.pendingDraw);
+      const totalTake = g.pendingDraw;
+      g.pendingDraw = 0;
+      g.turn = unoStep(g,1);
+      g.ev = {n, kind:'stack_draw', by:cur, cnt:totalTake};
+      return g;
+    }
+    k = unoDrawN(g,cur,1);
+    g.turn = unoStep(g,1);
+    g.ev = {n, kind:'draw', by:cur, cnt:k};
+    return g;
+  }
+
+  if(a.type==='play'){
+    const hand=g.hands[cur], c=hand[a.idx]; if(!c) return null;
+    const top=g.discard[g.discard.length-1];
+
+    if(g.pendingDraw > 0) {
+      if(c.value !== 'draw2' && c.value !== 'wild4') return null;
+    } else {
+      if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return null;
+    }
+
+    if(c.color==='black'&&!UNO_COLORS.includes(a.color)) return null;
+
+    hand.splice(a.idx,1); g.discard.push(c); g.color=c.color==='black'?a.color:c.color;
+
+    if(hand.length===0){ g.winner=cur; g.ev={n,kind:'win',by:cur,card:c}; return g; }
+
+    let kind='play', steps=1, to=null, cnt=0; const nxt=g.order[unoStep(g,1)];
+
+    if(c.value==='draw2'){
+      kind='draw2'; g.pendingDraw += 2; to = nxt; cnt = g.pendingDraw;
+    } else if(c.value==='wild4'){
+      kind='wild4'; g.pendingDraw += 4; to = nxt; cnt = g.pendingDraw;
+    } else if(c.value==='skip'){
+      kind='skip'; steps=2; to=nxt;
+    } else if(c.value==='reverse'){
+      kind='reverse'; if(g.order.length===2) steps=2; else g.dir*=-1;
+    } else if(c.value==='wild'){
+      kind='wild';
+    }
+
+    g.turn = unoStep(g, steps);
+    g.ev = {n, kind, by:cur, to, cnt, card:c, color:g.color, uno:hand.length===1};
+    return g;
+  }
+  return null;
+}
+
+const UT_SNAKES={24:13,18:7,21:2}, UT_LADDERS={4:14,9:20,11:22};
+const UT_MAP=[25,24,23,22,21,16,17,18,19,20,15,14,13,12,11,6,7,8,9,10,5,4,3,2,1];
+const UT_Q=["Ceritakan kenangan paling lucu bareng teman di sini!","Sebutkan 1 kelebihan pemain di sebelah kananmu!","Apa makanan yang paling bikin kamu happy?","Sebutkan 3 hal yang kamu syukuri hari ini!"];
+function utInit(players){ const pos={}; players.forEach(p=>pos[p.id]=1); return {pos,order:players.map(p=>p.id),turn:0,q:null,winner:null,ev:{n:0,kind:'start'}}; }
+function utReduce(room,a){
+  const g=clone(room.g); if(g.winner) return null; const cur=g.order[g.turn]; const n=g.ev.n+1;
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'pass',by:cur}; return g; }
+  if(a.by!==cur&&a.by!=='*') return null;
+  if(a.type==='roll'){
+    if(g.q) return null; const from=g.pos[cur], roll=1+rnd(6); let p=from+roll; if(p>25) p=50-p;
+    let kind='move'; if(UT_SNAKES[p]){p=UT_SNAKES[p];kind='snake';} else if(UT_LADDERS[p]){p=UT_LADDERS[p];kind='ladder';}
+    g.pos[cur]=p; if(p===25){ g.winner=cur; kind='win'; } else if(kind==='move'&&p%4===0){ g.q=UT_Q[rnd(UT_Q.length)]; kind='star'; } else g.turn=(g.turn+1)%g.order.length;
+    g.ev={n,by:cur,from,roll,landed:from+roll,to:p,kind}; return g;
+  }
+  if(a.type==='ack'){ if(!g.q) return null; g.q=null; g.turn=(g.turn+1)%g.order.length; g.ev={n,kind:'ack',by:cur}; return g; }
+  return null;
+}
+
+const TOD_NET={truth:["Kebiasaan paling aneh yang kamu punya apa?","Lagu guilty pleasure kamu apa?"],dare:["Joget 15 detik tanpa musik!","Nyanyikan satu lagu pilihan grup!"]};
+function todInit(players){ return {order:players.map(p=>p.id),turn:0,target:null,rot:0,phase:'spin',kind:null,text:null,ev:{n:0,kind:'start'}}; }
+function todReduce(room,a){
+  const g=clone(room.g); const n=g.ev.n+1, N=g.order.length, spinner=g.order[g.turn];
+  if(a.type==='skip'){ if(a.by!==room.host&&a.by!=='*') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'pass'}; return g; }
+  if(a.type==='spin'){
+    if(g.phase!=='spin'||N<2) return null; if(a.by!==spinner&&a.by!=='*') return null;
+    let ti; do{ti=rnd(N);}while(ti===g.turn);
+    const theta=ti*360/N, base=((g.rot%360)+360)%360, delta=((theta-base)+360)%360;
+    g.rot=g.rot+1080+delta; g.target=g.order[ti]; g.phase='choice'; g.ev={n,kind:'spin',by:spinner,to:g.target}; return g;
+  }
+  if(a.type==='pick'){
+    if(g.phase!=='choice') return null; if(a.by!==g.target&&a.by!=='*') return null;
+    const pool=TOD_NET[a.kind]; g.kind=a.kind; g.text=pool[rnd(pool.length)]; g.phase='result'; g.ev={n,kind:'pick'}; return g;
+  }
+  if(a.type==='next'){ if(g.phase!=='result') return null; g.turn=(g.turn+1)%N; g.phase='spin'; g.target=null; g.kind=null; g.text=null; g.ev={n,kind:'next'}; return g; }
+  return null;
+}
+
+const INIT={uno:unoInit,ut:utInit,tod:todInit};
+const REDUCE={uno:unoReduce,ut:utReduce,tod:todReduce};
+
+let db=null, auth=null, FS=null;
+try{
+  const base='https://www.gstatic.com/firebasejs/11.6.1/';
+  const [A,Au,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+  const app=A.getApp(); db=F.getFirestore(app); auth=Au.getAuth(app); FS={...F,signInAnonymously:Au.signInAnonymously};
+}catch(e){ console.warn(e); }
+const roomRef=c=>FS.doc(db,'artifacts',APP_ID,'public','data','rooms',c);
+async function ensureUser(){
+  if(!auth) throw new Error('nofb');
+  if(auth.authStateReady) await auth.authStateReady();
+  if(!auth.currentUser) await FS.signInAnonymously(auth);
+  return auth.currentUser.uid;
+}
+
+const P={game:'uno',mode:'online',view:'menu',name:'',me:null,code:null,room:null,unsub:null,sig:null,prev:{},localNames:[],revealKey:null,chats:[],chatOpen:false,unread:false};
+try{P.name=localStorage.getItem('pt_name')||'';}catch(e){}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const W=o=>Object.assign(window,o);
+const BY=()=>P.mode==='local'?'*':P.me;
+const pl=id=>(P.room.players.find(p=>p.id===id))||{name:'?',color:'#999'};
+const ini=n=>esc((n||'?')[0].toUpperCase());
+const setRoot=h=>{$('pt-root').innerHTML=h;};
+const chipOf=id=>document.querySelector('[data-pid="'+id+'"]');
+
+function uniqueName(list,name){
+  const base=(name||'Pemain').trim().slice(0,12)||'Pemain'; let n=base,i=2;
+  while(list.some(p=>(p.name||p).toLowerCase()===n.toLowerCase())) n=base.slice(0,10)+(i++);
+  return n;
+}
+function readName(){
+  const v=($('pt-name')&&$('pt-name').value||P.name||'').trim().slice(0,12);
+  P.name=v; try{localStorage.setItem('pt_name',v);}catch(e){} return v;
+}
+function showErr(m){ const e=$('pt-err'); if(e){e.textContent=m;e.classList.remove('hidden');} else toast(m); }
+
+W({
+  ptToggleChat(){
+    P.chatOpen = !P.chatOpen;
+    if(P.chatOpen) { 
+      P.unread = false; 
+      const unreadEl = $('pt-chat-unread');
+      if(unreadEl) unreadEl.classList.add('hidden'); 
+    }
+    const box = $('pt-chat-box');
+    if(box) box.classList.toggle('open', P.chatOpen);
+    if(P.chatOpen) { 
+      const m = $('pt-chat-msgs'); 
+      if(m) m.scrollTop = m.scrollHeight; 
+    }
+  },
+  async ptSendChat(){
+    const input = $('pt-chat-input');
+    const txt = (input ? input.value : '').trim();
+    if(!txt) return;
+    input.value = '';
+
+    const myName = P.mode === 'local' ? (P.name || 'Pemain') : (P.room?.players?.find(p => p.id === P.me)?.name || P.name || 'Pemain');
+    const msgObj = { sender: myName, text: txt, time: Date.now(), uid: P.me || 'local' };
+
+    if(P.mode === 'local'){
+      P.chats.push(msgObj);
+      renderChats();
+    } else if(P.code && db) {
+      try {
+        await FS.runTransaction(db, async tx => {
+          const s = await tx.get(roomRef(P.code));
+          if(!s.exists()) return;
+          const chats = s.data().chats || [];
+          chats.push(msgObj);
+          tx.update(roomRef(P.code), { chats });
+        });
+      } catch(e){ console.error(e); }
+    }
+  }
+});
+
+function renderChats(){
+  const container = $('pt-chat-msgs');
+  if(!container) return;
+  container.innerHTML = P.chats.map(c => `
+    <div class="pt-chat-msg ${c.uid===P.me ? 'me':''}">
+      <div class="sender">${esc(c.sender)}</div>
+      <div>${esc(c.text)}</div>
+    </div>
+  `).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
+function vMenu(){
+  const cfg=GAMES[P.game];
+  return `<div class="pt-wrap">
+  <div class="flex items-center justify-between mb-4">
+    <button onclick="ptClose()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <span class="text-xs text-gray-400">Siapapun yang punya kode bisa masuk</span>
+  </div>
+  <h2 class="font-serif text-2xl font-semibold text-brand-900">Mode Rame-Rame</h2>
+  <p class="text-sm text-brand-600 mb-5">Main bareng tanpa batas minimum 4 orang!</p>
+  <p class="pt-lbl">Pilih game</p>
+  <div class="grid grid-cols-3 gap-2 mb-5">
+    ${Object.entries(GAMES).map(([k,g])=>`<button onclick="ptPick('${k}')" class="pt-game ${P.game===k?'sel':''}" style="--c:${g.color}"><i class="fa-solid ${g.icon}"></i>${g.title}</button>`).join('')}
+  </div>
+  <p class="pt-lbl">Username kamu</p>
+  <input id="pt-name" class="pt-input" maxlength="12" placeholder="Contoh: Vanila" value="${esc(P.name)}">
+  <div class="mt-5 space-y-3">
+    <button onclick="ptHost()" class="pt-btn pt-pri"><i class="fa-solid fa-wifi"></i> Buat Room Baru</button>
+    <div class="flex gap-2">
+      <input id="pt-code" class="pt-input" style="text-transform:uppercase;letter-spacing:.2em;text-align:center;font-family:monospace" maxlength="5" placeholder="KODE">
+      <button onclick="ptJoin()" class="pt-btn pt-sec" style="width:auto;padding:0 22px">Gabung</button>
+    </div>
+    <p id="pt-err" class="text-xs text-red-500 hidden"></p>
+    <div class="flex items-center gap-3"><div class="h-px bg-gray-200 flex-1"></div><span class="text-xs text-gray-400">ATAU</span><div class="h-px bg-gray-200 flex-1"></div></div>
+    <button onclick="ptLocalSetup()" class="pt-btn pt-sec"><i class="fa-solid fa-mobile-screen"></i> Main 1 HP (gantian)</button>
+  </div>
+  </div>`;
+}
+
+function vLocal(){
+  const n=P.localNames.length, cfg=GAMES[P.game];
+  return `<div class="pt-wrap">
+  <div class="flex items-center gap-3 mb-4">
+    <button onclick="ptBackMenu()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div><h2 class="font-semibold text-brand-900">Main 1 HP · ${cfg.title}</h2><p class="text-xs text-gray-400">Username pemain (${n}/${MAX_PLAYERS})</p></div>
+  </div>
+  <div class="flex gap-2 mb-3">
+    <input id="pt-ln" class="pt-input" maxlength="12" placeholder="Username pemain" onkeydown="if(event.key==='Enter')ptAddLocal()">
+    <button onclick="ptAddLocal()" class="pt-btn pt-pri" style="width:auto;padding:0 20px">Tambah</button>
+  </div>
+  <div class="space-y-2 mb-5">
+    ${P.localNames.map((nm,i)=>`<div class="pt-row"><span class="pt-av" style="background:${COLORS[i]}">${ini(nm)}</span><span class="flex-1 text-sm font-medium">${esc(nm)}</span><button onclick="ptDelLocal(${i})" class="text-gray-300 hover:text-red-400 px-2"><i class="fa-solid fa-xmark"></i></button></div>`).join('')||'<p class="text-sm text-gray-400 text-center py-6">Belum ada pemain.</p>'}
+  </div>
+  <button onclick="ptLocalStart()" class="pt-btn pt-pri mt-auto ${n>=MIN_PLAYERS?'':'off'}">Mulai Main</button>
+  </div>`;
+}
+
+function vLobby(){
+  const r=P.room, isHost=r.host===P.me, n=r.players.length, cfg=GAMES[r.gameType];
+  return `<div class="pt-wrap">
+  <div class="flex items-center gap-3 mb-4">
+    <button onclick="ptLeave()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div><h2 class="font-semibold text-brand-900">Lobby · ${cfg.title}</h2><p class="text-xs text-gray-400">${n} Pemain telah masuk</p></div>
+  </div>
+  <div class="text-center bg-white rounded-3xl border border-brand-100 p-5 mb-5">
+    <p class="text-xs text-gray-400 mb-1">Kode room — Siapapun yang punya kode bisa masuk!</p>
+    <button onclick="ptCopy()" class="font-mono text-4xl font-bold tracking-widest text-brand-800">${esc(P.code)}</button>
+    <p class="text-[11px] text-gray-400 mt-1">Ketuk untuk menyalin kode</p>
+  </div>
+  <div class="space-y-2 mb-5">
+    ${r.players.map(p=>`<div class="pt-row"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="flex-1 text-sm font-medium">${esc(p.name)}${p.id===P.me?' (kamu)':''}</span>${p.id===r.host?'<i class="fa-solid fa-crown text-amber-400 text-sm"></i>':''}</div>`).join('')}
+  </div>
+  ${isHost
+    ?`<button onclick="ptStart()" class="pt-btn pt-pri mt-auto">Mulai Permainan Langsung</button>`
+    :`<p class="text-center text-sm text-gray-500 mt-auto"><i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Menunggu host memulai…</p>`}
+  </div>`;
+}
+
+function ptRender(){
+  if(P.view==='menu') setRoot(vMenu());
+  else if(P.view==='local') setRoot(vLocal());
+  else if(P.view==='lobby') setRoot(vLobby());
+  else renderGame();
+
+  const chatBtn = $('pt-chat-btn');
+  if(chatBtn) {
+    if(P.view==='game' || P.view==='lobby') chatBtn.classList.remove('hidden');
+    else chatBtn.classList.add('hidden');
+  }
+}
+
+W({
+  ptOpen(){ $('pt-root').classList.add('open'); document.body.style.overflow='hidden'; ptRender(); },
+  ptClose(){ if(P.room&&P.view==='game'&&!confirm('Keluar dari permainan?')) return; ptLeave(); $('pt-root').classList.remove('open'); document.body.style.overflow=''; },
+  ptPick(k){ readName(); P.game=k; ptRender(); },
+  ptBackMenu(){ P.view='menu'; ptRender(); },
+  ptCopy(){ try{navigator.clipboard.writeText(P.code);toast('Kode disalin');}catch(e){} },
+  ptLocalSetup(){ readName(); P.view='local'; if(!P.localNames.length&&P.name) P.localNames=[P.name]; ptRender(); },
+  ptAddLocal(){
+    const el=$('pt-ln'); const v=(el.value||'').trim(); if(!v) return;
+    if(P.localNames.length>=MAX_PLAYERS) return toast('Maksimal '+MAX_PLAYERS+' pemain');
+    P.localNames.push(uniqueName(P.localNames,v)); ptRender(); $('pt-ln').focus();
+  },
+  ptDelLocal(i){ P.localNames.splice(i,1); ptRender(); },
+  ptLocalStart(){
+    if(P.localNames.length<MIN_PLAYERS) return;
+    const players=P.localNames.map((n,i)=>({id:'L'+i,name:n,color:COLORS[i]}));
+    P.mode='local'; P.me=null; P.code=null; P.sig=null; P.prev={}; P.localNames=[]; P.revealKey=null;
+    P.room={gameType:P.game,players,status:'playing',host:'L0',g:INIT[P.game](players)};
+    onRoom();
+  },
+  async ptHost(){
+    const name=readName(); if(!name) return showErr('Isi username dulu ya');
+    if(!db) return showErr('Firebase belum tersambung.');
+    try{
+      const uid=await ensureUser(); let code,t=0;
+      do{ code=Math.random().toString(36).substring(2,7).toUpperCase(); t++; }while((await FS.getDoc(roomRef(code))).exists()&&t<6);
+      await FS.setDoc(roomRef(code),{party:true,status:'lobby',gameType:P.game,host:uid,players:[{id:uid,name,color:COLORS[0]}],chats:[],created:Date.now()});
+      P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
+    }catch(e){ showErr('Gagal bikin room.'); }
+  },
+  async ptJoin(){
+    const name=readName(); if(!name) return showErr('Isi username dulu ya');
+    const code=($('pt-code').value||'').trim().toUpperCase(); if(code.length<4) return showErr('Kode room salah');
+    if(!db) return showErr('Firebase belum tersambung.');
+    try{
+      const uid=await ensureUser();
+      await FS.runTransaction(db,async tx=>{
+        const s=await tx.get(roomRef(code)); if(!s.exists()) throw new Error('nf');
+        const d=s.data(); if(!d.party) throw new Error('other');
+        if(d.players.some(p=>p.id===uid)) return;
+        if(d.players.length>=MAX_PLAYERS) throw new Error('full');
+        const color=COLORS.find(c=>!d.players.some(p=>p.color===c))||COLORS[0];
+        tx.update(roomRef(code),{players:[...d.players,{id:uid,name:uniqueName(d.players,name),color}]});
+      });
+      P.mode='online'; P.me=uid; P.code=code; P.prev={}; P.sig=null; subscribe(code);
+    }catch(e){
+      const m={nf:'Room tidak ditemukan!',other:'Bukan room Mode Rame-Rame.',full:'Room penuh.'}[e.message];
+      showErr(m||'Gagal gabung.');
+    }
+  },
+  async ptStart(){
+    const r=P.room; if(r.players.length < MIN_PLAYERS) return toast('Butuh minimal 2 pemain');
+    try{
+      await FS.runTransaction(db,async tx=>{
+        const s=await tx.get(roomRef(P.code)); const d=s.data();
+        if(d.host!==P.me||d.players.length<MIN_PLAYERS) return;
+        tx.update(roomRef(P.code),{status:'playing',g:clone(INIT[d.gameType](d.players))});
+      });
+    }catch(e){ toast('Gagal memulai'); }
+  },
+  async ptRematch(){
+    const r=P.room;
+    if(P.mode==='local'){ P.prev={}; P.sig=null; P.revealKey=null; r.g=INIT[r.gameType](r.players); onRoom(); return; }
+    try{ await FS.updateDoc(roomRef(P.code),{status:'playing',g:clone(INIT[r.gameType](r.players))}); }catch(e){ toast('Gagal ulang'); }
+  },
+  ptExit(){ if(confirm('Keluar dari permainan?')) ptLeave(); },
+  ptSkip(){ dispatch({type:'skip',by:BY()}); }
+});
+
+async function ptLeave(){
+  const r=P.room, code=P.code, wasOnline=P.mode==='online';
+  if(P.unsub){P.unsub();P.unsub=null;}
+  if(wasOnline&&r&&code&&db&&r.status==='lobby'){
+    try{
+      if(r.host===P.me) await FS.deleteDoc(roomRef(code));
+      else await FS.runTransaction(db,async tx=>{const s=await tx.get(roomRef(code)); if(s.exists()) tx.update(roomRef(code),{players:s.data().players.filter(p=>p.id!==P.me)});});
+    }catch(e){}
+  }
+  P.room=null;P.code=null;P.mode='online';P.view='menu';P.sig=null;P.prev={};P.chats=[];
+  if($('pt-root').classList.contains('open')) ptRender();
+}
+W({ptLeave});
+
+function subscribe(code){
+  if(P.unsub) P.unsub();
+  P.unsub=FS.onSnapshot(roomRef(code),snap=>{
+    if(!snap.exists()){ toast('Room ditutup'); ptLeave(); return; }
+    P.room=snap.data();
+    if(!P.room.players.some(p=>p.id===P.me)){ toast('Kamu keluar dari room'); ptLeave(); return; }
+    if(P.room.chats) {
+      if(P.room.chats.length > P.chats.length && !P.chatOpen) {
+        P.unread = true;
+        $('pt-chat-unread')?.classList.remove('hidden');
+      }
+      P.chats = P.room.chats;
+      renderChats();
+    }
+    onRoom();
+  },e=>console.error(e));
+}
+
+function onRoom(){
+  const r=P.room; if(!r) return;
+  if(r.status==='lobby'){ P.view='lobby'; ptRender(); return; }
+  const sig=JSON.stringify([r.status,r.players,r.g]);
+  if(sig===P.sig&&P.view==='game') return;
+  P.sig=sig;
+  if(P.view!=='game'){ P.prev={}; P.view='game'; }
+  renderGame();
+}
+
+async function dispatch(a){
+  const r=P.room; if(!r) return;
+  if(P.mode==='local'){ const g=REDUCE[r.gameType](r,a); if(g){ r.g=g; onRoom(); } return; }
+  try{
+    await FS.runTransaction(db,async tx=>{
+      const s=await tx.get(roomRef(P.code)); if(!s.exists()) return;
+      const d=s.data(); if(d.status!=='playing') return;
+      const g=REDUCE[d.gameType](d,a); if(!g) return;
+      tx.update(roomRef(P.code),{g:clone(g),lastUpdate:Date.now()});
+    });
+  }catch(e){ toast('Gagal memproses giliran'); }
+}
+
+function renderGame(){
+  const r=P.room; if(!r||!r.g) return; const g=r.g;
+  if(g.ev.n===0&&(P.prev.evn||0)>0) P.prev={};
+  const isNew=P.prev.evn!==undefined&&g.ev.n>P.prev.evn;
+  ({uno:renderUno,ut:renderUt,tod:renderTod})[r.gameType](isNew);
+  P.prev.evn=g.ev.n;
+}
+
+function winnerHTML(g,r){
+  if(!g.winner) return '';
+  const p=pl(g.winner), can=P.mode==='local'||r.host===P.me;
+  return `<div class="pt-modal"><div class="pt-mbox">
+    <div style="font-size:52px">🎉</div>
+    <h3 class="font-bold text-xl text-gray-800 mt-1 mb-1">${esc(p.name)} menang!</h3>
+    <p class="text-sm text-gray-500 mb-5">${r.gameType==='uno'?'Kartunya habis duluan':'Sampai di kotak 25 duluan'}</p>
+    ${can?'<button onclick="ptRematch()" class="pt-btn pt-pri mb-2">Main Lagi</button>':'<p class="text-xs text-gray-400 mb-3">Menunggu host mengulang…</p>'}
+    <button onclick="ptLeave()" class="pt-btn pt-sec">Keluar</button></div></div>`;
+}
+
+function hostSkipBtn(r){
+  return (P.mode==='online'&&r.host===P.me)?'<button onclick="ptSkip()" class="text-xs text-gray-400 underline mt-4 self-center">Lewati giliran (host)</button>':'';
+}
+
+function topBar(title,right){
+  return `<div class="flex items-center justify-between gap-2 mb-2">
+    <button onclick="ptExit()" class="pt-icon"><i class="fa-solid fa-arrow-left"></i></button>
+    <div class="pt-pill ${title.me?'me':''}">${title.text}</div>
+    <div class="text-xs text-gray-500 min-w-[40px] text-right">${right||''}</div></div>`;
+}
+
+function cardHTML(c){
+  let v=c.value,icon='';
+  if(v==='skip')icon='fa-ban'; else if(v==='reverse')icon='fa-arrows-rotate'; else if(v==='draw2')v='+2'; else if(v==='wild')v='WILD'; else if(v==='wild4')v='+4';
+  const mid=icon?`<i class="fa-solid ${icon} uno-center-symbol"></i>`:`<span class="uno-center-symbol"${v==='WILD'?' style="font-size:.9em"':''}>${v}</span>`;
+  const cr=icon?`<i class="fa-solid ${icon}"></i>`:v;
+  return `<div class="uno-card uno-${c.color}"><span class="uno-corner-symbol">${cr}</span>${mid}<span class="uno-corner-symbol-br">${cr}</span></div>`;
+}
+const backHTML=()=>`<div class="uno-card uno-black" style="border-color:#6b7280"><span class="uno-center-symbol" style="color:#ef4444;font-style:italic;font-size:1.1em">UNO</span></div>`;
+const CO={red:0,yellow:1,green:2,blue:3,black:4};
+
+function renderUno(isNew){
+  const r=P.room,g=r.g,order=g.order,cur=order[g.turn],local=P.mode==='local';
+  const viewer=local?cur:P.me, myTurn=local||cur===P.me;
+  const covered=local&&!g.winner&&P.revealKey!==g.ev.n;
+  const hand=g.hands[viewer]||[], top=g.discard[g.discard.length-1];
+  
+  const valid=c=>{
+    if(g.pendingDraw > 0) {
+      return c.value === 'draw2' || c.value === 'wild4';
+    }
+    return c.color==='black'||c.color===g.color||c.value===top.value;
+  };
+
+  const prevLen=(P.prev.hl||{})[viewer];
+  if(isNew&&g.winner){ P.winHold=true; setTimeout(()=>{P.winHold=false;renderGame();},1100); }
+  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(a.c.value),undefined,{numeric:true}));
+  let k=0;
+  
+  const handHTML=covered
+    ?`<div class="pt-cover"><p class="text-sm text-gray-600 mb-3">Oper HP ke <b>${esc(pl(cur).name)}</b></p><button onclick="ptReveal()" class="pt-btn pt-pri" style="width:auto;margin:0 auto;padding:12px 24px">Aku ${esc(pl(cur).name)}, lihat kartu</button></div>`
+    :`<div id="pt-myhand" class="pt-hand">${items.map(({c,i})=>{
+        const isN=prevLen===undefined||i>=prevLen; const cls=myTurn?(valid(c)?'ok':'no'):'';
+        const style=isN?`style="animation-delay:${(k++)*0.07}s"`:'';
+        return `<div class="pt-cw ${cls} ${isN?'pt-deal':''}" ${style} onclick="ptPlay(${i})">${cardHTML(c)}</div>`;}).join('')}</div>`;
+  
+  const chips=order.map(id=>{const p=pl(id),c=g.hands[id].length;
+    return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===viewer&&!local?' (kamu)':''}</span><span class="pt-cnt ${c===1?'uno':''}">${c===1?'UNO':c}</span></div>`;}).join('');
+  
+  const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(myTurn?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
+  
+  setRoot(`<div class="pt-wrap">
+    ${topBar(title,`<i class="fa-solid fa-arrow-rotate-right pt-dir ${g.dir<0?'flip':''}"></i>`)}
+    <div class="pt-strip" id="pt-strip">${chips}</div>
+    <div class="flex-1 flex flex-col items-center justify-center my-3">
+      ${g.pendingDraw > 0 ? `<div class="mb-2 text-xs font-bold bg-red-100 text-red-600 px-3 py-1 rounded-full animate-bounce">Tumpukan Kartu Plus: +${g.pendingDraw}! Balas atau Ambil!</div>` : ''}
+      <div class="flex gap-6 items-center">
+        <div id="pt-discard" class="pt-pile">${cardHTML(top)}</div>
+        <div id="pt-drawpile" onclick="ptDraw()" class="uno-card uno-black ${myTurn&&!covered?'pt-draw-ok':''}" style="border-color:#6b7280">
+          <span class="uno-center-symbol" style="color:#fff;font-size:.8rem;font-weight:400">${g.pendingDraw > 0 ? 'AMBIL +'+g.pendingDraw : 'AMBIL'}</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 mt-4 text-xs text-gray-500"><span style="width:18px;height:18px;border-radius:50%;background:${COLORHEX[g.color]};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)"></span>Warna aktif · Sisa tumpukan ${g.deck.length}</div>
+    </div>
+    <div class="bg-white/60 rounded-2xl border border-white pb-1">${handHTML}</div>
+    ${hostSkipBtn(r)}
+  </div>${P.winHold?'':winnerHTML(g,r)}`);
+  
+  P.prev.hl=Object.assign(P.prev.hl||{},{[viewer]:hand.length});
+  const chip=chipOf(cur); if(chip) chip.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+
+  if(g.winner&&!P.winHold&&!P.prev.win){ P.prev.win=true; confetti(); }
+}
+
+W({
+  ptReveal(){ P.revealKey=P.room.g.ev.n; renderGame(); },
+  ptDraw(){
+    const g=P.room.g; if(g.winner) return;
+    if(!(P.mode==='local'||g.order[g.turn]===P.me)) return;
+    if(P.mode==='local'&&P.revealKey!==g.ev.n) return;
+    dispatch({type:'draw',by:BY()});
+  },
+  ptPlay(i){
+    const g=P.room.g; if(g.winner) return;
+    const cur=g.order[g.turn];
+    if(!(P.mode==='local'||cur===P.me)) return toast('Bukan giliranmu');
+    const viewer=P.mode==='local'?cur:P.me, c=g.hands[viewer][i], top=g.discard[g.discard.length-1];
+    if(!c) return;
+    
+    if(g.pendingDraw > 0) {
+      if(c.value !== 'draw2' && c.value !== 'wild4') return toast('Ada kartu plus! Keluarkan kartu plus atau Ambil.');
+    } else {
+      if(!(c.color==='black'||c.color===g.color||c.value===top.value)) return toast('Kartu tidak bisa dikeluarkan');
+    }
+
+    if(c.color==='black'){ P.pendingIdx=i; $('pt-colors').style.display='flex'; return; }
+    dispatch({type:'play',idx:i,by:BY()});
+  },
+  ptColor(col){ $('pt-colors').style.display='none'; if(P.pendingIdx==null) return; const i=P.pendingIdx; P.pendingIdx=null; dispatch({type:'play',idx:i,color:col,by:BY()}); }
+});
+
+function renderUt(isNew){
+  const r=P.room,g=r.g,cur=g.order[g.turn],local=P.mode==='local',mine=local||cur===P.me;
+  const cells=UT_MAP.map(num=>{
+    const cls=(num%2===0?'cell-alt ':'')+(UT_SNAKES[num]?'cell-snake':UT_LADDERS[num]?'cell-ladder':'');
+    const ic=UT_SNAKES[num]?'<i class="fa-solid fa-staff-snake" style="font-size:10px"></i>':UT_LADDERS[num]?'<i class="fa-solid fa-stairs" style="font-size:10px"></i>':(num%4===0?'<i class="fa-solid fa-star" style="font-size:9px;color:#eab308"></i>':'');
+    return `<div class="board-cell ${cls}" data-cell="${num}" style="padding-bottom:12px"><span>${num}</span>${ic}<div class="pt-dots"></div></div>`;
+  }).join('');
+  const title=local?{text:'Giliran: '+esc(pl(cur).name)}:(mine?{text:'Giliran kamu!',me:true}:{text:'Giliran: '+esc(pl(cur).name)});
+  const chips=g.order.map(id=>{const p=pl(id);return `<div class="pt-chip ${id===cur?'pt-turn':''}" data-pid="${id}"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="pt-nm">${esc(p.name)}${id===P.me?' (kamu)':''}</span><span class="pt-cnt">${g.pos[id]}</span></div>`;}).join('');
+  setRoot(`<div class="pt-wrap">
+    ${topBar(title,'')}
+    <div class="pt-strip">${chips}</div>
+    <div class="board-grid my-2" style="max-width:350px">${cells}</div>
+    <div class="flex gap-4 items-center justify-center mt-3">
+      <div id="pt-dice" class="w-16 h-16 bg-white border-2 border-emerald-200 rounded-2xl flex items-center justify-center text-3xl font-bold text-emerald-600 shadow-sm">${g.ev.roll?g.ev.roll:'<i class="fa-solid fa-dice-d6"></i>'}</div>
+      <button id="pt-roll" onclick="ptRoll()" class="py-4 px-8 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 active:scale-95 transition ${mine&&!g.q?'':'opacity-40 pointer-events-none'}">${mine?'Kocok Dadu!':'Menunggu '+esc(pl(cur).name)}</button>
+    </div>
+    ${hostSkipBtn(r)}
+  </div>
+  ${g.q?`<div id="pt-q" class="pt-modal"><div class="pt-mbox" style="border-top:8px solid #facc15">
+    <div style="font-size:30px">⭐</div><h3 class="font-bold text-gray-800 mb-2">Kotak Misteri untuk ${esc(pl(cur).name)}!</h3>
+    <p class="text-gray-600 mb-5 text-sm leading-relaxed">${esc(g.q)}</p>
+    ${mine?'<button onclick="ptAck()" class="pt-btn pt-pri">Udah Dijawab</button>':'<p class="text-xs text-gray-400">Menunggu '+esc(pl(cur).name)+' menjawab…</p>'}</div></div>`:''}
+  ${winnerHTML(g,r)}`);
+}
+W({ ptRoll(){ dispatch({type:'roll',by:BY()}); }, ptAck(){ dispatch({type:'ack',by:BY()}); } });
+
+function renderTod(isNew){
+  const r=P.room,g=r.g,N=g.order.length,local=P.mode==='local';
+  const spinnerId=g.order[g.turn], iSpin=local||spinnerId===P.me, iTarget=local||g.target===P.me;
+  const seats=g.order.map((id,i)=>{
+    const t=i*2*Math.PI/N, p=pl(id);
+    return `<div class="pt-seat ${id===g.target?'hit':''}" style="left:${50+41*Math.sin(t)}%;top:${50-41*Math.cos(t)}%"><span class="pt-av" style="background:${p.color}">${ini(p.name)}</span><span class="nm">${esc(p.name)}</span></div>`;
+  }).join('');
+  let panel='';
+  if(g.phase==='spin') panel=`<button onclick="ptTod('spin')" class="pt-btn ${iSpin?'':'off'}" style="background:#f59e0b;color:#fff">${iSpin?'Putar Botol':'Menunggu '+esc(pl(spinnerId).name)}</button>`;
+  else if(g.phase==='choice') panel=`<div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
+  else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md"><p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p><button onclick="ptTod('next')" class="pt-btn pt-sec">Lanjut</button></div>`;
+  setRoot(`<div class="pt-wrap">${topBar({text:'Truth or Dare'},'')}<div class="pt-ring my-4">${seats}<svg id="pt-bottle" class="pt-bottle" viewBox="0 0 100 300" fill="none"><path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/><rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/><rect x="22" y="140" width="56" height="50" fill="white" opacity="0.9"/><text x="50" y="160" font-family="Arial" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text><path d="M50 0 L65 20 L35 20 Z" fill="#ef4444"/></svg></div><div class="mt-2">${panel}</div>${hostSkipBtn(r)}</div>`);
+  const b=$('pt-bottle'); if(b) b.style.transform='rotate('+g.rot+'deg)';
+}
+W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
+</script>
+
+<!-- =====================================================================
+     ADD-ON CHAT UNO COUPLE (ONLINE) - TERISOLASI
+     ===================================================================== -->
+<style id="uc-style">
+#uc-fab{position:fixed;top:12px;right:12px;z-index:105;width:46px;height:46px;border-radius:50%;background:#8b6255;color:#fff;display:none;align-items:center;justify-content:center;font-size:18px;box-shadow:0 8px 20px rgba(139,98,85,.35);transition:transform .15s}
+#uc-fab.show{display:flex}
+#uc-fab:active{transform:scale(.92)}
+#uc-fab.ring{animation:ucRing .6s ease 2}
+#uc-badge{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;border-radius:10px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 5px;border:2px solid #fdf8f6}
+#uc-panel{position:fixed;left:0;right:0;bottom:0;z-index:130;max-width:448px;margin:0 auto;height:min(62vh,520px);background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.25);display:flex;flex-direction:column;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);font-family:Poppins,sans-serif}
+#uc-panel.open{transform:none}
+#uc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid #f2e8e5}
+#uc-list{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch}
+.uc-b{max-width:78%;padding:8px 12px;border-radius:16px;font-size:14px;line-height:1.35;word-break:break-word;animation:ucIn .25s ease both}
+.uc-b small{display:block;font-size:10px;opacity:.6;margin-top:2px}
+.uc-me{align-self:flex-end;background:#8b6255;color:#fff;border-bottom-right-radius:4px}
+.uc-them{align-self:flex-start;background:#f2e8e5;color:#482920;border-bottom-left-radius:4px}
+.uc-emo{display:flex;gap:6px;padding:6px 14px 0;overflow-x:auto;scrollbar-width:none}
+.uc-emo button{flex:0 0 auto;font-size:20px;padding:4px 10px;border-radius:999px;background:#fdf8f6;border:1px solid #f2e8e5}
+#uc-form{display:flex;gap:8px;padding:10px 14px calc(12px + env(safe-area-inset-bottom))}
+#uc-input{flex:1;padding:10px 14px;border-radius:999px;border:1px solid #eaddd7;font-size:14px;outline:none;background:#fff}
+#uc-input:focus{border-color:#a37c6c}
+#uc-send{width:42px;height:42px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center}
+@keyframes ucIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes ucRing{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+</style>
+
+<button id="uc-fab" onclick="ucOpen()" aria-label="Chat"><i class="fa-solid fa-comment-dots"></i><span id="uc-badge"></span></button>
+<div id="uc-panel">
+  <div id="uc-head">
+    <div><div style="font-weight:600;color:#482920;font-size:15px">Chat Pasangan</div><div style="font-size:11px;color:#9ca3af">Ngobrol sambil main UNO</div></div>
+    <button onclick="ucClose()" style="width:34px;height:34px;border-radius:50%;background:#f2e8e5;color:#8b6255"><i class="fa-solid fa-chevron-down"></i></button>
+  </div>
+  <div id="uc-list"></div>
+  <div class="uc-emo">
+    <button onclick="ucQuick('❤️')">❤️</button><button onclick="ucQuick('😂')">😂</button><button onclick="ucQuick('😡')">😡</button><button onclick="ucQuick('😭')">😭</button><button onclick="ucQuick('🔥')">🔥</button><button onclick="ucQuick('👏')">👏</button><button onclick="ucQuick('Curang ya! 😤')">Curang!</button><button onclick="ucQuick('Cepetan dong ⏳')">Cepetan</button>
+  </div>
+  <div id="uc-form">
+    <input id="uc-input" maxlength="200" placeholder="Ketik pesan…" autocomplete="off" onkeydown="if(event.key==='Enter')ucSend()">
+    <button id="uc-send" onclick="ucSend()"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<script type="module">
+(async () => {
+  const $ = id => document.getElementById(id);
+  const APP_ID = 'deeptalk-couple-app';
+  const CHAT_GAMES = ['uno'];
+  const SCREEN = { uno: 'uno-screen', ulartangga: 'ulartangga-screen', tod: 'tod-screen' };
+
+  let db = null, auth = null, F = null;
+  try {
+    const base = 'https://www.gstatic.com/firebasejs/11.6.1/';
+    const [A, Au, Fs] = await Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js')]);
+    const app = A.getApp(); db = Fs.getFirestore(app); auth = Au.getAuth(app); F = Fs;
+  } catch (e) { console.warn('Chat: Firebase tidak tersedia', e); return; }
+
+  const ref = code => F.doc(db, 'artifacts', APP_ID, 'public', 'data', 'rooms', code + '_chat');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const S = { type: '', code: null, unsub: null, msgs: [], seen: 0, ready: false, open: false, unread: 0 };
+  const myId = () => (auth && auth.currentUser && auth.currentUser.uid) || '';
+
+  function renderList() {
+    const list = $('uc-list'); const me = myId();
+    if (!list) return;
+    if (!S.msgs.length) { list.innerHTML = '<p style="text-align:center;color:#9ca3af;font-size:12px;margin-top:24px">Belum ada pesan. Sapa dulu yuk 👋</p>'; return; }
+    list.innerHTML = S.msgs.map(m => {
+      const d = new Date(m.t || Date.now());
+      const hh = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      return `<div class="uc-b ${m.u === me ? 'uc-me' : 'uc-them'}">${esc(m.m)}<small>${hh}</small></div>`;
+    }).join('');
+    list.scrollTop = list.scrollHeight;
+  }
+  function setBadge() {
+    const b = $('uc-badge'); if(!b) return;
+    b.textContent = S.unread > 9 ? '9+' : S.unread; 
+    b.style.display = S.unread ? 'flex' : 'none';
+  }
+  function onSnap(snap) {
+    const arr = snap.exists() ? (snap.data().chat || []) : [];
+    S.msgs = arr;
+    if (!S.ready) { S.ready = true; S.seen = arr.length; renderList(); return; }
+    for (let i = S.seen; i < arr.length; i++) {
+      if (arr[i].u !== myId()) {
+        if (!S.open) {
+          S.unread++;
+          if (window.PTFX && window.PTFX.toast) window.PTFX.toast('💬 ' + String(arr[i].m).slice(0, 40));
+          const f = $('uc-fab'); 
+          if(f) {
+            f.classList.remove('ring'); 
+            void f.offsetWidth; 
+            f.classList.add('ring');
+          }
+          if (navigator.vibrate) navigator.vibrate(40);
+        }
+      }
+    }
+    S.seen = arr.length;
+    if (S.open) S.unread = 0;
+    setBadge(); renderList();
+  }
+  function start() {
+    const fab = $('uc-fab');
+    if (fab) fab.classList.add('show');
+    if (S.unsub) return;
+    S.ready = false;
+    S.unsub = F.onSnapshot(ref(S.code), onSnap, e => console.warn('Chat error', e));
+  }
+  function stop() {
+    if (S.unsub) { S.unsub(); S.unsub = null; }
+    S.msgs = []; S.ready = false; S.seen = 0; S.unread = 0; S.open = false;
+    const fab = $('uc-fab'); if (fab) fab.classList.remove('show');
+    const panel = $('uc-panel'); if (panel) panel.classList.remove('open');
+    setBadge();
+  }
+  function sync() {
+    const scr = SCREEN[S.type] && $(SCREEN[S.type]);
+    const visible = scr && !scr.classList.contains('hidden');
+    if (S.code && CHAT_GAMES.includes(S.type) && visible) start(); else stop();
+  }
+  function endSession() { S.code = null; stop(); }
+
+  const wrap = (name, fn) => { const o = window[name]; if (typeof o !== 'function') return; window[name] = function (...a) { return fn(o, ...a); }; };
+  wrap('showGameLobby', (o, t) => { S.type = t; return o(t); });
+  wrap('startOfflineGame', (o) => { endSession(); return o(); });
+  wrap('goHomeFromGame', (o) => { endSession(); return o(); });
+  wrap('hostOnlineGame', async (o) => {
+    await o();
+    const c = ($('display-room-code') ? $('display-room-code').innerText : '').trim();
+    if (/^[A-Z0-9]{5}$/.test(c)) {
+      S.code = c;
+      try { await F.setDoc(ref(c), { chat: [] }); } catch (e) { /* abaikan */ }
+      sync();
+    }
+  });
+  wrap('joinOnlineGame', async (o) => {
+    const c = ($('room-code-input') ? $('room-code-input').value : '').trim().toUpperCase();
+    await o();
+    if (c && $('online-menu-modal') && $('online-menu-modal').style.display === 'none') { S.code = c; sync(); }
+  });
+
+  Object.values(SCREEN).forEach(id => { const el = $(id); if (el) new MutationObserver(sync).observe(el, { attributes: true, attributeFilter: ['class'] }); });
+
+  async function send(text) {
+    text = (text || '').trim().slice(0, 200); if (!text || !S.code) return;
+    const msg = { u: myId(), m: text, t: Date.now() };
+    try {
+      await F.runTransaction(db, async tx => {
+        const s = await tx.get(ref(S.code));
+        const cur = s.exists() ? (s.data().chat || []) : [];
+        tx.set(ref(S.code), { chat: cur.concat([msg]).slice(-50) });
+      });
+    } catch (e) { console.error(e); if (window.PTFX && window.PTFX.toast) window.PTFX.toast('Pesan gagal terkirim'); }
+  }
+  Object.assign(window, {
+    ucOpen() { S.open = true; S.unread = 0; setBadge(); const panel = $('uc-panel'); if (panel) panel.classList.add('open'); renderList(); },
+    ucClose() { S.open = false; const panel = $('uc-panel'); if (panel) panel.classList.remove('open'); const input = $('uc-input'); if (input) input.blur(); },
+    ucSend() { const i = $('uc-input'); if (!i) return; const v = i.value; i.value = ''; send(v); },
+    ucQuick(t) { send(t); }
+  });
+})();
+</script>
+
 </body>
 </html>
