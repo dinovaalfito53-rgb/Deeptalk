@@ -1230,7 +1230,7 @@
 .pt-av{width:26px;height:26px;border-radius:50%;color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pt-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:#fff;border:1px solid #f2e8e5}
 
-#pt-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
+#pt-chat-btn{position:fixed;bottom:20px;right:20px;z-index:380;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:none;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);cursor:pointer;transition:transform .2s}
 #pt-chat-btn:active{transform:scale(.9)}
 #pt-chat-unread{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #fff}
 #pt-chat-box{position:fixed;bottom:80px;right:20px;z-index:390;width:310px;height:380px;background:#fff;border-radius:24px;box-shadow:0 12px 35px rgba(0,0,0,.15);border:1px solid #f2e8e5;display:none;flex-direction:column;overflow:hidden}
@@ -1682,8 +1682,8 @@ function ptRender(){
 
   const chatBtn = $('pt-chat-btn');
   if(chatBtn) {
-    if(P.view==='game' || P.view==='lobby') chatBtn.classList.remove('hidden');
-    else chatBtn.classList.add('hidden');
+    if(P.view==='game' || P.view==='lobby') chatBtn.style.display = 'flex';
+    else chatBtn.style.display = 'none';
   }
 }
 
@@ -1976,10 +1976,10 @@ W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
 </script>
 
 <!-- =====================================================================
-     ADD-ON CHAT UNO COUPLE (ONLINE) - TERISOLASI
+     ADD-ON CHAT UNO COUPLE (ONLINE) - TERISOLASI (HANYA KANAN BAWAH)
      ===================================================================== -->
 <style id="uc-style">
-#uc-fab{position:fixed;top:12px;right:12px;z-index:105;width:46px;height:46px;border-radius:50%;background:#8b6255;color:#fff;display:none;align-items:center;justify-content:center;font-size:18px;box-shadow:0 8px 20px rgba(139,98,85,.35);transition:transform .15s}
+#uc-fab{position:fixed;bottom:20px;right:20px;z-index:105;width:50px;height:50px;border-radius:50%;background:#8b6255;color:#fff;display:none;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 25px rgba(139,98,85,.4);transition:transform .15s}
 #uc-fab.show{display:flex}
 #uc-fab:active{transform:scale(.92)}
 #uc-fab.ring{animation:ucRing .6s ease 2}
