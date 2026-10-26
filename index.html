@@ -270,10 +270,12 @@
             <!-- Center Board -->
             <div class="flex-1 flex flex-col items-center justify-center my-4 relative">
                 <div id="uno-message" class="absolute -top-6 text-sm font-bold text-brand-600 bg-brand-50 px-4 py-1 rounded-full shadow-sm opacity-0 transition-opacity"></div>
+                <!-- [FIX] Info tumpukan kartu plus (stacking) -->
+                <div id="uno-stack-info" class="hidden mb-3 text-xs font-bold bg-red-100 text-red-600 px-3 py-1 rounded-full animate-bounce"></div>
                 <div class="flex gap-6 items-center">
                     <div id="discard-pile" class="scale-110 shadow-lg shadow-black/20 rounded-lg"></div>
                     <div id="draw-pile" onclick="drawCardCurrentPlayer()" class="uno-card uno-black border-gray-500 hover:border-white transition-colors cursor-pointer group">
-                        <span class="uno-center-symbol text-white text-sm font-normal">AMBIL</span>
+                        <span id="draw-pile-label" class="uno-center-symbol text-white text-sm font-normal">AMBIL</span>
                         <div class="absolute inset-0 bg-white/0 group-hover:bg-white/10 rounded-md transition-colors"></div>
                     </div>
                 </div>
@@ -699,6 +701,10 @@
             
             document.getElementById(`${type}-screen`).classList.remove('hidden');
             document.getElementById(`${type}-screen`).classList.add('flex');
+
+            // [FIX] Posisi token Ular Tangga dihitung ulang setelah layar tampil
+            // (sebelumnya dihitung saat layar masih tersembunyi sehingga posisinya salah)
+            if (type === 'ulartangga') setTimeout(() => { renderUtBoard(); }, 60);
         }
 
         window.goHomeFromGame = function() {
@@ -720,7 +726,7 @@
         function syncState() {
             if (!isOnline || !currentRoomCode || !userId) return;
             let statePayload = {};
-            if(currentGameType === 'uno') statePayload = { deck: unoDeck, p1Hand, p2Hand, discardPile, currentTurn, currentColor, pendingWildAction };
+            if(currentGameType === 'uno') statePayload = { deck: unoDeck, p1Hand, p2Hand, discardPile, currentTurn, currentColor, pendingWildAction, pendingDraw };
             if(currentGameType === 'ulartangga') statePayload = { p1Pos: utState.p1, p2Pos: utState.p2, turn: utState.turn, dice: utState.dice, qTrigger: utState.qTrigger };
             if(currentGameType === 'tod') statePayload = { rotation: todState.rotation, turn: todState.turn, action: todState.action, result: todState.result, phase: todState.phase };
             
@@ -736,6 +742,7 @@
                 unoDeck = data.state.deck || []; p1Hand = data.state.p1Hand || []; p2Hand = data.state.p2Hand || [];
                 discardPile = data.state.discardPile || []; currentTurn = data.state.currentTurn; currentColor = data.state.currentColor;
                 pendingWildAction = data.state.pendingWildAction;
+                pendingDraw = data.state.pendingDraw || 0;
                 renderUnoBoard();
             }
             if(currentGameType === 'ulartangga') {
@@ -787,6 +794,7 @@
         // ==========================================
         let unoDeck = [], p1Hand = [], p2Hand = [], discardPile = [];
         let currentTurn = 1, currentColor = '', pendingWildAction = null, p1Hidden = false, p2Hidden = true;
+        let pendingDraw = 0; // [FIX] jumlah kartu hukuman yang menumpuk (stacking +2 / +4)
         const unoColors = ['red', 'blue', 'green', 'yellow'];
 
         function initUnoLogic() {
@@ -803,6 +811,7 @@
             let first = unoDeck.pop(); while(first.type !== 'number'){ unoDeck.unshift(first); first = unoDeck.pop(); }
             discardPile.push(first); currentColor = first.color;
             currentTurn = 1; p1Hidden = false; p2Hidden = true;
+            pendingDraw = 0; pendingWildAction = null;
             renderUnoBoard();
         }
 
@@ -869,6 +878,15 @@
             if(discardPile.length && (discardPile[discardPile.length-1].color==='black' || currentColor!==discardPile[discardPile.length-1].color)){
                 cInd.classList.remove('hidden'); cInd.style.backgroundColor = {'red':'#ef4444','blue':'#3b82f6','green':'#22c55e','yellow':'#eab308'}[currentColor];
             } else cInd.classList.add('hidden');
+
+            // [FIX] Tampilan tumpukan kartu plus
+            const stackInfo = document.getElementById('uno-stack-info');
+            const drawLabel = document.getElementById('draw-pile-label');
+            if(stackInfo) {
+                if(pendingDraw > 0) { stackInfo.classList.remove('hidden'); stackInfo.innerText = `Tumpukan Plus: +${pendingDraw}! Balas pakai +2/+4 atau Ambil`; }
+                else stackInfo.classList.add('hidden');
+            }
+            if(drawLabel) drawLabel.innerText = pendingDraw > 0 ? ('AMBIL +' + pendingDraw) : 'AMBIL';
         }
 
         function showUnoMsg(msg) {
@@ -879,12 +897,40 @@
 
         function checkValidUnoPlay(c) {
             if(!discardPile.length) return true;
+            // [FIX] Saat ada tumpukan plus, hanya +2 / +4 yang boleh dibalas
+            if(pendingDraw > 0) return c.value === 'draw2' || c.value === 'wild4';
             let top = discardPile[discardPile.length-1];
             return c.color==='black' || c.color===currentColor || c.value===top.value;
         }
 
+        // [FIX] Ambil N kartu dari tumpukan (otomatis kocok ulang kalau habis)
+        function unoTakeCards(handArr, k) {
+            let got = 0;
+            for(let i=0;i<k;i++) {
+                if(!unoDeck.length) {
+                    if(discardPile.length <= 1) break;
+                    let top = discardPile.pop(); unoDeck = shuffleArray(discardPile); discardPile = [top];
+                }
+                if(unoDeck.length) { handArr.push(unoDeck.pop()); got++; }
+            }
+            return got;
+        }
+
         window.drawCardCurrentPlayer = function() {
             if(isOnline && currentTurn!==myPlayerNumber) return;
+
+            // [FIX] Kena tumpukan plus: ambil semua kartu hukuman sekaligus, lalu giliran lewat
+            if(pendingDraw > 0) {
+                const n = pendingDraw;
+                unoTakeCards(currentTurn===1 ? p1Hand : p2Hand, n);
+                pendingDraw = 0;
+                showUnoMsg("Ambil +" + n + " kartu!");
+                currentTurn = currentTurn===1 ? 2 : 1;
+                if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
+                if(isOnline) syncState(); else renderUnoBoard();
+                return;
+            }
+
             if(!unoDeck.length) {
                 let top = discardPile.pop(); unoDeck = shuffleArray(discardPile); discardPile = [top];
                 if(!unoDeck.length) return;
@@ -901,7 +947,7 @@
             if(pNum!==currentTurn) return;
             let hand = pNum===1 ? p1Hand : p2Hand;
             let c = hand[idx];
-            if(!checkValidUnoPlay(c)) { showUnoMsg("Tidak bisa!"); return; }
+            if(!checkValidUnoPlay(c)) { showUnoMsg(pendingDraw > 0 ? "Balas +2/+4 atau Ambil!" : "Tidak bisa!"); return; }
             
             hand.splice(idx,1); discardPile.push(c); currentColor = c.color;
             if(hand.length===0) { handleEndGame(pNum); return; }
@@ -919,12 +965,11 @@
             currentColor = color;
             document.getElementById('color-picker-modal').classList.add('hidden'); document.getElementById('color-picker-modal').style.display = 'none';
             if(pendingWildAction === 'wild4') {
-                let target = currentTurn===1 ? p2Hand : p1Hand;
-                for(let i=0;i<4;i++) if(unoDeck.length) target.push(unoDeck.pop());
-                showUnoMsg("+4 Kena mental!");
-            } else {
-                currentTurn = currentTurn===1 ? 2 : 1;
+                // [FIX] +4 ditumpuk, giliran pindah ke lawan (boleh dibalas +2/+4)
+                pendingDraw += 4;
+                showUnoMsg("+4 Tumpuk: +" + pendingDraw);
             }
+            currentTurn = currentTurn===1 ? 2 : 1;
             pendingWildAction = null;
             if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
             if(isOnline) syncState(); else renderUnoBoard();
@@ -934,9 +979,9 @@
             let pass = true;
             if(val==='skip' || val==='reverse') { showUnoMsg("Skip!"); pass = false; }
             else if(val==='draw2') {
-                let target = currentTurn===1 ? p2Hand : p1Hand;
-                for(let i=0;i<2;i++) if(unoDeck.length) target.push(unoDeck.pop());
-                showUnoMsg("+2 Mampus!"); pass = false;
+                // [FIX] +2 ditumpuk, giliran pindah ke lawan (boleh dibalas +2/+4)
+                pendingDraw += 2;
+                showUnoMsg("+2 Tumpuk: +" + pendingDraw);
             }
             if(pass) currentTurn = currentTurn===1 ? 2 : 1;
             if(!isOnline) { p1Hidden = currentTurn!==1; p2Hidden = currentTurn!==2; }
@@ -1158,6 +1203,10 @@
                 } else {
                     btn.classList.remove('opacity-50', 'pointer-events-none'); btn.innerText = "Putar Botol";
                 }
+            } else if (todState.phase === 'animating') {
+                // [FIX] Saat botol berputar, tombol dikunci supaya tidak bisa ditekan dua kali
+                btn.style.display = 'block';
+                btn.classList.add('opacity-50', 'pointer-events-none'); btn.innerText = "Botol berputar...";
             } else if (todState.phase === 'choice') {
                 btn.style.display = 'none';
                 document.getElementById('tod-action-area').classList.remove('hidden');
@@ -1283,6 +1332,20 @@
 @keyframes ptBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes ptSpin{to{transform:rotate(360deg)}}
 @keyframes ptBn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}14%{opacity:1;transform:scale(1.15) rotate(3deg)}24%{transform:scale(1) rotate(0)}78%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-36px) scale(1)}}
+
+/* [FIX] CSS yang dipakai kode tapi sebelumnya belum didefinisikan (modal, toast, animasi bagi kartu, dadu, token) */
+.pt-modal{position:fixed;inset:0;z-index:420;background:rgba(17,24,39,.7);display:flex;align-items:center;justify-content:center;padding:16px;animation:ptFade .3s}
+.pt-mbox{background:#fff;border-radius:28px;padding:24px;max-width:300px;width:100%;text-align:center;animation:ptPop .4s cubic-bezier(.2,.9,.3,1.3)}
+#pt-toast{position:fixed;top:18px;left:50%;transform:translate(-50%,-90px);z-index:700;background:#1f2937;color:#fff;font-size:13px;padding:9px 16px;border-radius:999px;transition:transform .3s;pointer-events:none;max-width:90vw}
+#pt-toast.show{transform:translate(-50%,0)}
+.pt-deal{animation:ptDeal .45s cubic-bezier(.2,.8,.2,1) both}
+.pt-roll{animation:ptRoll .6s}
+.pt-tok{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid #fff;box-shadow:0 1px 2px rgba(0,0,0,.4);animation:ptPop .35s}
+.uc-deal{animation:ptDeal .45s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes ptFade{from{opacity:0}to{opacity:1}}
+@keyframes ptPop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes ptDeal{0%{opacity:0;transform:translateY(-60px) scale(.6) rotate(-12deg)}100%{opacity:1;transform:none}}
+@keyframes ptRoll{0%{transform:rotate(0) scale(.6)}60%{transform:rotate(540deg) scale(1.2)}100%{transform:rotate(720deg) scale(1)}}
 </style>
 
 <div id="pt-root"></div>
@@ -1811,11 +1874,46 @@ async function dispatch(a){
   }catch(e){ toast('Gagal memproses giliran'); }
 }
 
+/* [FIX] Efek animasi Mode Rame-Rame: banner, kartu terbang, token papan.
+   Sebelumnya banner() dan fly() sudah ada tapi tidak pernah dipanggil. */
+function playFx(r,g){
+  const e=g.ev, who=e.by?pl(e.by).name:'';
+  if(r.gameType==='uno'){
+    const to=e.to?pl(e.to).name:'';
+    const B={draw2:['+2','#ef4444','Tumpuk: +'+e.cnt],wild4:['+4','#111827','Tumpuk: +'+e.cnt],skip:['SKIP','#f59e0b',to+' dilewati'],reverse:['REVERSE','#3b82f6','Arah berbalik'],wild:['WILD',COLORHEX[e.color]||'#8b5cf6','Warna baru'],stack_draw:['AMBIL +'+e.cnt,'#7c3aed',who+' kena!']};
+    if(B[e.kind]) banner(...B[e.kind]); else if(e.uno) banner('UNO!','#ef4444',who);
+    if(e.card&&e.kind!=='win') fly(chipOf(e.by),$('pt-discard'),cardHTML(e.card),{rot:360});
+    if(e.kind==='win') banner('MENANG!','#10b981',who);
+    if(e.kind==='draw'||e.kind==='stack_draw'){
+      for(let i=0;i<Math.min(e.cnt||1,6);i++) fly($('pt-drawpile'),chipOf(e.by),backHTML(),{delay:i*120});
+    }
+  }
+  if(r.gameType==='ut'){
+    const d=$('pt-dice'); if(d&&e.roll) d.classList.add('pt-roll');
+    if(e.kind==='snake') banner('ULAR! 🐍','#dc2626',who+' turun');
+    if(e.kind==='ladder') banner('TANGGA! 🪜','#16a34a',who+' naik');
+    if(e.kind==='star') banner('⭐ MISTERI','#eab308',who);
+    if(e.kind==='win') banner('MENANG!','#10b981',who);
+    if(e.from){
+      const a=document.querySelector('[data-cell="'+e.from+'"]'), b=document.querySelector('[data-cell="'+e.to+'"]');
+      fly(a,b,'<div style="width:60px;height:90px;display:flex;align-items:center;justify-content:center"><i class="pt-tok" style="width:22px;height:22px;background:'+pl(e.by).color+'"></i></div>',{dur:700});
+    }
+  }
+}
+function utTokens(g){
+  g.order.forEach(id=>{
+    const c=document.querySelector('[data-cell="'+g.pos[id]+'"] .pt-dots');
+    if(c) c.insertAdjacentHTML('beforeend','<i class="pt-tok" style="background:'+pl(id).color+'"></i>');
+  });
+}
+
 function renderGame(){
   const r=P.room; if(!r||!r.g) return; const g=r.g;
   if(g.ev.n===0&&(P.prev.evn||0)>0) P.prev={};
   const isNew=P.prev.evn!==undefined&&g.ev.n>P.prev.evn;
   ({uno:renderUno,ut:renderUt,tod:renderTod})[r.gameType](isNew);
+  if(r.gameType==='ut') utTokens(g);
+  if(isNew) playFx(r,g);
   P.prev.evn=g.ev.n;
 }
 
@@ -1866,7 +1964,7 @@ function renderUno(isNew){
 
   const prevLen=(P.prev.hl||{})[viewer];
   if(isNew&&g.winner){ P.winHold=true; setTimeout(()=>{P.winHold=false;renderGame();},1100); }
-  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(a.c.value),undefined,{numeric:true}));
+  const items=hand.map((c,i)=>({c,i})).sort((a,b)=>(CO[a.c.color]-CO[b.c.color])||String(a.c.value).localeCompare(String(b.c.value),undefined,{numeric:true}));
   let k=0;
   
   const handHTML=covered
@@ -1970,7 +2068,16 @@ function renderTod(isNew){
   else if(g.phase==='choice') panel=`<div class="grid grid-cols-2 gap-3 ${iTarget?'':'opacity-40 pointer-events-none'}"><button onclick="ptTod('pick','truth')" class="pt-btn" style="background:#3b82f6;color:#fff">TRUTH</button><button onclick="ptTod('pick','dare')" class="pt-btn" style="background:#f43f5e;color:#fff">DARE</button></div>`;
   else panel=`<div class="bg-white p-5 rounded-2xl border-2 border-brand-200 text-center shadow-md"><p class="font-medium text-gray-800 mb-4">${esc(g.text)}</p><button onclick="ptTod('next')" class="pt-btn pt-sec">Lanjut</button></div>`;
   setRoot(`<div class="pt-wrap">${topBar({text:'Truth or Dare'},'')}<div class="pt-ring my-4">${seats}<svg id="pt-bottle" class="pt-bottle" viewBox="0 0 100 300" fill="none"><path d="M40 30 L40 10 L60 10 L60 30 C60 50 80 80 80 260 C80 280 70 290 50 290 C30 290 20 280 20 260 C20 80 40 50 40 30 Z" fill="#10b981" stroke="#047857" stroke-width="4"/><rect x="35" y="5" width="30" height="15" rx="5" fill="#047857"/><rect x="22" y="140" width="56" height="50" fill="white" opacity="0.9"/><text x="50" y="160" font-family="Arial" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">T O D</text><path d="M50 0 L65 20 L35 20 Z" fill="#ef4444"/></svg></div><div class="mt-2">${panel}</div>${hostSkipBtn(r)}</div>`);
-  const b=$('pt-bottle'); if(b) b.style.transform='rotate('+g.rot+'deg)';
+  // [FIX] Botol dimulai dari sudut sebelumnya lalu berputar ke sudut baru (sebelumnya langsung loncat ke posisi akhir)
+  const b=$('pt-bottle');
+  if(b){
+    b.style.transition='none';
+    b.style.transform='rotate('+(P.prev.rot||0)+'deg)';
+    void b.getBoundingClientRect();
+    b.style.transition='';
+    b.style.transform='rotate('+g.rot+'deg)';
+    P.prev.rot=g.rot;
+  }
 }
 W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
 </script>
@@ -2135,6 +2242,126 @@ W({ ptTod(type,kind){ dispatch({type,kind,by:BY()}); } });
     ucSend() { const i = $('uc-input'); if (!i) return; const v = i.value; i.value = ''; send(v); },
     ucQuick(t) { send(t); }
   });
+})();
+</script>
+
+<!-- =====================================================================
+     [BARU] ADD-ON ANIMASI GAME COUPLE (UNO COUPLE, ULAR TANGGA, TOD)
+     Membaca perubahan tampilan lalu memutar efek: kartu terbang, banner
+     +2 / +4 / SKIP / REVERSE / WILD / UNO, kartu "dibagi", dadu berputar,
+     banner ular/tangga, dan konfeti saat menang.
+     ===================================================================== -->
+<script type="module">
+(function () {
+  const $ = id => document.getElementById(id);
+  const FX = window.PTFX;
+  if (!FX) return;
+  const { banner, fly, confetti } = FX;
+
+  const BACK = '<div class="uno-card uno-black" style="border-color:#6b7280"><span class="uno-center-symbol" style="color:#ef4444;font-style:italic;font-size:1.1em">UNO</span></div>';
+
+  // ---------- UNO COUPLE ----------
+  const unoScr = $('uno-screen');
+  let S = null, raf = 0;
+
+  function dealMark(handId, n, all) {
+    const h = $(handId); if (!h) return;
+    const cards = [...h.children];
+    const from = all ? 0 : Math.max(0, cards.length - n);
+    cards.slice(from).forEach((el, i) => {
+      el.classList.remove('uc-deal');
+      el.style.animationDelay = (i * 0.06) + 's';
+      void el.offsetWidth;
+      el.classList.add('uc-deal');
+    });
+  }
+
+  function checkUno() {
+    if (!unoScr) return;
+    if (unoScr.classList.contains('hidden')) { S = null; return; }
+    const dp = $('discard-pile'); if (!dp) return;
+    const topEl = dp.querySelector('.uno-card'); if (!topEl) return;
+
+    const key = topEl.className + '|' + topEl.textContent.trim();
+    const c1 = parseInt($('p1-card-count').textContent) || 0;
+    const c2 = parseInt($('p2-card-count').textContent) || 0;
+
+    if (!S) {
+      S = { key, c1, c2 };
+      dealMark('p1-hand', c1, true);
+      dealMark('p2-hand', c2, true);
+      return;
+    }
+
+    const topChanged = key !== S.key;
+    const d1 = c1 - S.c1, d2 = c2 - S.c2;
+    let shown = false;
+
+    if (topChanged) {
+      const src = d1 < 0 ? 'p1-area' : (d2 < 0 ? 'p2-area' : null);
+      if (src) fly($(src), dp, topEl.outerHTML, { rot: 360 });
+
+      const sym = topEl.querySelector('.uno-center-symbol');
+      const v = sym ? (sym.textContent || '').trim() : '';
+      const cls = sym ? sym.className : '';
+      const si = $('uno-stack-info');
+      const m = (si && !si.classList.contains('hidden')) ? si.textContent.match(/\+(\d+)/) : null;
+      const stackTxt = m ? 'Tumpukan: +' + m[1] : '';
+
+      if (v === '+2') { banner('+2', '#ef4444', stackTxt); shown = true; }
+      else if (v === '+4') { banner('+4', '#111827', stackTxt); shown = true; }
+      else if (cls.includes('fa-ban')) { banner('SKIP', '#f59e0b', 'Giliran dilewati'); shown = true; }
+      else if (cls.includes('fa-arrows-rotate')) { banner('REVERSE', '#3b82f6', 'Arah berbalik'); shown = true; }
+      else if (v === 'WILD') { banner('WILD', '#8b5cf6', 'Warna berganti'); shown = true; }
+    }
+
+    [[d1, 'p1-hand'], [d2, 'p2-hand']].forEach(([d, h]) => {
+      if (d > 0) {
+        dealMark(h, d, false);
+        for (let i = 0; i < Math.min(d, 6); i++) fly($('draw-pile'), $(h), BACK, { delay: i * 110, dur: 500 });
+        if (!topChanged && d > 1) { banner('AMBIL +' + d, '#7c3aed', 'Kartu hukuman!'); shown = true; }
+      }
+    });
+
+    if (!shown && ((d1 < 0 && c1 === 1) || (d2 < 0 && c2 === 1))) banner('UNO!', '#ef4444', '');
+
+    S = { key, c1, c2 };
+  }
+
+  if (unoScr) {
+    new MutationObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(checkUno); })
+      .observe(unoScr, { childList: true, subtree: true, characterData: true });
+    new MutationObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(checkUno); })
+      .observe(unoScr, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // ---------- KONFETI SAAT ADA PEMENANG (semua game couple) ----------
+  const wm = $('winner-modal');
+  if (wm) {
+    let shownWin = false;
+    new MutationObserver(() => {
+      const open = wm.style.display === 'flex';
+      if (open && !shownWin) { shownWin = true; confetti(); }
+      if (!open) shownWin = false;
+    }).observe(wm, { attributes: true, attributeFilter: ['style', 'class'] });
+  }
+
+  // ---------- ULAR TANGGA COUPLE ----------
+  const dice = $('ut-dice-display');
+  if (dice) {
+    new MutationObserver(() => {
+      if (!dice.textContent.trim()) return;
+      dice.classList.remove('pt-roll'); void dice.offsetWidth; dice.classList.add('pt-roll');
+    }).observe(dice, { childList: true });
+  }
+  const utMsg = $('ut-message');
+  if (utMsg) {
+    new MutationObserver(() => {
+      const t = utMsg.textContent || '';
+      if (t.includes('Ular')) banner('ULAR! 🐍', '#dc2626', 'Turun deh...');
+      else if (t.includes('Tangga')) banner('TANGGA! 🪜', '#16a34a', 'Naik!');
+    }).observe(utMsg, { childList: true, characterData: true, subtree: true });
+  }
 })();
 </script>
 
